@@ -34,23 +34,5 @@
     "tags": ["characters", "story"],
     "sourceLinks": [{ "title": "Rockstar Newswire", "url": "https://www.rockstargames.com/newswire" }],
     "publishedAt": "2026-08-05T00:00:00.000Z"
-  },
-  {
-    "slug": "test-rumor-fixture-one",
-    "title": "[Test fixture] Community speculation on cheat menu access",
-    "summary": "Placeholder rumor entry used only to test the \"rumored\" credibility badge and single-source styling during development. Not a real claim.",
-    "credibility": "rumor",
-    "tags": ["test-data"],
-    "sourceLinks": [{ "title": "Internal test fixture", "url": "#" }],
-    "publishedAt": "2026-09-16T00:00:00.000Z"
-  },
-  {
-    "slug": "test-rumor-fixture-two",
-    "title": "[Test fixture] Community speculation on returning vehicles",
-    "summary": "Placeholder rumor entry used only to test the leak feed's multi-source vs single-source presentation during development. Not a real claim.",
-    "credibility": "rumor",
-    "tags": ["test-data"],
-    "sourceLinks": [{ "title": "Internal test fixture", "url": "#" }],
-    "publishedAt": "2026-09-17T00:00:00.000Z"
   }
 ]

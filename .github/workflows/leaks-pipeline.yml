@@ -27,3 +27,29 @@ jobs:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
+
+  build-and-deploy:
+    needs: run-pipeline
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm install
+
+      # getStaticPaths for /leaks/[slug] fetches from MongoDB at build time,
+      # so any leak the pipeline job just added is pulled in here.
+      - run: npm run build
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+
+      - run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 6b82597059a6e435d5311e2471598d57
