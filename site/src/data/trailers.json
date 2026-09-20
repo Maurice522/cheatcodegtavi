@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "trailer-1",
+    "title": "Trailer 1",
+    "date": "2023-12-05",
+    "summary": "The first reveal trailer, introducing Vice City and Leonida along with protagonist Lucia Caminos.",
+    "youtubeId": "QdBZY2fkU-0"
+  },
+  {
+    "slug": "trailer-2",
+    "title": "Trailer 2",
+    "date": "2026-05-06",
+    "summary": "The second trailer, expanding on the story and the partnership between Lucia Caminos and Jason Duval.",
+    "youtubeId": "VQRLujxTm3c"
+  },
+  {
+    "slug": "cover-art-reveal",
+    "title": "Official Cover Art Reveal",
+    "date": "2026-06-18",
+    "summary": "A short reveal of the official box art ahead of pre-orders opening.",
+    "youtubeId": "EiQEBYDox_k"
+  },
+  {
+    "slug": "extended-look",
+    "title": "Extended Look",
+    "date": "2026-08-27",
+    "summary": "A longer gameplay-focused video released ahead of launch, covering more of Leonida.",
+    "youtubeId": "tJbzMqJGH4k"
+  }
+]

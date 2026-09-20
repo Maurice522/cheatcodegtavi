@@ -1,0 +1,66 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  category: string;
+  class?: string;
+}
+const { slug, title, category, class: className = '' } = Astro.props;
+---
+
+<favorite-button data-slug={slug} data-title={title} data-category={category} class:list={['inline-flex', className]}>
+  <button
+    type="button"
+    data-favorite-toggle
+    aria-pressed="false"
+    aria-label={`Save ${title} to favorites`}
+    class="press flex h-8 w-8 items-center justify-center rounded-full border border-border-default bg-bg-primary/80 text-text-secondary backdrop-blur-sm transition-colors duration-150 hover:border-accent-tertiary/60 hover:text-accent-tertiary"
+  >
+    <svg data-favorite-icon width="15" height="15" viewBox="0 0 16 16" fill="none">
+      <path
+        d="M8 1.5l1.9 4.1 4.4.6-3.2 3.1.8 4.4L8 11.6l-3.9 2.1.8-4.4-3.2-3.1 4.4-.6z"
+        stroke="currentColor"
+        stroke-width="1.4"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </button>
+</favorite-button>
+
+<script>
+  import { isFavorited, toggleFavorite } from '../lib/favorites-client';
+
+  class FavoriteButtonEl extends HTMLElement {
+    connectedCallback() {
+      const button = this.querySelector<HTMLButtonElement>('[data-favorite-toggle]');
+      const icon = this.querySelector<SVGPathElement>('[data-favorite-icon] path');
+      if (!button || !icon) return;
+
+      const slug = this.dataset.slug ?? '';
+      const title = this.dataset.title ?? '';
+      const category = this.dataset.category ?? '';
+
+      const sync = () => {
+        const active = isFavorited(slug);
+        button.setAttribute('aria-pressed', String(active));
+        icon.setAttribute('fill', active ? 'currentColor' : 'none');
+        button.classList.toggle('text-accent-tertiary', active);
+        button.classList.toggle('border-accent-tertiary/60', active);
+      };
+      sync();
+
+      button.addEventListener('click', (e) => {
+        // These buttons sit inside link-cards (CheatCard) — never let the
+        // click fall through to the card's own navigation.
+        e.preventDefault();
+        e.stopPropagation();
+        toggleFavorite({ slug, title, category });
+        sync();
+      });
+
+      window.addEventListener('favorites:change', sync);
+    }
+  }
+
+  customElements.define('favorite-button', FavoriteButtonEl);
+</script>

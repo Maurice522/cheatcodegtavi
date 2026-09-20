@@ -1,0 +1,75 @@
+---
+interface Props {
+  currentSlug: string;
+  currentTitle: string;
+  currentCategory: string;
+}
+
+const { currentSlug, currentTitle, currentCategory } = Astro.props;
+---
+
+<recently-viewed
+  data-slug={currentSlug}
+  data-title={currentTitle}
+  data-category={currentCategory}
+  class="hidden flex-col gap-3"
+>
+  <p class="text-label text-text-muted">Previously Viewed</p>
+  <div data-list class="flex flex-wrap gap-2"></div>
+</recently-viewed>
+
+<script>
+  const STORAGE_KEY = 'cheatcodegtavi:recently-viewed';
+  const MAX_ITEMS = 8;
+
+  interface ViewedEntry {
+    slug: string;
+    title: string;
+    category: string;
+  }
+
+  class RecentlyViewedEl extends HTMLElement {
+    connectedCallback() {
+      const slug = this.dataset.slug ?? '';
+      const title = this.dataset.title ?? '';
+      const category = this.dataset.category ?? '';
+
+      let entries: ViewedEntry[] = [];
+      try {
+        entries = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
+      } catch {
+        entries = [];
+      }
+
+      const others = entries.filter((e) => e.slug !== slug);
+
+      this.renderList(others);
+
+      const updated = [{ slug, title, category }, ...others].slice(0, MAX_ITEMS);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      } catch {
+        // localStorage unavailable (private browsing, blocked storage) — skip silently
+      }
+    }
+
+    renderList(entries: ViewedEntry[]) {
+      if (entries.length === 0) return;
+      this.classList.remove('hidden');
+      this.classList.add('flex');
+      const list = this.querySelector('[data-list]');
+      if (!list) return;
+      list.innerHTML = '';
+      for (const entry of entries) {
+        const link = document.createElement('a');
+        link.href = `/cheats/${entry.slug}`;
+        link.className =
+          'press text-body-sm rounded-full border border-border-default bg-bg-surface px-3 py-1.5 text-text-secondary transition-colors duration-150 hover:border-accent-secondary/50 hover:text-text-primary';
+        link.textContent = entry.title;
+        list.appendChild(link);
+      }
+    }
+  }
+
+  customElements.define('recently-viewed', RecentlyViewedEl);
+</script>

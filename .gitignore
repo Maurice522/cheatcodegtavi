@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.astro/
+
+# Real GTA6 screenshots/artwork — copyright risk, not something to entrench
+# into git history. See conversation notes; excluded until resolved.
+site/public/gta_images/
+
+.env
+.env.local
+.env.production
+*.env
+!.env.example
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+.DS_Store
+.idea/

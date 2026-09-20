@@ -1,0 +1,323 @@
+---
+import type { Cheat, PlatformDetail } from '../lib/cheats';
+import ConfidenceBadge from './ConfidenceBadge.astro';
+
+interface Props {
+  cheat: Cheat;
+}
+
+const { cheat } = Astro.props;
+
+const platforms: { key: 'ps5' | 'xbox' | 'pc'; label: string; detail: PlatformDetail | null }[] = [
+  { key: 'ps5', label: 'PS5', detail: cheat.platforms.ps5 },
+  { key: 'xbox', label: 'Xbox', detail: cheat.platforms.xbox },
+  { key: 'pc', label: 'PC', detail: cheat.platforms.pc },
+];
+
+const defaultPlatform = cheat.platforms.ps5 ? 'ps5' : cheat.platforms.xbox ? 'xbox' : 'pc';
+---
+
+<platform-tabs data-default={defaultPlatform}>
+  <div role="tablist" class="relative inline-flex gap-1 rounded-full border border-border-default bg-bg-surface p-1">
+    <span data-tab-indicator class="absolute inset-y-1 left-1 -z-0 rounded-full bg-accent-primary" />
+    {
+      platforms.map((p) => (
+        <button
+          type="button"
+          role="tab"
+          data-platform-tab={p.key}
+          aria-selected={p.key === defaultPlatform}
+          class:list={[
+            'press text-label relative z-10 rounded-full px-4 py-2 transition-colors duration-150',
+            p.key === defaultPlatform ? 'text-text-on-accent' : 'text-text-secondary hover:text-text-primary',
+          ]}
+        >
+          {p.label}
+        </button>
+      ))
+    }
+  </div>
+
+  {
+    platforms.map((p) => (
+      <div data-platform-panel={p.key} hidden={p.key !== defaultPlatform} class="mt-6">
+        {p.detail ? (
+          <div class="flex flex-col gap-5 rounded-xl border border-border-default bg-bg-surface p-6">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <ConfidenceBadge confidence={p.detail.confidence} />
+              <span class="text-caption text-text-muted">
+                {p.detail.sources.length} source{p.detail.sources.length === 1 ? '' : 's'} cross-referenced
+              </span>
+            </div>
+            <div>
+              <p class="text-label text-text-muted">{p.detail.inputType === 'phone' ? 'Dial this number' : 'Button input'}</p>
+              <div class="mt-1 flex flex-wrap items-center gap-3">
+                <p
+                  data-dial={p.detail.input}
+                  class="text-heading-md text-accent-secondary"
+                  style="font-family: var(--font-heading);"
+                >
+                  {p.detail.input}
+                </p>
+                <button
+                  type="button"
+                  data-copy-code={p.detail.input}
+                  class="press text-label inline-flex items-center gap-1.5 rounded-full border border-border-default px-3 py-1.5 text-text-secondary transition-colors duration-150 hover:border-accent-secondary/60 hover:text-text-primary"
+                >
+                  <svg data-copy-icon-default width="12" height="12" viewBox="0 0 14 14" fill="none">
+                    <rect x="4.5" y="4.5" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3" />
+                    <path d="M2.5 9.5V2.5a1 1 0 0 1 1-1h7" stroke="currentColor" stroke-width="1.3" />
+                  </svg>
+                  <svg data-copy-icon-done width="12" height="12" viewBox="0 0 14 14" fill="none" class="hidden text-verified">
+                    <path d="M2.5 7.2L5.3 10L11.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span data-copy-label>Copy</span>
+                </button>
+              </div>
+            </div>
+            <div>
+              <p class="text-label text-text-muted">Effect</p>
+              <p class="text-body-lg mt-1 text-text-primary">{p.detail.effect}</p>
+            </div>
+
+            <div
+              data-vote-widget
+              data-vote-slug={cheat.slug}
+              data-vote-platform={p.key}
+              class="flex flex-wrap items-center gap-3 border-t border-border-subtle pt-4"
+            >
+              <span class="text-label text-text-muted">Did this work?</span>
+              <button
+                type="button"
+                data-vote-btn="up"
+                class="press text-label inline-flex items-center gap-1.5 rounded-full border border-border-default px-3 py-1.5 text-text-secondary transition-colors duration-150 hover:border-verified/50 hover:text-verified"
+              >
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                  <path d="M2 8h2v6H2V8zm3 0l4.5-6 1 .5-1 4.5H14l-2 7H7L5 13V8z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" />
+                </svg>
+                <span data-vote-count="up">–</span>
+              </button>
+              <button
+                type="button"
+                data-vote-btn="down"
+                class="press text-label inline-flex items-center gap-1.5 rounded-full border border-border-default px-3 py-1.5 text-text-secondary transition-colors duration-150 hover:border-error/50 hover:text-error"
+              >
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="transform: rotate(180deg);">
+                  <path d="M2 8h2v6H2V8zm3 0l4.5-6 1 .5-1 4.5H14l-2 7H7L5 13V8z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" />
+                </svg>
+                <span data-vote-count="down">–</span>
+              </button>
+            </div>
+          </div>
+        ) : p.key === 'pc' ? (
+          <div class="flex flex-col items-center gap-2 rounded-xl border border-dashed border-border-default bg-bg-surface p-10 text-center">
+            <p class="text-heading-sm text-text-secondary">PC — Coming Soon</p>
+            <p class="text-body-sm max-w-md text-text-muted">
+              GTA6 has not launched on PC yet. This page will populate automatically once Rockstar ships a PC
+              version and our pipeline finds verified cheat data for it.
+            </p>
+          </div>
+        ) : (
+          <div class="flex flex-col items-center gap-2 rounded-xl border border-dashed border-border-default bg-bg-surface p-10 text-center">
+            <p class="text-heading-sm text-text-secondary">Scanning for {p.label} data</p>
+            <p class="text-body-sm max-w-md text-text-muted">
+              We haven't confirmed this cheat on {p.label} yet. Check back soon — our pipeline re-scans
+              regularly.
+            </p>
+          </div>
+        )}
+      </div>
+    ))
+  }
+</platform-tabs>
+
+<script>
+  import { gsap } from 'gsap';
+
+  function votedKey(slug: string, platform: string) {
+    return `cheatcodegtavi:voted:${slug}:${platform}`;
+  }
+
+  function setVoteCounts(widget: HTMLElement, up: number, down: number) {
+    const upEl = widget.querySelector('[data-vote-count="up"]');
+    const downEl = widget.querySelector('[data-vote-count="down"]');
+    if (upEl) upEl.textContent = String(up);
+    if (downEl) downEl.textContent = String(down);
+  }
+
+  function markVoted(widget: HTMLElement, direction: 'up' | 'down' | null) {
+    widget.querySelectorAll<HTMLButtonElement>('[data-vote-btn]').forEach((btn) => {
+      btn.disabled = true;
+      btn.classList.add('opacity-50');
+      if (direction && btn.dataset.voteBtn === direction) {
+        btn.classList.remove('opacity-50');
+        btn.classList.add(direction === 'up' ? 'text-verified' : 'text-error', 'border-current');
+      }
+    });
+  }
+
+  async function setUpVoteWidget(widget: HTMLElement) {
+    const slug = widget.dataset.voteSlug ?? '';
+    const platform = widget.dataset.votePlatform ?? '';
+    if (!slug || !platform) return;
+
+    const alreadyVoted = localStorage.getItem(votedKey(slug, platform)) as 'up' | 'down' | null;
+
+    try {
+      const res = await fetch(`/api/vote?slug=${encodeURIComponent(slug)}&platform=${encodeURIComponent(platform)}`);
+      if (res.ok) {
+        const { up, down } = await res.json();
+        setVoteCounts(widget, up, down);
+      }
+    } catch {
+      // Voting API isn't deployed yet (see README-worker.md) — counts stay at "–".
+    }
+
+    if (alreadyVoted) {
+      markVoted(widget, alreadyVoted);
+      return;
+    }
+
+    widget.querySelectorAll<HTMLButtonElement>('[data-vote-btn]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const direction = btn.dataset.voteBtn as 'up' | 'down';
+        markVoted(widget, direction); // optimistic — locks the UI immediately either way
+        try {
+          const res = await fetch('/api/vote', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ slug, platform, direction }),
+          });
+          if (res.ok) {
+            const { up, down } = await res.json();
+            setVoteCounts(widget, up, down);
+            localStorage.setItem(votedKey(slug, platform), direction);
+          }
+        } catch {
+          // Vote didn't record server-side, but the UI already locked — acceptable
+          // trade-off over leaving the buttons clickable during a dead API.
+        }
+      });
+    });
+  }
+
+  class PlatformTabs extends HTMLElement {
+    connectedCallback() {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const tabs = this.querySelectorAll<HTMLButtonElement>('[data-platform-tab]');
+      const indicator = this.querySelector<HTMLElement>('[data-tab-indicator]');
+
+      const moveIndicator = (tab: HTMLElement, animate: boolean) => {
+        if (!indicator) return;
+        const x = tab.offsetLeft - (tabs[0]?.offsetLeft ?? 0);
+        const props = { x, width: tab.offsetWidth };
+        if (animate && !reduceMotion) {
+          gsap.to(indicator, { ...props, duration: 0.3, ease: 'power3.out' });
+        } else {
+          gsap.set(indicator, props);
+        }
+      };
+
+      const initialTab = Array.from(tabs).find((t) => t.getAttribute('aria-selected') === 'true');
+      if (initialTab) moveIndicator(initialTab, false);
+      // Re-sync after fonts/layout settle — offsetLeft can be off by a few px pre-webfont-swap.
+      window.addEventListener('load', () => {
+        if (initialTab) moveIndicator(initialTab, false);
+      });
+
+      const dialReveal = (panel: HTMLElement) => {
+        const dial = panel.querySelector<HTMLElement>('[data-dial]');
+        if (!dial) return;
+        const digits = dial.dataset.dial ?? '';
+        dial.setAttribute('aria-label', digits);
+        if (reduceMotion) {
+          dial.textContent = digits;
+          return;
+        }
+        dial.innerHTML = `<span aria-hidden="true">${digits
+          .split('')
+          .map((ch) => `<span style="opacity:0;display:inline-block">${ch === ' ' ? '&nbsp;' : ch}</span>`)
+          .join('')}</span>`;
+        gsap.to(dial.querySelectorAll(':scope > span > span'), {
+          opacity: 1,
+          duration: 0.05,
+          stagger: 0.045,
+          ease: 'none',
+        });
+      };
+
+      const firstPanel = this.querySelector<HTMLElement>('[data-platform-panel]:not([hidden])');
+      if (firstPanel) dialReveal(firstPanel);
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const key = tab.dataset.platformTab;
+          if (tab.getAttribute('aria-selected') === 'true') return;
+
+          tabs.forEach((t) => t.setAttribute('aria-selected', String(t === tab)));
+          moveIndicator(tab, true);
+
+          const panels = this.querySelectorAll<HTMLElement>('[data-platform-panel]');
+          const nextPanel = this.querySelector<HTMLElement>(`[data-platform-panel="${key}"]`);
+          const currentPanel = Array.from(panels).find((p) => !p.hidden);
+
+          if (reduceMotion || !nextPanel) {
+            panels.forEach((panel) => {
+              panel.hidden = panel.dataset.platformPanel !== key;
+            });
+            dialReveal(nextPanel ?? panels[0]);
+            return;
+          }
+
+          const swap = () => {
+            panels.forEach((panel) => {
+              panel.hidden = panel.dataset.platformPanel !== key;
+            });
+            dialReveal(nextPanel);
+            gsap.fromTo(
+              nextPanel,
+              { opacity: 0, y: 8 },
+              { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' },
+            );
+          };
+
+          if (currentPanel) {
+            gsap.to(currentPanel, { opacity: 0, y: -4, duration: 0.12, ease: 'power1.in', onComplete: swap });
+          } else {
+            swap();
+          }
+        });
+      });
+
+      this.querySelectorAll<HTMLElement>('[data-vote-widget]').forEach((widget) => setUpVoteWidget(widget));
+
+      this.querySelectorAll<HTMLButtonElement>('[data-copy-code]').forEach((btn) => {
+        let resetTimer: ReturnType<typeof setTimeout> | undefined;
+        btn.addEventListener('click', async () => {
+          const code = btn.dataset.copyCode ?? '';
+          try {
+            await navigator.clipboard.writeText(code);
+          } catch {
+            return;
+          }
+          const iconDefault = btn.querySelector('[data-copy-icon-default]');
+          const iconDone = btn.querySelector('[data-copy-icon-done]');
+          const label = btn.querySelector('[data-copy-label]');
+          iconDefault?.classList.add('hidden');
+          iconDone?.classList.remove('hidden');
+          if (label) label.textContent = 'Copied';
+          btn.classList.add('border-verified/60', 'text-verified');
+          clearTimeout(resetTimer);
+          resetTimer = setTimeout(() => {
+            iconDefault?.classList.remove('hidden');
+            iconDone?.classList.add('hidden');
+            if (label) label.textContent = 'Copy';
+            btn.classList.remove('border-verified/60', 'text-verified');
+          }, 1800);
+        });
+      });
+    }
+  }
+
+  customElements.define('platform-tabs', PlatformTabs);
+</script>

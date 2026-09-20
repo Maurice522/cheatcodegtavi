@@ -1,0 +1,35 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+---
+
+<Layout title="Cheat Codes" description="GTA6 cheat codes — coming once Rockstar ships the game.">
+  <PageHero
+    eyebrow="Coming Soon"
+    title="Cheat Codes"
+    subtitle="We don't publish cheat codes sourced from leaks, guesses, or GTA V holdovers."
+    accent="pink"
+  />
+  <div class="mx-auto flex max-w-xl flex-col items-center gap-4 px-5 py-16 text-center">
+    <p class="text-body-lg text-text-secondary">
+      Once GTA6 launches on November 19, 2026, this page fills in with real cheat codes as our pipeline
+      cross-references and verifies them — PS5 first, Xbox alongside it, and PC once Rockstar ships a version to
+      support.
+    </p>
+    <div class="mt-2 flex flex-wrap justify-center gap-3">
+      <a
+        href="/leaks"
+        class="press text-label rounded-full border border-border-default px-6 py-3 text-text-primary transition-colors duration-150 hover:border-accent-secondary/60"
+      >
+        See Leaks &amp; Updates
+      </a>
+      <a
+        href="/cheats/gta5-vs-gta6"
+        class="press text-label rounded-full border border-border-default px-6 py-3 text-text-primary transition-colors duration-150 hover:border-accent-secondary/60"
+      >
+        GTA5 vs GTA6 Cheats
+      </a>
+    </div>
+    <a href="/faq" class="text-body-sm text-accent-secondary hover:underline">How will cheat codes work in GTA6? →</a>
+  </div>
+</Layout>

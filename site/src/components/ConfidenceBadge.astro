@@ -1,0 +1,50 @@
+---
+interface Props {
+  confidence: 'verified' | 'rumored';
+  class?: string;
+}
+
+const { confidence, class: className = '' } = Astro.props;
+
+const styles = {
+  verified: 'bg-verified/15 text-verified border-verified/30',
+  rumored: 'bg-rumored/15 text-rumored border-rumored/30',
+};
+
+const labels = {
+  verified: 'Verified',
+  rumored: 'Rumored',
+};
+
+const titles = {
+  verified: 'Verified — confirmed by 2+ independent sources, or by Rockstar directly',
+  rumored: 'Rumored — reported by a single source, not yet cross-referenced',
+};
+---
+
+<span
+  class:list={[
+    'text-label inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1',
+    styles[confidence],
+    className,
+  ]}
+  title={titles[confidence]}
+>
+  {
+    confidence === 'verified' ? (
+      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" class="shrink-0">
+        <path
+          class="badge-check"
+          d="M2.5 6.5L4.8 8.8L9.5 3.5"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    ) : (
+      <span class="badge-flicker h-1.5 w-1.5 rounded-full bg-current" />
+    )
+  }
+  {labels[confidence]}
+</span>

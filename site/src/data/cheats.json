@@ -1,0 +1,262 @@
+[
+  {
+    "slug": "invincibility",
+    "title": "Invincibility",
+    "category": "player",
+    "tags": ["survival", "player", "combat"],
+    "platforms": {
+      "ps5": {
+        "inputType": "controller",
+        "input": "Right, X, Right, Left, Right, R1, Right, Left, X, Triangle",
+        "effect": "Grants five minutes of invincibility. The screen pulses white while active and damage numbers stop appearing entirely.",
+        "confidence": "verified",
+        "sources": [
+          { "title": "Internal test fixture", "url": "#" },
+          { "title": "Internal test fixture (cross-check)", "url": "#" }
+        ]
+      },
+      "xbox": {
+        "inputType": "controller",
+        "input": "Right, X, Right, Left, Right, RB, Right, Left, X, Y",
+        "effect": "Grants five minutes of invincibility. The screen pulses white while active and damage numbers stop appearing entirely.",
+        "confidence": "verified",
+        "sources": [{ "title": "Internal test fixture", "url": "#" }]
+      },
+      "pc": null
+    },
+    "images": { "controllerDiagram": null, "videoEmbedUrl": null },
+    "viewCount": 18420,
+    "updatedAt": "2026-09-10T00:00:00.000Z"
+  },
+  {
+    "slug": "infinite-ammo",
+    "title": "Infinite Ammo",
+    "category": "weapons",
+    "tags": ["weapons", "combat", "survival"],
+    "platforms": {
+      "ps5": {
+        "inputType": "phone",
+        "input": "1-999-462-363",
+        "effect": "Removes ammo consumption for every equipped weapon until you die or manually toggle it off.",
+        "confidence": "verified",
+        "sources": [
+          { "title": "Internal test fixture", "url": "#" },
+          { "title": "Internal test fixture (cross-check)", "url": "#" }
+        ]
+      },
+      "xbox": {
+        "inputType": "phone",
+        "input": "1-999-462-363",
+        "effect": "Removes ammo consumption for every equipped weapon until you die or manually toggle it off.",
+        "confidence": "verified",
+        "sources": [{ "title": "Internal test fixture", "url": "#" }]
+      },
+      "pc": null
+    },
+    "images": { "controllerDiagram": null, "videoEmbedUrl": null },
+    "viewCount": 24110,
+    "updatedAt": "2026-09-12T00:00:00.000Z"
+  },
+  {
+    "slug": "spawn-sports-car",
+    "title": "Spawn Sports Car",
+    "category": "vehicles",
+    "tags": ["vehicles", "cars"],
+    "platforms": {
+      "ps5": {
+        "inputType": "phone",
+        "input": "1-999-227-767",
+        "effect": "Spawns a random high-end sports car directly in front of you, replacing anything currently parked there.",
+        "confidence": "rumored",
+        "sources": [{ "title": "Internal test fixture", "url": "#" }]
+      },
+      "xbox": null,
+      "pc": null
+    },
+    "images": { "controllerDiagram": null, "videoEmbedUrl": null },
+    "viewCount": 9820,
+    "updatedAt": "2026-09-14T00:00:00.000Z"
+  },
+  {
+    "slug": "lower-wanted-level",
+    "title": "Lower Wanted Level",
+    "category": "wanted",
+    "tags": ["police", "wanted", "survival"],
+    "platforms": {
+      "ps5": {
+        "inputType": "controller",
+        "input": "R1, R1, Circle, R2, Left, R1, R1, Left, Left, Left, Left",
+        "effect": "Instantly clears one star from your current wanted level. Stack the input again to clear more.",
+        "confidence": "verified",
+        "sources": [
+          { "title": "Internal test fixture", "url": "#" },
+          { "title": "Internal test fixture (cross-check)", "url": "#" }
+        ]
+      },
+      "xbox": {
+        "inputType": "controller",
+        "input": "RB, RB, B, RT, Left, RB, RB, Left, Left, Left, Left",
+        "effect": "Instantly clears one star from your current wanted level. Stack the input again to clear more.",
+        "confidence": "verified",
+        "sources": [{ "title": "Internal test fixture", "url": "#" }]
+      },
+      "pc": null
+    },
+    "images": { "controllerDiagram": null, "videoEmbedUrl": null },
+    "viewCount": 15230,
+    "updatedAt": "2026-09-08T00:00:00.000Z"
+  },
+  {
+    "slug": "raise-wanted-level",
+    "title": "Raise Wanted Level",
+    "category": "wanted",
+    "tags": ["police", "wanted"],
+    "platforms": {
+      "ps5": {
+        "inputType": "controller",
+        "input": "R1, R1, Circle, R2, Right, Left, Right, Left, Right, Left",
+        "effect": "Instantly adds one star to your current wanted level.",
+        "confidence": "rumored",
+        "sources": [{ "title": "Internal test fixture", "url": "#" }]
+      },
+      "xbox": {
+        "inputType": "controller",
+        "input": "RB, RB, B, RT, Right, Left, Right, Left, Right, Left",
+        "effect": "Instantly adds one star to your current wanted level.",
+        "confidence": "rumored",
+        "sources": [{ "title": "Internal test fixture", "url": "#" }]
+      },
+      "pc": null
+    },
+    "images": { "controllerDiagram": null, "videoEmbedUrl": null },
+    "viewCount": 4310,
+    "updatedAt": "2026-09-07T00:00:00.000Z"
+  },
+  {
+    "slug": "change-weather",
+    "title": "Change Weather",
+    "category": "weather",
+    "tags": ["weather", "environment"],
+    "platforms": {
+      "ps5": {
+        "inputType": "phone",
+        "input": "1-999-625-348",
+        "effect": "Cycles to the next weather pattern in the rotation — useful for screenshots or breaking up storm loops.",
+        "confidence": "verified",
+        "sources": [
+          { "title": "Internal test fixture", "url": "#" },
+          { "title": "Internal test fixture (cross-check)", "url": "#" }
+        ]
+      },
+      "xbox": {
+        "inputType": "phone",
+        "input": "1-999-625-348",
+        "effect": "Cycles to the next weather pattern in the rotation — useful for screenshots or breaking up storm loops.",
+        "confidence": "verified",
+        "sources": [{ "title": "Internal test fixture", "url": "#" }]
+      },
+      "pc": null
+    },
+    "images": { "controllerDiagram": null, "videoEmbedUrl": null },
+    "viewCount": 7650,
+    "updatedAt": "2026-09-11T00:00:00.000Z"
+  },
+  {
+    "slug": "super-jump",
+    "title": "Super Jump",
+    "category": "gameplay",
+    "tags": ["movement", "gameplay"],
+    "platforms": {
+      "ps5": {
+        "inputType": "controller",
+        "input": "Left, Left, Triangle, Triangle, Right, Right, Left, Right, Square, R1, R2",
+        "effect": "Massively increases jump height for the rest of the session — clears most low buildings in one bound.",
+        "confidence": "rumored",
+        "sources": [{ "title": "Internal test fixture", "url": "#" }]
+      },
+      "xbox": null,
+      "pc": null
+    },
+    "images": { "controllerDiagram": null, "videoEmbedUrl": null },
+    "viewCount": 11040,
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "slug": "slow-motion-aim",
+    "title": "Slow-Motion Aim",
+    "category": "combat",
+    "tags": ["combat", "gameplay"],
+    "platforms": {
+      "ps5": {
+        "inputType": "phone",
+        "input": "1-999-756-966",
+        "effect": "Slows time while aiming down sights, similar to a bullet-time effect, for a limited window.",
+        "confidence": "verified",
+        "sources": [
+          { "title": "Internal test fixture", "url": "#" },
+          { "title": "Internal test fixture (cross-check)", "url": "#" }
+        ]
+      },
+      "xbox": {
+        "inputType": "phone",
+        "input": "1-999-756-966",
+        "effect": "Slows time while aiming down sights, similar to a bullet-time effect, for a limited window.",
+        "confidence": "verified",
+        "sources": [{ "title": "Internal test fixture", "url": "#" }]
+      },
+      "pc": null
+    },
+    "images": { "controllerDiagram": null, "videoEmbedUrl": null },
+    "viewCount": 13980,
+    "updatedAt": "2026-09-09T00:00:00.000Z"
+  },
+  {
+    "slug": "drunk-mode",
+    "title": "Drunk Mode",
+    "category": "gameplay",
+    "tags": ["gameplay", "movement", "comedy"],
+    "platforms": {
+      "ps5": {
+        "inputType": "controller",
+        "input": "Right, Right, Left, Left, R1, L1, R1, L1, Triangle, Circle",
+        "effect": "Makes on-foot movement and driving handle as if intoxicated, with heavy camera sway.",
+        "confidence": "rumored",
+        "sources": [{ "title": "Internal test fixture", "url": "#" }]
+      },
+      "xbox": null,
+      "pc": null
+    },
+    "images": { "controllerDiagram": null, "videoEmbedUrl": null },
+    "viewCount": 6210,
+    "updatedAt": "2026-09-06T00:00:00.000Z"
+  },
+  {
+    "slug": "explosive-melee",
+    "title": "Explosive Melee Attacks",
+    "category": "combat",
+    "tags": ["combat", "weapons"],
+    "platforms": {
+      "ps5": {
+        "inputType": "phone",
+        "input": "1-999-547-861",
+        "effect": "Every melee hit detonates on impact — high risk in close quarters, devastating in open fights.",
+        "confidence": "verified",
+        "sources": [
+          { "title": "Internal test fixture", "url": "#" },
+          { "title": "Internal test fixture (cross-check)", "url": "#" }
+        ]
+      },
+      "xbox": {
+        "inputType": "phone",
+        "input": "1-999-547-861",
+        "effect": "Every melee hit detonates on impact — high risk in close quarters, devastating in open fights.",
+        "confidence": "verified",
+        "sources": [{ "title": "Internal test fixture", "url": "#" }]
+      },
+      "pc": null
+    },
+    "images": { "controllerDiagram": null, "videoEmbedUrl": null },
+    "viewCount": 10390,
+    "updatedAt": "2026-09-15T00:00:00.000Z"
+  }
+]

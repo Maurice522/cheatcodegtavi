@@ -1,0 +1,67 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CharacterAvatar from '../../components/CharacterAvatar.astro';
+import characters from '../../data/characters.json';
+
+export function getStaticPaths() {
+  return characters.map((c) => ({ params: { slug: c.slug } }));
+}
+
+const { slug } = Astro.params;
+const index = characters.findIndex((c) => c.slug === slug);
+const character = characters[index];
+
+const connections = (character.connections ?? [])
+  .map((connSlug) => characters.find((c) => c.slug === connSlug))
+  .filter((c): c is NonNullable<typeof c> => Boolean(c));
+---
+
+<Layout title={character.name} description={character.description}>
+  <div class="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
+    <nav class="text-caption mb-6 text-text-muted">
+      <a href="/characters" class="hover:text-text-primary">Characters</a>
+      <span class="mx-2">/</span>
+      <span class="text-text-secondary">{character.name}</span>
+    </nav>
+
+    <div class="relative h-64 overflow-hidden rounded-xl border border-border-default sm:h-80 lg:h-[26rem]">
+      {character.heroImage && (
+        <img src={character.heroImage} alt={character.name} class="h-full w-full object-cover object-center" />
+      )}
+      <div class="absolute inset-0 bg-gradient-to-r from-bg-primary/15 via-bg-primary/5 to-bg-primary/20"></div>
+      <div class="relative flex h-full items-end p-8">
+        <div class="flex flex-wrap items-center gap-5">
+          <CharacterAvatar name={character.name} index={index} size="lg" icon={character.icon} />
+          <div>
+            <span class="text-label text-accent-secondary">{character.role}</span>
+            <h1 class="text-display-md text-3xl text-text-primary sm:text-5xl">{character.name}</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-body-lg mt-8 max-w-2xl whitespace-pre-line text-text-secondary">
+      {character.bio ?? character.description}
+    </p>
+
+    {connections.length > 0 && (
+      <div class="mt-10">
+        <h2 class="text-heading-sm mb-4 text-text-primary">Connected To</h2>
+        <div class="flex flex-wrap gap-3">
+          {connections.map((c) => (
+            <a
+              href={`/characters/${c.slug}`}
+              class="press text-body-sm rounded-full border border-border-default bg-bg-surface px-4 py-2 text-text-secondary transition-colors duration-150 hover:border-accent-secondary/50 hover:text-text-primary"
+            >
+              {c.name}
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <a href="/characters" class="text-label mt-12 inline-block text-accent-secondary hover:text-accent-secondary/80">
+      &larr; Back to Characters
+    </a>
+  </div>
+</Layout>

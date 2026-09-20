@@ -1,0 +1,89 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const faqs = [
+  {
+    q: 'How do cheat codes work in GTA6?',
+    a: "Rockstar hasn't confirmed the exact mechanism yet. In GTA5, cheats were entered by pulling out your phone and dialing a specific number — no menu, no pause screen. GTA6's marketing has leaned even harder into phone-based interaction, so a similar dial-in system is the most likely carryover, but until Rockstar or a verified source confirms it, treat it as an expectation rather than a fact.",
+  },
+  {
+    q: 'Do cheat codes disable trophies and achievements?',
+    a: 'In every mainline GTA title going back to GTA5, activating a cheat code disabled trophy/achievement unlocks for the rest of that play session — saving and reloading cleared the flag. We expect GTA6 to follow the same rule, but it has not been officially confirmed.',
+  },
+  {
+    q: 'Can I use cheat codes in GTA6 Online or multiplayer?',
+    a: "Historically, no — GTA Online has never allowed cheat codes, and GTA5's single-player cheats were hard-blocked from online sessions entirely. Rockstar hasn't announced GTA6's online mode yet (see our Leaks & Updates page for the latest on that), so this page will update once multiplayer details — and its cheat policy — are confirmed.",
+  },
+  {
+    q: 'Will cheat codes work on PC?',
+    a: "There's nothing to confirm yet — GTA6 is launching November 19, 2026 on PS5 and Xbox Series X|S only, with no announced PC release date. Every cheat page on this site marks PC as \"Coming Soon\" for exactly this reason, and we'll add PC-specific codes the moment a PC version ships and cheats are verified for it.",
+  },
+  {
+    q: 'Do cheat codes cost money or require DLC?',
+    a: "No. Cheat codes have always been a free, built-in feature of every mainline GTA game — there's no purchase, subscription, or DLC required to use them, and we'd be surprised if that changed for GTA6.",
+  },
+  {
+    q: 'Can I turn a cheat off after turning it on?',
+    a: "Most GTA cheats toggle — entering the same code again switches the effect back off. A handful are one-shot triggers (like spawning a vehicle) rather than an on/off state. Each cheat page on this site spells out which kind it is once real GTA6 codes are verified and published.",
+  },
+  {
+    q: 'What does "Verified" vs "Rumored" mean on this site?',
+    a: 'Verified means a cheat has been confirmed by two or more independent sources, or directly by Rockstar. Rumored means it has only surfaced from a single source and hasn\'t been cross-referenced yet. We show the badge on every cheat and leak so you always know how much to trust it — see our Leaks & Updates page for the same system applied to news and rumors.',
+  },
+  {
+    q: 'Where do your cheat codes come from?',
+    a: "Our pipeline cross-references competitor sites, Reddit, GTA news outlets, and Rockstar's own Newswire, then rewrites everything in original wording rather than copy-pasting. Nothing gets published as \"Verified\" until at least two independent sources agree, or Rockstar confirms it directly.",
+  },
+];
+---
+
+<Layout
+  title="FAQ"
+  description="Frequently asked questions about GTA6 cheat codes — how they work, achievements, online play, PC support, and how we verify them."
+>
+  <PageHero eyebrow="Good to Know" title="Frequently Asked Questions" subtitle="Everything about how GTA6 cheat codes work, before a single one has shipped." accent="cyan" />
+
+  <div class="mx-auto max-w-3xl px-5 py-14 sm:px-8 sm:py-20" data-reveal-group>
+    <div class="flex flex-col gap-4">
+      {faqs.map((item) => (
+        <details data-reveal class="group rounded-xl border border-border-default bg-bg-surface p-5 open:border-accent-secondary/40">
+          <summary class="text-heading-sm flex cursor-pointer list-none items-center justify-between gap-4 text-text-primary marker:content-none">
+            {item.q}
+            <svg
+              class="h-4 w-4 shrink-0 text-text-muted transition-transform duration-200 group-open:rotate-45"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
+              <path d="M8 2V14M2 8H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            </svg>
+          </summary>
+          <p class="text-body-md mt-3 text-text-secondary">{item.a}</p>
+        </details>
+      ))}
+    </div>
+
+    <div class="mt-12 flex flex-col items-center gap-3 rounded-xl border border-dashed border-border-default p-8 text-center">
+      <p class="text-body-md text-text-secondary">Still have a question this didn't answer?</p>
+      <a
+        href="/leaks"
+        class="press text-label rounded-full border border-border-default px-6 py-3 text-text-primary transition-colors duration-150 hover:border-accent-secondary/60"
+      >
+        Check Leaks &amp; Updates
+      </a>
+    </div>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a,
+      },
+    })),
+  })} />
+</Layout>

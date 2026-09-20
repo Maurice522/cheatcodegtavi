@@ -1,0 +1,337 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'GTA6 cheat codes, leaks, and updates.' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@600;700;800&family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>{title} · CheatCodeGTAVI.com</title>
+    <meta name="description" content={description} />
+
+    <script is:inline>
+      // Runs synchronously before paint so a page reached via an internal nav
+      // click starts fully covered (no flash-of-uncovered-content) — the
+      // matching reveal-out animation lives in the body script below.
+      if (sessionStorage.getItem('pt-cover') === '1') {
+        document.documentElement.classList.add('pt-precovered');
+      }
+      // Same before-paint requirement for theme: reading localStorage after
+      // first paint would flash dark-then-light (or vice versa) on every load.
+      // No stored preference defaults to dark, matching the site's original
+      // single-theme design rather than following system preference.
+      var storedTheme = localStorage.getItem('theme');
+      if (storedTheme === 'light') {
+        document.documentElement.dataset.theme = 'light';
+      }
+    </script>
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <div class="pt-overlay" aria-hidden="true">
+      <div class="pt-overlay-panel"></div>
+      <div class="pt-overlay-bar pt-overlay-bar-1"></div>
+      <div class="pt-overlay-bar pt-overlay-bar-2"></div>
+    </div>
+    <Nav />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      import { gsap } from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Stronger custom curves than the built-in eases — see global.css --ease-out/--ease-in-out.
+      const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)';
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Safety net: whatever happens with the animation library (a thrown error, a
+      // stalled rAF ticker in an unusual embedding context, etc.), critical content
+      // must never stay permanently invisible. Every element we're about to animate
+      // gets force-revealed after a short timeout regardless of animation outcome.
+      const allAnimatedEls = document.querySelectorAll<HTMLElement>(
+        '[data-hero-item], [data-reveal], [data-reveal-solo]',
+      );
+      const countUpEls = document.querySelectorAll<HTMLElement>('[data-count-up]');
+      const forceReveal = () => {
+        // killTweensOf matters here: a tab backgrounded mid-tween can leave a GSAP
+        // animation paused at a partial value (e.g. opacity: 0.43) rather than at 0
+        // or 1 — just setting the inline style isn't enough if the ticker later
+        // resumes and overwrites it again with another in-between frame.
+        gsap.killTweensOf(allAnimatedEls);
+        allAnimatedEls.forEach((el) => {
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        });
+        countUpEls.forEach((el) => {
+          el.textContent = formatCompactCount(Number(el.dataset.countUp));
+        });
+      };
+      window.setTimeout(forceReveal, 2000);
+      // setTimeout/rAF are throttled the same way a backgrounded tab stalls the
+      // animation itself, so the 2s timer above can be delayed right alongside the
+      // stuck tween it's meant to catch. Visibility/pageshow events aren't subject
+      // to that throttling, so they catch the case the timer alone misses.
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') forceReveal();
+      });
+      window.addEventListener('pageshow', forceReveal);
+
+      // --- Signature page transition — a brief neon wipe standing in for the
+      // game's character-switch flash. Real navigations (not SPA), so it works
+      // the same on every page without any router plumbing.
+      const ptOverlay = document.querySelector<HTMLElement>('.pt-overlay');
+      const ptPanel = document.querySelector<HTMLElement>('.pt-overlay-panel');
+      const ptBars = document.querySelectorAll<HTMLElement>('.pt-overlay-bar');
+
+      function isSameOrigin(url: string) {
+        try {
+          return new URL(url, location.href).origin === location.origin;
+        } catch {
+          return false;
+        }
+      }
+
+      if (ptOverlay && ptPanel) {
+        // Mobile back/forward almost always restores the page from bfcache rather
+        // than reloading it — none of this script re-runs, so a transition that
+        // was mid-cover (or mid-uncover) when the user navigated away stays
+        // frozen exactly like that when they come back. `pageshow` with
+        // `persisted: true` is the one signal that fires on a bfcache restore,
+        // so it's used here to hard-reset the overlay regardless of whatever
+        // state it was left in.
+        window.addEventListener('pageshow', (e) => {
+          if (!e.persisted) return;
+          gsap.killTweensOf([ptOverlay, ptPanel, ptBars]);
+          document.documentElement.classList.remove('pt-precovered');
+          sessionStorage.removeItem('pt-cover');
+          gsap.set([ptOverlay, ptPanel, ptBars], { clearProps: 'all' });
+        });
+
+        document.addEventListener('click', (e) => {
+          if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          const link = (e.target as HTMLElement)?.closest?.('a');
+          if (!link || !link.href) return;
+          if (link.target === '_blank' || link.hasAttribute('download')) return;
+          if (!isSameOrigin(link.href)) return;
+
+          const dest = new URL(link.href, location.href);
+          if (dest.pathname === location.pathname && dest.search === location.search) return; // hash-only / same page
+
+          if (reduceMotion) return; // let the browser navigate normally, instantly
+
+          e.preventDefault();
+          sessionStorage.setItem('pt-cover', '1');
+
+          // The animation drives requestAnimationFrame, which browsers throttle or
+          // pause entirely when the tab loses focus/visibility (e.g. an alt-tab
+          // right after the click) — a stalled tween must never block the actual
+          // navigation. go() is idempotent so whichever fires first wins.
+          let navigated = false;
+          const go = () => {
+            if (navigated) return;
+            navigated = true;
+            location.href = link.href;
+          };
+          window.setTimeout(go, 600);
+
+          gsap
+            .timeline({ onComplete: go })
+            .to(ptBars, { opacity: 1, duration: 0.1 })
+            .to(ptPanel, { scaleY: 1, duration: 0.32, ease: 'power3.inOut' }, '-=0.04')
+            .to(ptOverlay, { opacity: 1, duration: 0.05 }, '<');
+        });
+
+        if (document.documentElement.classList.contains('pt-precovered')) {
+          sessionStorage.removeItem('pt-cover');
+          if (reduceMotion) {
+            document.documentElement.classList.remove('pt-precovered');
+            gsap.set([ptOverlay, ptPanel, ptBars], { clearProps: 'all' });
+          } else {
+            // Same rAF-stall safety net as the outbound leg — a stuck reveal must
+            // never leave the page permanently covered.
+            let revealed = false;
+            const uncover = () => {
+              if (revealed) return;
+              revealed = true;
+              document.documentElement.classList.remove('pt-precovered');
+              gsap.set([ptOverlay, ptPanel, ptBars], { clearProps: 'all' });
+            };
+            window.setTimeout(uncover, 800);
+
+            gsap
+              .timeline({ delay: 0.05, onComplete: uncover })
+              .to(ptBars, { opacity: 1, duration: 0.08 })
+              .to(ptPanel, { scaleY: 0, duration: 0.38, ease: 'power3.inOut' }, '+=0.05')
+              .to(ptOverlay, { opacity: 0, duration: 0.05 }, '-=0.05');
+          }
+        }
+      }
+
+      // Compact "24.1k" style formatting reused by both the static render and
+      // the count-up animation below — precise five-digit counts on a
+      // pre-launch site read as suspiciously fake, compact ones don't.
+      function formatCompactCount(n: number) {
+        if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, '')}m`;
+        if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, '')}k`;
+        return String(n);
+      }
+
+      if (!reduceMotion) {
+        try {
+          // Hero entrance — plays immediately, not scroll-gated.
+          const heroTimeline = document.querySelector<HTMLElement>('[data-hero-timeline]');
+          if (heroTimeline) {
+            const items = heroTimeline.querySelectorAll('[data-hero-item]');
+            gsap.from(items, {
+              opacity: 0,
+              y: 32,
+              duration: 0.7,
+              ease: EASE_OUT,
+              stagger: 0.1,
+              clearProps: 'opacity,transform',
+            });
+          }
+
+          // Scroll-triggered reveals for any group of items further down the page.
+          document.querySelectorAll<HTMLElement>('[data-reveal-group]').forEach((group) => {
+            const items = group.querySelectorAll('[data-reveal]');
+            if (items.length === 0) return;
+            gsap.from(items, {
+              opacity: 0,
+              y: 28,
+              duration: 0.5,
+              ease: EASE_OUT,
+              stagger: 0.06,
+              clearProps: 'opacity,transform',
+              scrollTrigger: {
+                trigger: group,
+                start: 'top 85%',
+              },
+            });
+          });
+
+          // Standalone reveals (not part of a stagger group).
+          document.querySelectorAll<HTMLElement>('[data-reveal-solo]').forEach((el) => {
+            gsap.from(el, {
+              opacity: 0,
+              y: 24,
+              duration: 0.5,
+              ease: EASE_OUT,
+              clearProps: 'opacity,transform',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top 88%',
+              },
+            });
+          });
+
+          // Cursor-tilt on cards — subtle 3D lean toward the pointer.
+          const tiltCards = document.querySelectorAll<HTMLElement>('[data-tilt]');
+          const resetTilt = (card: HTMLElement) => {
+            gsap.to(card, {
+              rotateX: 0,
+              rotateY: 0,
+              transformPerspective: 600,
+              duration: 0.5,
+              ease: EASE_OUT,
+              overwrite: true,
+              clearProps: 'transform',
+            });
+          };
+          tiltCards.forEach((card) => {
+            const strength = 8;
+            card.addEventListener('mousemove', (e) => {
+              const rect = card.getBoundingClientRect();
+              const px = (e.clientX - rect.left) / rect.width - 0.5;
+              const py = (e.clientY - rect.top) / rect.height - 0.5;
+              gsap.to(card, {
+                rotateX: -py * strength,
+                rotateY: px * strength,
+                transformPerspective: 600,
+                duration: 0.4,
+                ease: EASE_OUT,
+                overwrite: true,
+              });
+            });
+            card.addEventListener('mouseleave', () => resetTilt(card));
+          });
+          // A fast pointer exit off the window edge, an alt-tab mid-hover, or a
+          // trackpad jump can skip a card's mouseleave entirely, leaving it stuck
+          // mid-tilt (visually spilling into neighboring grid cells) with nothing
+          // left to ever reset it. Catch those cases at the window/document level
+          // regardless of which card was mid-hover when it happened.
+          window.addEventListener('blur', () => tiltCards.forEach(resetTilt));
+          document.addEventListener('mouseleave', () => tiltCards.forEach(resetTilt));
+
+          // View-count odometer — counts up from 0 once the stat scrolls into view.
+          countUpEls.forEach((el) => {
+            const target = Number(el.dataset.countUp) || 0;
+            const counter = { val: 0 };
+            gsap.to(counter, {
+              val: target,
+              duration: 1.1,
+              ease: EASE_OUT,
+              onUpdate: () => {
+                el.textContent = formatCompactCount(Math.round(counter.val));
+              },
+              scrollTrigger: {
+                trigger: el,
+                start: 'top 92%',
+                once: true,
+              },
+            });
+          });
+
+          // Cursor-reactive glow on dark hero/banner sections — desktop pointers only.
+          if (window.matchMedia('(pointer: fine)').matches) {
+            document.querySelectorAll<HTMLElement>('[data-cursor-glow]').forEach((section) => {
+              const glow = document.createElement('div');
+              glow.className = 'cursor-glow';
+              glow.setAttribute('aria-hidden', 'true');
+              section.appendChild(glow);
+              section.addEventListener('pointermove', (e) => {
+                const rect = section.getBoundingClientRect();
+                glow.style.setProperty('--gx', `${((e.clientX - rect.left) / rect.width) * 100}%`);
+                glow.style.setProperty('--gy', `${((e.clientY - rect.top) / rect.height) * 100}%`);
+                glow.style.opacity = '1';
+              });
+              section.addEventListener('pointerleave', () => {
+                glow.style.opacity = '0';
+              });
+            });
+          }
+        } catch (err) {
+          console.error('Animation setup failed, falling back to static content:', err);
+          forceReveal();
+        }
+      } else {
+        forceReveal();
+      }
+    </script>
+  </body>
+</html>

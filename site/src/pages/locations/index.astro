@@ -1,0 +1,30 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import LocationIcon from '../../components/LocationIcon.astro';
+import locations from '../../data/locations.json';
+---
+
+<Layout title="Locations" description="A guide to the regions of Leonida in GTA6.">
+  <PageHero eyebrow="Explore" title="Locations" subtitle="The regions of Leonida, at a glance." accent="cyan" />
+  <div class="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+      {
+        locations.map((loc) => (
+          <a
+            href={`/locations/${loc.slug}`}
+            data-reveal
+            class="press flex flex-col gap-3 rounded-xl border border-border-default bg-bg-surface p-6 transition-colors duration-150 hover:border-accent-secondary/50"
+          >
+            <LocationIcon icon={loc.icon} class="h-8 w-8 text-accent-secondary" />
+            <div>
+              <span class="text-label text-accent-secondary">{loc.kind}</span>
+              <h2 class="text-heading-sm text-text-primary">{loc.name}</h2>
+            </div>
+            <p class="text-body-sm text-text-secondary">{loc.description}</p>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Layout>

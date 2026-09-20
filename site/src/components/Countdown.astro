@@ -1,0 +1,101 @@
+---
+interface Props {
+  targetIso?: string;
+}
+
+const { targetIso = '2026-11-19T05:00:00Z' } = Astro.props;
+
+const units = [
+  { key: 'days', label: 'Days' },
+  { key: 'hours', label: 'Hours' },
+  { key: 'minutes', label: 'Min' },
+  { key: 'seconds', label: 'Sec' },
+];
+---
+
+<gta-countdown data-target={targetIso} class="flex items-center gap-3 sm:gap-5">
+  {
+    units.map((unit) => (
+      <div class="flex flex-col items-center">
+        <div
+          class="shadow-glow-pink flex h-16 w-16 items-center justify-center rounded-lg border border-border-default bg-bg-elevated sm:h-24 sm:w-24 sm:rounded-xl"
+        >
+          <span
+            data-unit={unit.key}
+            class="text-display-md text-2xl tabular-nums text-text-primary sm:text-4xl"
+          >
+            00
+          </span>
+        </div>
+        <span
+          class="text-caption mt-2 font-semibold uppercase tracking-wide text-text-primary [text-shadow:0_1px_6px_rgb(0_0_0_/_0.9),0_1px_2px_rgb(0_0_0_/_0.9)]"
+        >
+          {unit.label}
+        </span>
+      </div>
+    ))
+  }
+</gta-countdown>
+
+<script>
+  import { gsap } from 'gsap';
+
+  class GtaCountdown extends HTMLElement {
+    private timer: ReturnType<typeof setInterval> | undefined;
+    private lastValues: Record<string, string> = {};
+    private reduceMotion = false;
+
+    connectedCallback() {
+      this.reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const target = new Date(this.dataset.target ?? '').getTime();
+      const render = () => {
+        const diff = Math.max(0, target - Date.now());
+        const days = Math.floor(diff / 86_400_000);
+        const hours = Math.floor((diff / 3_600_000) % 24);
+        const minutes = Math.floor((diff / 60_000) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        this.setUnit('days', days);
+        this.setUnit('hours', hours);
+        this.setUnit('minutes', minutes);
+        this.setUnit('seconds', seconds);
+        if (diff <= 0 && this.timer) clearInterval(this.timer);
+      };
+      render();
+      this.timer = setInterval(render, 1000);
+    }
+
+    disconnectedCallback() {
+      if (this.timer) clearInterval(this.timer);
+    }
+
+    setUnit(unit: string, value: number) {
+      const el = this.querySelector<HTMLElement>(`[data-unit="${unit}"]`);
+      if (!el) return;
+      const next = String(value).padStart(2, '0');
+      if (this.lastValues[unit] === next) return;
+      this.lastValues[unit] = next;
+
+      if (this.reduceMotion) {
+        el.textContent = next;
+        return;
+      }
+
+      gsap.to(el, {
+        rotateX: -90,
+        transformPerspective: 400,
+        duration: 0.15,
+        ease: 'power1.in',
+        onComplete: () => {
+          el.textContent = next;
+          gsap.fromTo(
+            el,
+            { rotateX: 90, transformPerspective: 400 },
+            { rotateX: 0, duration: 0.2, ease: 'power1.out' },
+          );
+        },
+      });
+    }
+  }
+
+  customElements.define('gta-countdown', GtaCountdown);
+</script>

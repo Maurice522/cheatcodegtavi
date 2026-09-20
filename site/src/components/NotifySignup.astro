@@ -1,0 +1,105 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<notify-signup class:list={['block', className]}>
+  <form data-notify-form class="flex flex-col gap-2 sm:flex-row sm:items-center">
+    <label for="notify-email" class="sr-only">Email address</label>
+    <input
+      id="notify-email"
+      data-notify-input
+      type="email"
+      required
+      placeholder="you@example.com"
+      autocomplete="email"
+      class="text-body-sm w-full min-w-0 rounded-full border border-border-default bg-bg-primary px-4 py-2.5 text-text-primary placeholder:text-text-muted focus:border-accent-secondary/60 focus:outline-none sm:w-64"
+    />
+    <button
+      type="submit"
+      data-notify-submit
+      class="press shadow-glow-pink text-label shrink-0 rounded-full bg-accent-primary px-5 py-2.5 text-text-on-accent transition-transform duration-150 hover:scale-105 disabled:pointer-events-none disabled:opacity-60"
+    >
+      Notify Me at Launch
+    </button>
+  </form>
+  <p data-notify-message class="text-body-sm mt-2 hidden" role="status"></p>
+</notify-signup>
+
+<script>
+  class NotifySignup extends HTMLElement {
+    connectedCallback() {
+      const form = this.querySelector<HTMLFormElement>('[data-notify-form]');
+      const input = this.querySelector<HTMLInputElement>('[data-notify-input]');
+      const submit = this.querySelector<HTMLButtonElement>('[data-notify-submit]');
+      const message = this.querySelector<HTMLElement>('[data-notify-message]');
+      if (!form || !input || !submit || !message) return;
+
+      const STORAGE_KEY = 'cheatcodegtavi:subscribed-email';
+      const already = localStorage.getItem(STORAGE_KEY);
+      if (already) {
+        this.showDone(`You're on the list at ${already} — we'll email you the moment GTA6 cheats go live.`);
+      }
+
+      const show = (text: string, tone: 'muted' | 'error' | 'success') => {
+        message.textContent = text;
+        message.classList.remove('hidden', 'text-text-muted', 'text-error', 'text-verified');
+        message.classList.add(tone === 'error' ? 'text-error' : tone === 'success' ? 'text-verified' : 'text-text-muted');
+      };
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = input.value.trim();
+        if (!email) return;
+
+        submit.disabled = true;
+        show('Signing you up…', 'muted');
+
+        try {
+          const res = await fetch('/api/subscribe', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+
+          if (res.ok) {
+            try {
+              localStorage.setItem(STORAGE_KEY, email);
+            } catch {
+              // localStorage unavailable — the signup itself still succeeded server-side
+            }
+            this.showDone(`You're on the list at ${email} — we'll email you the moment GTA6 cheats go live.`);
+            return;
+          }
+
+          if (res.status === 400) {
+            const body = await res.json().catch(() => ({}));
+            show(body.error ?? 'Enter a valid email address.', 'error');
+          } else {
+            throw new Error(`Unexpected status ${res.status}`);
+          }
+        } catch {
+          // Most likely: the signup Worker isn't deployed yet (see README-worker.md).
+          show("Signups aren't live yet — check back soon.", 'muted');
+        } finally {
+          submit.disabled = false;
+        }
+      });
+    }
+
+    showDone(text: string) {
+      const form = this.querySelector<HTMLFormElement>('[data-notify-form]');
+      const message = this.querySelector<HTMLElement>('[data-notify-message]');
+      if (form) form.hidden = true;
+      if (message) {
+        message.textContent = text;
+        message.classList.remove('hidden', 'text-text-muted', 'text-error');
+        message.classList.add('text-verified');
+      }
+    }
+  }
+
+  customElements.define('notify-signup', NotifySignup);
+</script>

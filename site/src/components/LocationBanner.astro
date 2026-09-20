@@ -1,0 +1,101 @@
+---
+interface Props {
+  variant: 'vice-city' | 'leonida-keys' | 'grassrivers' | 'port-gellhorn' | 'ambrosia' | 'mount-kalaga';
+  image?: string;
+}
+
+const { variant, image } = Astro.props;
+
+const skies: Record<string, [string, string]> = {
+  'vice-city': ['#3a1a4a', '#ff6bc0'],
+  'leonida-keys': ['#0f2a3a', '#21e6e6'],
+  grassrivers: ['#1a2a1f', '#6620c7'],
+  'port-gellhorn': ['#2a1030', '#ffb020'],
+  ambrosia: ['#3a2a10', '#ffc94a'],
+  'mount-kalaga': ['#0b0d1f', '#8b3ef5'],
+};
+
+const [skyTop, skyBottom] = skies[variant];
+const gradId = `sky-${variant}`;
+---
+
+<div class="relative h-64 w-full overflow-hidden rounded-xl sm:h-80 lg:h-[26rem]">
+  {image ? (
+    <img src={image} alt={`${variant} hero`} class="h-full w-full object-cover object-center" />
+  ) : (
+    <svg viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax slice" class="h-full w-full">
+      <defs>
+        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color={skyTop} />
+          <stop offset="100%" stop-color={skyBottom} stop-opacity="0.55" />
+        </linearGradient>
+      </defs>
+      <rect width="1200" height="400" fill={`url(#${gradId})`} />
+      <rect width="1200" height="400" fill="var(--color-bg-primary)" opacity="0.35" />
+
+      {variant === 'vice-city' && (
+        <g fill="#05060A">
+          <circle cx="600" cy="260" r="90" fill="var(--color-pink-500)" opacity="0.5" />
+          <rect x="80" y="200" width="60" height="160" />
+          <rect x="150" y="230" width="45" height="130" />
+          <rect x="960" y="210" width="55" height="150" />
+          <rect x="1030" y="240" width="70" height="120" />
+          <rect x="1110" y="220" width="50" height="140" />
+          <rect x="0" y="360" width="1200" height="40" />
+        </g>
+      )}
+
+      {variant === 'leonida-keys' && (
+        <g>
+          <circle cx="950" cy="120" r="60" fill="var(--color-gold-400)" opacity="0.6" />
+          <path d="M0 300 Q150 280 300 300 T600 300 T900 300 T1200 300 V400 H0 Z" fill="#05060A" opacity="0.85" />
+          <path d="M0 320 Q150 305 300 320 T600 320 T900 320 T1200 320 V400 H0 Z" fill="#05060A" />
+          <ellipse cx="200" cy="290" rx="40" ry="10" fill="#0B0D14" />
+          <ellipse cx="700" cy="295" rx="55" ry="12" fill="#0B0D14" />
+        </g>
+      )}
+
+      {variant === 'grassrivers' && (
+        <g stroke="#05060A" stroke-width="6" fill="none" stroke-linecap="round">
+          <circle cx="1000" cy="100" r="45" fill="var(--color-purple-400)" opacity="0.4" stroke="none" />
+          <path d="M100 340 V260 M100 260c15-15 30 15 45 0s30 15 45 0" />
+          <path d="M300 360 V300 M300 300c15-15 30 15 45 0s30 15 45 0" />
+          <path d="M550 340 V270 M550 270c15-15 30 15 45 0s30 15 45 0" />
+          <path d="M850 355 V295 M850 295c15-15 30 15 45 0s30 15 45 0" />
+          <rect x="0" y="360" width="1200" height="40" fill="#05060A" stroke="none" />
+        </g>
+      )}
+
+      {variant === 'port-gellhorn' && (
+        <g fill="#05060A">
+          <circle cx="250" cy="140" r="3" fill="var(--color-gold-400)" />
+          <circle cx="900" cy="90" r="2" fill="var(--color-cyan-400)" />
+          <path d="M500 200 L500 360 L700 360 L700 200 L600 150 Z" />
+          <rect x="530" y="230" width="30" height="40" fill="var(--color-gold-500)" opacity="0.7" />
+          <rect x="620" y="230" width="30" height="40" fill="var(--color-pink-500)" opacity="0.5" />
+          <rect x="0" y="360" width="1200" height="40" />
+        </g>
+      )}
+
+      {variant === 'ambrosia' && (
+        <g fill="#05060A">
+          <circle cx="300" cy="300" r="130" fill="var(--color-gold-500)" opacity="0.55" />
+          <rect x="850" y="240" width="20" height="120" />
+          <circle cx="860" cy="230" r="22" />
+          <rect x="920" y="270" width="80" height="90" />
+          <path d="M920 270 L960 240 L1000 270 Z" />
+          <rect x="0" y="360" width="1200" height="40" />
+        </g>
+      )}
+
+      {variant === 'mount-kalaga' && (
+        <g fill="#05060A">
+          <circle cx="950" cy="90" r="35" fill="var(--color-ink-100)" opacity="0.85" />
+          <path d="M0 360 L150 180 L280 300 L380 220 L520 360 Z" />
+          <path d="M300 360 L480 150 L650 320 L780 240 L950 360 Z" opacity="0.85" />
+          <rect x="0" y="355" width="1200" height="45" />
+        </g>
+      )}
+    </svg>
+  )}
+</div>

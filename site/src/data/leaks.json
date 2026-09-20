@@ -1,0 +1,56 @@
+[
+  {
+    "slug": "gta6-launch-date-confirmed",
+    "title": "GTA6 Launch Date Confirmed: November 19, 2026",
+    "summary": "Rockstar and Take-Two have reconfirmed the release date twice in 2026 — once when pre-orders opened in June, and again during the August Extended Look gameplay reveal. Grand Theft Auto VI launches November 19, 2026 on PlayStation 5 and Xbox Series X|S.",
+    "credibility": "official",
+    "tags": ["release-date", "official"],
+    "sourceLinks": [{ "title": "Rockstar Newswire", "url": "https://www.rockstargames.com/newswire" }],
+    "publishedAt": "2026-08-05T00:00:00.000Z"
+  },
+  {
+    "slug": "no-pc-version-at-launch",
+    "title": "No PC Version at Launch — Console Only",
+    "summary": "Rockstar has confirmed only PlayStation 5 and Xbox Series X|S for the November 19 launch, with no PC storefront, digital platform, or system requirements announced. Based on the GTA5 and Red Dead Redemption 2 patterns, a PC release realistically lands sometime in late 2027 to 2028.",
+    "credibility": "official",
+    "tags": ["pc", "platforms"],
+    "sourceLinks": [{ "title": "Rockstar Newswire", "url": "https://www.rockstargames.com/newswire" }],
+    "publishedAt": "2026-08-05T00:00:00.000Z"
+  },
+  {
+    "slug": "welcome-to-leonida",
+    "title": "Welcome to Leonida: The World of GTA6",
+    "summary": "GTA6 is set in the fictional state of Leonida, a Florida-inspired sprawl anchored by Vice City. Trailers so far have shown swampland, beaches, and a dense urban core, continuing the series' tradition of a satirical, real-world-adjacent setting.",
+    "credibility": "official",
+    "tags": ["map", "leonida", "vice-city"],
+    "sourceLinks": [{ "title": "Rockstar Newswire", "url": "https://www.rockstargames.com/newswire" }],
+    "publishedAt": "2026-08-05T00:00:00.000Z"
+  },
+  {
+    "slug": "meet-jason-and-lucia",
+    "title": "Meet Jason and Lucia — GTA6's Protagonists",
+    "summary": "Rockstar confirmed a pair of protagonists, Jason and Lucia, in the very first trailer — a first for the mainline series. The August Extended Look expanded on their dynamic and the Bonnie-and-Clyde framing of the story.",
+    "credibility": "official",
+    "tags": ["characters", "story"],
+    "sourceLinks": [{ "title": "Rockstar Newswire", "url": "https://www.rockstargames.com/newswire" }],
+    "publishedAt": "2026-08-05T00:00:00.000Z"
+  },
+  {
+    "slug": "test-rumor-fixture-one",
+    "title": "[Test fixture] Community speculation on cheat menu access",
+    "summary": "Placeholder rumor entry used only to test the \"rumored\" credibility badge and single-source styling during development. Not a real claim.",
+    "credibility": "rumor",
+    "tags": ["test-data"],
+    "sourceLinks": [{ "title": "Internal test fixture", "url": "#" }],
+    "publishedAt": "2026-09-16T00:00:00.000Z"
+  },
+  {
+    "slug": "test-rumor-fixture-two",
+    "title": "[Test fixture] Community speculation on returning vehicles",
+    "summary": "Placeholder rumor entry used only to test the leak feed's multi-source vs single-source presentation during development. Not a real claim.",
+    "credibility": "rumor",
+    "tags": ["test-data"],
+    "sourceLinks": [{ "title": "Internal test fixture", "url": "#" }],
+    "publishedAt": "2026-09-17T00:00:00.000Z"
+  }
+]

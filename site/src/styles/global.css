@@ -1,0 +1,326 @@
+/* Fonts loaded via <link> in Layout.astro's <head> rather than @import here —
+   an @import inside a stylesheet is render-blocking, a <head> <link> lets the
+   browser fetch it in parallel with everything else. */
+@import "tailwindcss";
+
+@theme {
+  /* ---- Ink neutrals (dark base) ---- */
+  --color-ink-950: #05060a;
+  --color-ink-900: #0b0d14;
+  --color-ink-800: #12151f;
+  --color-ink-700: #1b1f2e;
+  --color-ink-600: #262b3d;
+  --color-ink-500: #3a4058;
+  --color-ink-400: #565d7a;
+  --color-ink-300: #7b819e;
+  --color-ink-200: #a8adc4;
+  --color-ink-100: #d6d8e6;
+  --color-ink-50: #f1f2f8;
+
+  /* ---- Neon accent ramps (GTA6 trailer palette) ---- */
+  --color-pink-600: #d6127a;
+  --color-pink-500: #ff2e9e;
+  --color-pink-400: #ff6bc0;
+  --color-cyan-600: #0fb8b8;
+  --color-cyan-500: #21e6e6;
+  --color-cyan-400: #6ff3f3;
+  --color-purple-600: #6620c7;
+  --color-purple-500: #8b3ef5;
+  --color-purple-400: #b27cfa;
+  --color-gold-600: #d9a02a;
+  --color-gold-500: #ffc94a;
+  --color-gold-400: #ffde8a;
+
+  /* ---- Status ---- */
+  --color-verified: #2fe88a;
+  --color-rumored: #ffb020;
+  --color-error: #ff4d4d;
+
+  /* ---- Semantic (default: dark theme; overridden per-token under
+     [data-theme="light"] below — every component reads these vars rather than
+     the raw ink/accent scales, so the whole site rethemes from these two
+     blocks alone). ---- */
+  --color-bg-primary: var(--color-ink-950);
+  --color-bg-surface: var(--color-ink-900);
+  --color-bg-elevated: var(--color-ink-800);
+  --color-border-default: var(--color-ink-600);
+  --color-border-subtle: var(--color-ink-700);
+  --color-text-primary: var(--color-ink-50);
+  --color-text-secondary: var(--color-ink-200);
+  --color-text-muted: var(--color-ink-400);
+  --color-accent-primary: var(--color-pink-500);
+  --color-accent-primary-hover: var(--color-pink-400);
+  --color-accent-secondary: var(--color-cyan-500);
+  --color-accent-tertiary: var(--color-gold-500);
+  --color-accent-purple: var(--color-purple-500);
+  --color-text-on-accent: var(--color-ink-950);
+
+  /* ---- Fonts ---- */
+  --font-display: "Anton", "Archivo Black", sans-serif;
+  --font-heading: "Manrope", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  /* ---- Radius ---- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 999px;
+}
+
+/* ---- Typography scale — one class bundles family + size + weight + line-height +
+   tracking. Never combine with a separate font-weight utility. ---- */
+@utility text-display-xl {
+  font-family: var(--font-display);
+  font-size: 88px;
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+}
+@utility text-display-lg {
+  font-family: var(--font-display);
+  font-size: 64px;
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+}
+@utility text-display-md {
+  font-family: var(--font-display);
+  font-size: 44px;
+  line-height: 0.96;
+  letter-spacing: -0.005em;
+}
+@utility text-heading-lg {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1.2;
+}
+@utility text-heading-md {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.3;
+}
+@utility text-heading-sm {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.3;
+}
+@utility text-body-lg {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.5;
+}
+@utility text-body-md {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.5;
+}
+@utility text-body-sm {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.45;
+}
+@utility text-label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+@utility text-caption {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* ---- Effects — colored glow instead of a generic drop shadow, the signature
+   accent treatment for active/hover states on buttons, tabs, and cards. ---- */
+@utility shadow-elevation-sm {
+  box-shadow: 0 2px 8px 0 rgb(0 0 0 / 0.35);
+}
+@utility shadow-elevation-md {
+  box-shadow: 0 8px 24px -4px rgb(0 0 0 / 0.45);
+}
+@utility shadow-glow-pink {
+  box-shadow: 0 0 28px 0 rgb(255 46 158 / 0.55);
+}
+@utility shadow-glow-cyan {
+  box-shadow: 0 0 28px 0 rgb(33 230 230 / 0.5);
+}
+
+/* ---- Scanline / grain overlay — subtle Vice-noir texture, used sparingly on
+   hero sections only (see DESIGN.md Don'ts). ---- */
+@utility bg-scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0.025) 0px,
+    rgb(255 255 255 / 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+:root {
+  /* Stronger custom easing curves — the built-in CSS easings read as weak/generic. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* ---- Light theme — set on <html> by the inline head script in Layout.astro
+   (before paint, to avoid a flash of the wrong theme) and toggled by
+   ThemeToggle.astro. Neon accents shift to their darker "-600" ramp step here:
+   the vivid "-500" values read fine against near-black but lose most of their
+   contrast as text/borders against white, so light mode trades a little
+   vibrancy for legibility rather than reusing the dark-mode accent 1:1. ---- */
+:root[data-theme="light"] {
+  --color-bg-primary: #ffffff;
+  --color-bg-surface: #f5f5fa;
+  --color-bg-elevated: #eaebf3;
+  --color-border-default: #d7d9e6;
+  --color-border-subtle: #e6e7f1;
+  --color-text-primary: var(--color-ink-950);
+  --color-text-secondary: var(--color-ink-500);
+  --color-text-muted: var(--color-ink-300);
+  --color-accent-primary: var(--color-pink-600);
+  --color-accent-primary-hover: var(--color-pink-500);
+  --color-accent-secondary: var(--color-cyan-600);
+  --color-accent-tertiary: var(--color-gold-600);
+  --color-accent-purple: var(--color-purple-600);
+  --color-text-on-accent: #ffffff;
+}
+
+/* ---- Press feedback — every pressable element should feel like it heard you. ---- */
+@utility press {
+  transition: transform 160ms var(--ease-out);
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+::selection {
+  background-color: var(--color-accent-primary);
+  color: var(--color-text-on-accent);
+}
+
+/* ---- Alternating section tint — cheap wayfinding cue on long scroll pages so
+   one section reads as visually distinct from the next without a hard border.
+   Uses the semantic surface token (not a raw ink shade) specifically so this
+   stays a subtle *tint* rather than turning into a dark-gray band once the
+   page background itself is light. ---- */
+@utility bg-section-alt {
+  background-color: var(--color-bg-surface);
+}
+
+/* ---- Page transition overlay (see Layout.astro) — a brief neon wipe on internal
+   navigation, standing in for the game's character-switch flash. ---- */
+.pt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0;
+}
+.pt-overlay-panel {
+  position: absolute;
+  inset: 0;
+  background: var(--color-bg-primary);
+  transform: scaleY(0);
+  transform-origin: center;
+}
+.pt-overlay-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  opacity: 0;
+}
+.pt-overlay-bar-1 {
+  top: 38%;
+  background: var(--color-accent-primary);
+  box-shadow: 0 0 24px 2px var(--color-accent-primary);
+}
+.pt-overlay-bar-2 {
+  top: 62%;
+  background: var(--color-accent-secondary);
+  box-shadow: 0 0 24px 2px var(--color-accent-secondary);
+}
+/* Set synchronously (no FOUC) by the inline head script when a navigation is
+   already in flight — see Layout.astro. */
+html.pt-precovered .pt-overlay {
+  opacity: 1;
+}
+html.pt-precovered .pt-overlay-panel {
+  transform: scaleY(1);
+}
+
+/* ---- Cursor-reactive glow — subtle spotlight following the pointer on dark
+   hero/banner sections. Desktop (pointer: fine) only, applied via JS. ---- */
+.cursor-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+  background: radial-gradient(
+    circle at var(--gx, 50%) var(--gy, 50%),
+    color-mix(in srgb, var(--color-pink-400) 16%, transparent),
+    transparent 42%
+  );
+}
+
+/* ---- Confidence badge motion — checkmark draw-in for verified, unstable
+   flicker for rumored. Communicates the distinction before you even read it. ---- */
+.badge-check {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .badge-check {
+    animation: badge-check-draw 0.5s var(--ease-out) 0.1s forwards;
+  }
+  .badge-flicker {
+    animation: badge-flicker 3.2s ease-in-out infinite;
+  }
+}
+@keyframes badge-check-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes badge-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 0.4;
+  }
+  94% {
+    opacity: 1;
+  }
+  96% {
+    opacity: 0.55;
+  }
+  97% {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,59 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import LocationIcon from '../../components/LocationIcon.astro';
+import LocationBanner from '../../components/LocationBanner.astro';
+import locations from '../../data/locations.json';
+
+export function getStaticPaths() {
+  return locations.map((loc) => ({ params: { slug: loc.slug } }));
+}
+
+const { slug } = Astro.params;
+const location = locations.find((loc) => loc.slug === slug)!;
+const others = locations.filter((loc) => loc.slug !== slug);
+---
+
+<Layout title={location.name} description={location.description}>
+  <div class="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
+    <nav class="text-caption mb-6 text-text-muted">
+      <a href="/locations" class="hover:text-text-primary">Locations</a>
+      <span class="mx-2">/</span>
+      <span class="text-text-secondary">{location.name}</span>
+    </nav>
+
+    <LocationBanner variant={location.slug} image={location.heroImage} />
+
+    <div class="mt-6 flex flex-wrap items-center gap-5">
+      <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-bg-elevated">
+        <LocationIcon icon={location.icon} class="h-10 w-10 text-accent-secondary" />
+      </div>
+      <div>
+        <span class="text-label text-accent-secondary">{location.kind}</span>
+        <h1 class="text-display-md text-3xl text-text-primary sm:text-5xl">{location.name}</h1>
+      </div>
+    </div>
+
+    <p class="text-body-lg mt-8 max-w-2xl whitespace-pre-line text-text-secondary">
+      {location.bio ?? location.description}
+    </p>
+
+    <div class="mt-12">
+      <h2 class="text-heading-sm mb-4 text-text-primary">Other Regions</h2>
+      <div class="flex flex-wrap gap-3">
+        {others.map((loc) => (
+          <a
+            href={`/locations/${loc.slug}`}
+            class="press text-body-sm flex items-center gap-2 rounded-full border border-border-default bg-bg-surface px-4 py-2 text-text-secondary transition-colors duration-150 hover:border-accent-secondary/50 hover:text-text-primary"
+          >
+            <LocationIcon icon={loc.icon} class="h-4 w-4" />
+            {loc.name}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <a href="/locations" class="text-label mt-12 inline-block text-accent-secondary hover:text-accent-secondary/80">
+      &larr; Back to Locations
+    </a>
+  </div>
+</Layout>

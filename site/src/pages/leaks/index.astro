@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import LeakCard from '../../components/LeakCard.astro';
+import { getAllLeaks } from '../../lib/leaks';
+
+const leaks = await getAllLeaks();
+---
+
+<Layout title="Leaks & Updates" description="Every GTA6 leak and official update, tracked and cross-referenced.">
+  <PageHero
+    eyebrow="Tracked Daily"
+    title="Leaks & Updates"
+    subtitle="Official announcements and community leaks, clearly labeled so you always know how solid the source is."
+    accent="cyan"
+  />
+  <div class="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16" data-reveal-group>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {leaks.map((leak) => (
+        <div id={leak.slug} data-reveal>
+          <LeakCard leak={leak} />
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>

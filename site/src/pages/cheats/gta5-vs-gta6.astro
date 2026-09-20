@@ -1,0 +1,76 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import CheatIcon from '../../components/CheatIcon.astro';
+import { getAllCheats, getCheatIcon, type CheatIconName } from '../../lib/cheats';
+import gta5Cheats from '../../data/gta5-cheats.json';
+
+interface Gta5Cheat {
+  title: string;
+  category: string;
+  code: string;
+  effect: string;
+}
+
+const cheats = gta5Cheats as Gta5Cheat[];
+
+// Auto-upgrades the moment the real GTA6 pipeline publishes a cheat with a
+// matching title — no manual edits needed here when Phase 3 ships.
+const gta6Cheats = getAllCheats();
+const rows = cheats.map((cheat) => {
+  const match = gta6Cheats.find((c) => c.title.toLowerCase() === cheat.title.toLowerCase());
+  return { ...cheat, icon: getCheatIcon(cheat.category) as CheatIconName, gta6Match: match };
+});
+---
+
+<Layout
+  title="GTA5 vs GTA6 Cheat Codes"
+  description="Every classic GTA V cheat code, and whether it's been confirmed to return in GTA6 yet."
+>
+  <PageHero
+    eyebrow="GTA V Archive"
+    title="GTA5 vs GTA6 Cheat Codes"
+    subtitle="GTA6's own cheat codes haven't been confirmed yet — here's every classic GTA V code while you wait, and whether it's shown up in GTA6 so far."
+    accent="gold"
+  />
+
+  <div class="mx-auto max-w-4xl px-5 py-14 sm:px-8 sm:py-20">
+    <div class="mb-8 rounded-xl border border-dashed border-border-default bg-bg-surface p-5">
+      <p class="text-body-sm text-text-secondary">
+        These are <strong class="text-text-primary">GTA V codes</strong>, published here as a reference —
+        not GTA6 content. See our <a href="/faq" class="text-accent-secondary hover:underline">FAQ</a> for how
+        we expect GTA6's cheat system to work, and <a href="/cheats" class="text-accent-secondary hover:underline">Cheat Codes</a>
+        for the real, verified GTA6 list once it exists.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3" data-reveal-group>
+      {rows.map((row) => (
+        <div data-reveal class="flex flex-col gap-3 rounded-xl border border-border-default bg-bg-surface p-5 sm:flex-row sm:items-center sm:gap-5">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-bg-elevated text-accent-secondary">
+            <CheatIcon icon={row.icon} class="h-6 w-6" />
+          </div>
+          <div class="flex-1">
+            <p class="text-heading-sm text-text-primary">{row.title}</p>
+            <p class="text-body-sm text-text-secondary">{row.effect}</p>
+            <p class="text-caption mt-1 text-accent-secondary" style="font-family: var(--font-heading);">{row.code}</p>
+          </div>
+          <div class="shrink-0">
+            {row.gta6Match ? (
+              <a
+                href={`/cheats/${row.gta6Match.slug}`}
+                class="text-label inline-flex items-center gap-1.5 rounded-full border border-verified/30 bg-verified/15 px-3 py-1.5 text-verified transition-colors hover:bg-verified/25"
+              >
+                Confirmed in GTA6 →
+              </a>
+            ) : (
+              <span class="text-label inline-flex items-center rounded-full border border-border-default px-3 py-1.5 text-text-muted">
+                Not yet in GTA6
+              </span>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>

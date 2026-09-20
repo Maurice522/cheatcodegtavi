@@ -1,0 +1,38 @@
+---
+import type { Cheat } from '../lib/cheats';
+import { getCheatIcon } from '../lib/cheats';
+import { formatCompactCount } from '../lib/format';
+import ConfidenceBadge from './ConfidenceBadge.astro';
+import CheatBanner from './CheatBanner.astro';
+import FavoriteButton from './FavoriteButton.astro';
+
+interface Props {
+  cheat: Cheat;
+}
+
+const { cheat } = Astro.props;
+const primary = cheat.platforms.ps5 ?? cheat.platforms.xbox;
+const icon = getCheatIcon(cheat.category);
+---
+
+<a
+  href={`/cheats/${cheat.slug}`}
+  class="group relative flex flex-col gap-3 overflow-hidden rounded-xl border border-border-default bg-bg-surface p-5 transition-[transform,border-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:border-accent-primary/50 hover:shadow-glow-pink"
+>
+  {primary && <CheatBanner confidence={primary.confidence} icon={icon} size="sm" />}
+  <FavoriteButton
+    slug={cheat.slug}
+    title={cheat.title}
+    category={cheat.category}
+    class="absolute right-3 top-3 z-10"
+  />
+  <div class="flex items-start justify-between gap-3">
+    <span class="text-label text-accent-secondary">{cheat.category}</span>
+    {primary && <ConfidenceBadge confidence={primary.confidence} />}
+  </div>
+  <h3 class="text-heading-sm text-text-primary">{cheat.title}</h3>
+  {primary && <p class="text-body-sm line-clamp-2 text-text-secondary">{primary.effect}</p>}
+  <div class="text-caption mt-auto flex items-center gap-1 pt-2 text-text-muted">
+    <span data-count-up={cheat.viewCount}>{formatCompactCount(cheat.viewCount)}</span>&nbsp;views
+  </div>
+</a>

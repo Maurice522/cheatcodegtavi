@@ -1,0 +1,102 @@
+[
+  {
+    "slug": "jason-duval",
+    "name": "Jason Duval",
+    "role": "Protagonist",
+    "icon": "star",
+    "heroImage": "/gta_images/jason-and-lucia-09.jpg",
+    "description": "One of the two playable leads. He has a background in small-scale criminal work around the Leonida Keys and previously spent time in the military before drifting back into that life.",
+    "bio": "Jason grew up on the margins of the Keys, in the kind of towns where a fast dinghy and a working knowledge of the local marinas mattered more than a diploma. Small jobs led to slightly bigger ones, the way they always do in that world, and by his late teens he was already known to the wrong people for the right reasons — reliable, quiet, good under pressure.\n\nA stint in the military interrupted that trajectory, and by most accounts it should have set him straight. Instead it sharpened him: better instincts, better nerves, and a résumé that made him more useful to the people he came back to rather than less. Leonida has a way of pulling people back into orbit, and Jason never really left it behind so much as postponed it.\n\nEverything changes when he crosses paths with Lucia. What starts as a shared problem becomes a shared plan, and the two of them fall into the kind of dynamic Rockstar has only hinted at once before in the series — two people who trust each other more than they trust anyone else left standing. It's the first time the mainline series has split its story evenly between two leads, and Jason is written as the calmer half of that pairing, the one who thinks two steps ahead while things are still on fire.\n\nHis ties reach further than just Lucia. Cal Hampton keeps him looped into Vice City business he'd rather not touch directly, and Brian Heder's boat yard in the Keys gives him a place to disappear to when Leonida gets too hot. None of these are people Jason fully trusts — they're just the ones he has left.",
+    "connections": ["lucia-caminos", "cal-hampton", "brian-heder"]
+  },
+  {
+    "slug": "lucia-caminos",
+    "name": "Lucia Caminos",
+    "role": "Protagonist",
+    "icon": "star",
+    "heroImage": "/gta_images/jason-and-lucia-09.jpg",
+    "description": "The second playable lead and the series' first female protagonist. She was recently released from Leonida Penitentiary and is now partnered with Jason.",
+    "bio": "Lucia is the first woman to headline a mainline Grand Theft Auto game, and Rockstar has built the reveal trailers around that fact deliberately — she isn't a sidekick who happens to be playable, she's positioned as co-lead from the very first frame she appears in. That alone makes her the most closely watched character in the game before a single mission has been played.\n\nShe comes into the story fresh out of Leonida Penitentiary, which tells you most of what you need to know about how the last few years went for her. Prison doesn't soften people like Lucia; it tends to make them faster, more decisive, and considerably less patient with anyone who wastes her time. Whatever put her away, she's not interested in repeating the mistake that got her caught — only in not getting caught again.\n\nHer partnership with Jason forms almost immediately, and the trailers frame it less as romance-first and more as two survivors recognizing the same look in each other. She reads as the sharper-tongued half of the two of them, quicker to call out a bad plan and quicker to improvise when the good plan falls apart anyway.\n\nOutside of Jason, Lucia is kept deliberately isolated in what's been shown so far — no obvious crew of her own, no old contacts surfacing yet. That's likely to change once the full story unfolds, but for now she reads as someone who's used to relying on herself first and anyone else second.",
+    "connections": ["jason-duval"]
+  },
+  {
+    "slug": "cal-hampton",
+    "name": "Cal Hampton",
+    "role": "Supporting",
+    "icon": "signal",
+    "heroImage": "/gta_images/cal-hampton-01.jpg",
+    "description": "An associate of Jason's based in Vice City, described as more cautious and homebound than the people around him.",
+    "bio": "Cal operates out of Vice City proper, and everything about how he's been described so far — cautious, homebound, more comfortable behind a phone than in the middle of a job — marks him as the planner in Jason's circle rather than the muscle. Every GTA crew needs someone who stays back and keeps things running while everyone else is out taking risks; Cal reads like that role.\n\nThat caution isn't framed as weakness. In a world built around impulsive people making increasingly bad decisions, someone who thinks twice before answering a call tends to last longer than the ones who don't. Cal's value to Jason is likely less about firepower and more about information — knowing who's asking questions, who's owed money, and who's about to become a problem.\n\nHis homebound streak also suggests a character who's carved out something resembling a normal life in Vice City, which makes him an odd fit for the chaos Jason and Lucia are about to bring into it. Whether that stability survives contact with the rest of the story is very much an open question.\n\nFor now, Cal exists mostly at the edges of what's been shown — a name attached to Jason's past rather than a face given much screen time yet. That will likely change as more of the story comes into focus.",
+    "connections": ["jason-duval"]
+  },
+  {
+    "slug": "boobie-ike",
+    "name": "Boobie Ike",
+    "role": "Supporting",
+    "icon": "briefcase",
+    "heroImage": "/gta_images/boobie-ike-03.jpg",
+    "description": "A well-known Vice City businessman with interests spanning real estate, nightlife, and a record label he runs alongside Dre'Quan Priest.",
+    "bio": "Boobie Ike is Vice City money with Vice City taste — the kind of local figure whose name is on a building downtown and a VIP rope at three different clubs, and who never seems to be short of either. Real estate gives him the legitimate face; nightlife gives him the reach; and neither one fully explains where the rest of his income actually comes from, which is exactly how he seems to like it.\n\nHis record label, run in partnership with Dre'Quan Priest, is the piece of his empire that gets talked about the most, and for good reason — a music label doubles as both a cultural foothold in the city and a very convenient way to move money and people around without too many questions being asked. That's not a new idea in the GTA universe, but Boobie Ike wears it especially well.\n\nThe partnership with Dre'Quan appears to be a genuine one rather than just a business arrangement of convenience — two men who each bring something the other doesn't, one supplying the capital and connections, the other supplying the ear for talent and the studio time. Together they've built enough of a name that Real Dimez signing with them is treated as a meaningful moment rather than a footnote.\n\nEverything about Boobie Ike suggests a man who has spent years learning exactly how far Vice City will let him go before it pushes back — and who is fully expecting, at some point in this story, to find out.",
+    "connections": ["dre-quan-priest"]
+  },
+  {
+    "slug": "dre-quan-priest",
+    "name": "Dre'Quan Priest",
+    "role": "Supporting",
+    "icon": "music",
+    "heroImage": "/gta_images/drequan-priest-02.jpg",
+    "description": "A music producer connected to Boobie Ike's record label, Only Raw Records, who signed the duo Real Dimez.",
+    "bio": "Dre'Quan Priest is the ears behind Only Raw Records, the label he runs alongside Boobie Ike — the one listening to demos, sitting in on sessions, and deciding who's actually worth the studio time versus who just talks a good game. In a city as saturated with aspiring artists as Vice City is shown to be, that instinct is worth more than the marketing budget.\n\nSigning Real Dimez appears to be his highest-profile move so far, and the fact that it's treated as a notable event within the story suggests Only Raw Records has enough of a reputation that its choices actually move the needle for an up-and-coming act's career. That's not a small thing to build from nothing in a city this competitive.\n\nHis partnership with Boobie Ike gives him the kind of backing most producers spend a decade trying to find — money, connections, and a business partner who isn't just in it for a vanity credit. Whether that partnership is as clean as it looks from the outside is a different question entirely, and one the story will likely spend more time on than the music itself.\n\nAs written so far, Dre'Quan reads less like a background industry figure and more like someone whose label is a genuine piece of Vice City's cultural landscape — the kind of name a local artist name-drops because it actually means something.",
+    "connections": ["boobie-ike", "real-dimez"]
+  },
+  {
+    "slug": "real-dimez",
+    "name": "Real Dimez",
+    "role": "Supporting",
+    "icon": "mic",
+    "heroImage": "/gta_images/realdimez.jpg",
+    "description": "A two-person music duo, Bae-Luxe and Roxy, signed to Only Raw Records after building a following through their own tracks and social media presence.",
+    "bio": "Real Dimez are Bae-Luxe and Roxy, a duo who built their name the way most breakout acts do now — releasing their own material, building an audience online one post at a time, and getting loud enough that a label eventually had to notice. By the time Only Raw Records came calling, they'd already done the hard part themselves.\n\nThat independent streak is worth paying attention to. Acts who build a following before signing tend to walk into a partnership with more leverage and a clearer sense of their own identity than acts who get discovered cold — which suggests Real Dimez may have more say in their own direction than a typical up-and-comer would.\n\nSigning with Dre'Quan Priest and Boobie Ike's label puts them squarely inside Vice City's music-and-money ecosystem, for better or worse. It's a step up in resources and visibility, but it also means their success is now tangled up with a label whose backers have interests well beyond the music itself.\n\nTheir rise is also framed alongside other local names coming up in the same scene, DWNPLY among them — less a solo ascent than one part of a wider Vice City music moment the story seems to be building out in the background.",
+    "connections": ["dre-quan-priest", "dwnply"]
+  },
+  {
+    "slug": "raul-bautista",
+    "name": "Raul Bautista",
+    "role": "Supporting",
+    "icon": "mask",
+    "heroImage": "/gta_images/raul-bautista-03.jpg",
+    "description": "An experienced crew leader who plans and organizes heists, known for taking on increasingly risky scores.",
+    "bio": "Raul Bautista is the guy you call when the job is too big to pull off with a handgun and a getaway car. As a crew leader who specializes in planning and organizing heists, he represents the more methodical, blueprint-and-timing side of Leonida's criminal underworld — the opposite of the impulsive street-level chaos the series is also known for.\n\nWhat stands out about how he's been described is the trajectory: increasingly risky scores, not a single big one. That's a pattern more than a personality trait, and it usually means one of two things in a story like this — either he's chasing something specific that keeps raising the stakes, or he's simply good enough that the safer jobs stopped being worth his time.\n\nHeists have been a central pillar of Grand Theft Auto's more ambitious entries for years now, from elaborate casino jobs to multi-stage scores requiring a full crew with different specialties. Raul reads like the character built to anchor that side of GTA6's structure — the planner other characters, possibly including Jason and Lucia, end up working with or around.\n\nHis reputation for pushing scores further each time also plants an obvious question the story hasn't answered yet: what happens the first time one of those increasingly risky jobs doesn't go according to plan.",
+    "connections": []
+  },
+  {
+    "slug": "brian-heder",
+    "name": "Brian Heder",
+    "role": "Supporting",
+    "icon": "boat",
+    "heroImage": "/gta_images/brianheder.jpg",
+    "description": "A longtime smuggler operating out of the Keys, who lets Jason stay at one of his properties in exchange for help with local jobs.",
+    "bio": "Brian Heder has spent long enough running things through the Leonida Keys that he no longer thinks of it as smuggling so much as just business — boats going out light and coming back heavy, routes that avoid the wrong kind of attention, and a network built up over years of not getting caught. The Keys' maze of islands and open water make it exactly the kind of geography that a career like his depends on.\n\nHis arrangement with Jason is practical rather than sentimental: a place to stay in exchange for help with the jobs Brian needs done locally. It's the classic GTA housing situation — free rent always comes with strings attached — and it keeps Jason tied to the Keys even as the story presumably pulls him toward Vice City and Lucia.\n\nThe boat yard itself functions as both his cover and his actual operation, the kind of place that looks like routine maintenance and repair work to anyone glancing in from the road. It's also, notably, where his home life intersects with his business — his wife Lori is connected to the same operation, which suggests it's as much a family concern as a criminal one.\n\nBrian's role in the story is likely more supporting infrastructure than main plot — the guy who keeps the Keys chapter of Jason's life running in the background while the bigger story plays out elsewhere.",
+    "connections": ["jason-duval", "lori"]
+  },
+  {
+    "slug": "lori",
+    "name": "Lori",
+    "role": "Mentioned",
+    "icon": "boat",
+    "heroImage": "/gta_images/gta6-screen-extendedlook-10.jpg",
+    "description": "Brian Heder's wife, mentioned in connection with his boat yard operation in the Keys.",
+    "bio": "Lori hasn't been given much screen time so far, but her connection to Brian Heder's boat yard operation says something about the shape of his life in the Keys — this isn't framed as a lone-wolf smuggling setup, it's a family business, or close enough to one that the two are hard to separate.\n\nHow involved she actually is in the day-to-day running of things is still unclear. She could be entirely removed from that side of it, or she could be more hands-on than a first mention suggests — GTA's supporting cast has a long history of quiet, background characters turning out to matter more once the story gets moving.\n\nEither way, her presence adds a layer of domestic texture to Brian's corner of the world that the trailers haven't spent much time on elsewhere. The Keys chapter of the story reads less like a criminal outpost and more like a place people actually live, work, and are married in — which fits Leonida's overall approach of grounding its criminal world in ordinary-looking lives.",
+    "connections": ["brian-heder"]
+  },
+  {
+    "slug": "dwnply",
+    "name": "DWNPLY",
+    "role": "Mentioned",
+    "icon": "music",
+    "heroImage": "/gta_images/gta6-screen-extendedlook-06.jpg",
+    "description": "A local rapper referenced as part of Real Dimez's early rise in the Vice City music scene.",
+    "bio": "DWNPLY is one of the names tied to Real Dimez's early days coming up in Vice City, part of the same grassroots scene that eventually produced a duo big enough to catch Only Raw Records' attention. Exactly how direct that connection is — collaborator, peer, rival, or just someone who shared a stage early on — hasn't been spelled out yet.\n\nWhat the mention does confirm is that Rockstar is building out a music scene with actual depth to it rather than a single act existing in isolation. Vice City's in-game culture has always leaned heavily on music, and having named artists referencing each other's rise suggests the same layered approach extends into the story's supporting cast this time.\n\nFor now, DWNPLY functions more as scene-setting than a character in their own right — a thread that ties Real Dimez's backstory to a wider, more lived-in version of Vice City's music world. Whether that thread gets pulled on further once the game is out remains to be seen.",
+    "connections": ["real-dimez"]
+  }
+]

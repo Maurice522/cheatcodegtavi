@@ -1,0 +1,49 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import trailers from '../../data/trailers.json';
+
+const sorted = [...trailers].sort((a, b) => +new Date(b.date) - +new Date(a.date));
+---
+
+<Layout title="Trailers" description="Every official GTA6 trailer, embedded from Rockstar's own YouTube channel.">
+  <PageHero
+    eyebrow="Straight From Rockstar"
+    title="Trailers"
+    subtitle="Official releases only, embedded from their verified YouTube channel — nothing rehosted."
+    accent="gold"
+  />
+  <div class="mx-auto max-w-4xl px-5 py-12 sm:px-8 sm:py-16">
+    <div class="flex flex-col gap-10" data-reveal-group>
+      {
+        sorted.map((t) => {
+          const date = new Date(t.date).toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+          });
+          return (
+            <div data-reveal class="flex flex-col gap-3">
+              <div class="aspect-video w-full overflow-hidden rounded-xl border border-border-default bg-bg-surface">
+                <iframe
+                  class="h-full w-full"
+                  src={`https://www.youtube-nocookie.com/embed/${t.youtubeId}`}
+                  title={t.title}
+                  loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                />
+              </div>
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <h2 class="text-heading-sm text-text-primary">{t.title}</h2>
+                <time class="text-caption text-text-muted">{date}</time>
+              </div>
+              <p class="text-body-sm text-text-secondary">{t.summary}</p>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</Layout>

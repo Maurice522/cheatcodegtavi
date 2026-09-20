@@ -1,0 +1,75 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import CharacterAvatar from '../../components/CharacterAvatar.astro';
+import characters from '../../data/characters.json';
+
+const leads = characters.filter((c) => c.role === 'Protagonist');
+const supporting = characters.filter((c) => c.role === 'Supporting');
+const mentioned = characters.filter((c) => c.role === 'Mentioned');
+---
+
+<Layout title="Characters" description="Who's who in GTA6 — protagonists and supporting cast.">
+  <PageHero eyebrow="Who's Who" title="Characters" subtitle="The cast of Leonida." accent="purple" />
+  <div class="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
+    <h2 class="text-heading-md mb-5 text-text-primary" data-reveal-solo>Protagonists</h2>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2" data-reveal-group>
+      {
+        leads.map((c, i) => (
+          <a
+            href={`/characters/${c.slug}`}
+            data-reveal
+            class="press flex items-center gap-4 rounded-xl border border-border-default bg-bg-surface p-6 transition-colors duration-150 hover:border-accent-primary/50"
+          >
+            <CharacterAvatar name={c.name} index={i} size="md" icon={c.icon} />
+            <div>
+              <p class="text-label text-accent-secondary">{c.role}</p>
+              <h3 class="text-heading-sm text-text-primary">{c.name}</h3>
+              <p class="text-body-sm mt-1 text-text-secondary">{c.description}</p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+
+    <h2 class="text-heading-md mt-12 mb-5 text-text-primary" data-reveal-solo>Supporting Cast</h2>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+      {
+        supporting.map((c, i) => (
+          <a
+            href={`/characters/${c.slug}`}
+            data-reveal
+            class="press flex items-start gap-3 rounded-xl border border-border-default bg-bg-surface p-5 transition-colors duration-150 hover:border-accent-primary/50"
+          >
+            <CharacterAvatar name={c.name} index={i} size="sm" icon={c.icon} />
+            <div>
+              <h3 class="text-heading-sm text-text-primary">{c.name}</h3>
+              <p class="text-body-sm mt-1 text-text-secondary">{c.description}</p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+
+    {mentioned.length > 0 && (
+      <>
+        <h2 class="text-heading-md mt-12 mb-5 text-text-primary" data-reveal-solo>Also Mentioned</h2>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2" data-reveal-group>
+          {mentioned.map((c, i) => (
+            <a
+              href={`/characters/${c.slug}`}
+              data-reveal
+              class="press flex items-start gap-3 rounded-xl border border-border-default bg-bg-surface p-5 transition-colors duration-150 hover:border-accent-primary/50"
+            >
+              <CharacterAvatar name={c.name} index={i} size="sm" icon={c.icon} />
+              <div>
+                <h3 class="text-heading-sm text-text-primary">{c.name}</h3>
+                <p class="text-body-sm mt-1 text-text-secondary">{c.description}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </>
+    )}
+  </div>
+</Layout>

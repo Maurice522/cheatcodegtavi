@@ -1,0 +1,23 @@
+{
+  "feeds": [
+    { "name": "IGN", "url": "https://feeds.ign.com/ign/games-all" },
+    { "name": "GameSpot", "url": "https://www.gamespot.com/feeds/game-news/" },
+    { "name": "Eurogamer", "url": "https://www.eurogamer.net/feed" },
+    { "name": "PCGamesN", "url": "https://www.pcgamesn.com/feed" },
+    { "name": "VG247", "url": "https://www.vg247.com/feed" },
+    { "name": "Dexerto", "url": "https://www.dexerto.com/feed/" },
+    { "name": "Kotaku", "url": "https://kotaku.com/rss" },
+    { "name": "Polygon", "url": "https://www.polygon.com/rss/index.xml" },
+    { "name": "Rock Paper Shotgun", "url": "https://www.rockpapershotgun.com/feed" }
+  ],
+  "keywords": [
+    "gta 6",
+    "gta6",
+    "gta vi",
+    "grand theft auto vi",
+    "grand theft auto 6",
+    "leonida",
+    "jason and lucia",
+    "vice city 2026"
+  ]
+}

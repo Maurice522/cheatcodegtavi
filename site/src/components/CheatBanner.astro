@@ -1,0 +1,47 @@
+---
+// Original "input diagram" banner for cheats — no game assets. Tinted by
+// confidence (green/amber, matching ConfidenceBadge) and topped with the
+// category-derived CheatIcon, so every cheat card and detail page carries a
+// graphic instead of bare text.
+import CheatIcon from './CheatIcon.astro';
+import type { Confidence, CheatIconName } from '../lib/cheats';
+
+interface Props {
+  confidence: Confidence;
+  icon: CheatIconName;
+  size?: 'sm' | 'lg';
+}
+
+const { confidence, icon, size = 'sm' } = Astro.props;
+
+const tint: Record<Confidence, string> = {
+  verified: 'var(--color-verified)',
+  rumored: 'var(--color-rumored)',
+};
+
+const color = tint[confidence];
+const heightClass = size === 'lg' ? 'h-40 sm:h-56' : 'h-28';
+const iconClass = size === 'lg' ? 'h-14 w-14 sm:h-20 sm:w-20' : 'h-9 w-9';
+---
+
+<div class:list={['relative w-full overflow-hidden rounded-xl', heightClass]} style="background: var(--color-bg-surface);">
+  <svg viewBox="0 0 600 200" preserveAspectRatio="xMidYMid slice" class="h-full w-full">
+    <defs>
+      <radialGradient id={`cheat-glow-${confidence}`} cx="50%" cy="50%" r="65%">
+        <stop offset="0%" stop-color={color} stop-opacity="0.35" />
+        <stop offset="100%" stop-color={color} stop-opacity="0" />
+      </radialGradient>
+      <pattern id={`cheat-grid-${confidence}`} width="30" height="30" patternUnits="userSpaceOnUse">
+        <path d="M30 0H0V30" fill="none" stroke={color} stroke-width="0.6" opacity="0.25" />
+      </pattern>
+    </defs>
+    <rect width="600" height="200" fill={`url(#cheat-glow-${confidence})`} />
+    <rect width="600" height="200" fill={`url(#cheat-grid-${confidence})`} />
+    <g stroke={color} stroke-width="1.2" opacity="0.4" fill="none">
+      <rect x="220" y="60" width="160" height="80" rx="10" />
+    </g>
+  </svg>
+  <div class="absolute inset-0 flex items-center justify-center" style={`color: ${color};`}>
+    <CheatIcon icon={icon} class={iconClass} />
+  </div>
+</div>

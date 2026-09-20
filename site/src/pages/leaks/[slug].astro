@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getAllLeaks, getLeakBySlug } from '../../lib/leaks';
+
+export async function getStaticPaths() {
+  const leaks = await getAllLeaks();
+  return leaks.map((l) => ({ params: { slug: l.slug } }));
+}
+
+const { slug } = Astro.params;
+const leak = await getLeakBySlug(slug as string);
+
+if (!leak) return Astro.redirect('/leaks');
+
+const credibilityStyles: Record<typeof leak.credibility, string> = {
+  official: 'bg-verified/15 text-verified border-verified/30',
+  confirmed: 'bg-accent-secondary/15 text-accent-secondary border-accent-secondary/30',
+  rumor: 'bg-rumored/15 text-rumored border-rumored/30',
+};
+
+const credibilityLabels: Record<typeof leak.credibility, string> = {
+  official: 'Official',
+  confirmed: 'Confirmed',
+  rumor: 'Rumor',
+};
+
+const sourceName = leak.sourceName ?? leak.sourceLinks[0]?.title;
+const sourceUrl = leak.sourceLinks[0]?.url;
+
+const date = new Date(leak.publishedAt).toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+});
+---
+
+<Layout title={leak.title} description={leak.summary}>
+  <article class="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
+    <nav class="text-caption mb-6 text-text-muted">
+      <a href="/leaks" class="hover:text-text-primary">Leaks &amp; Updates</a>
+      <span class="mx-2">/</span>
+      <span class="text-text-secondary">{leak.title}</span>
+    </nav>
+
+    <span class:list={['text-label inline-flex items-center rounded-full border px-2.5 py-1', credibilityStyles[leak.credibility]]}>
+      {credibilityLabels[leak.credibility]}
+    </span>
+
+    <h1 class="text-display-md mt-4 text-3xl text-text-primary sm:text-4xl">{leak.title}</h1>
+
+    <div class="text-body-sm mt-4 flex flex-wrap items-center gap-2 text-text-muted">
+      {sourceName && <span class="font-medium uppercase text-text-secondary">{sourceName}</span>}
+      {sourceName && <span aria-hidden="true">·</span>}
+      <time>{date}</time>
+    </div>
+
+    {leak.image && (
+      <div class="mt-6 aspect-video w-full overflow-hidden rounded-xl bg-bg-elevated">
+        <img src={leak.image} alt="" class="h-full w-full object-cover" />
+      </div>
+    )}
+
+    <p class="text-body-lg mt-8 max-w-2xl whitespace-pre-line text-text-secondary">{leak.summary}</p>
+
+    <div class="mt-6 flex flex-wrap gap-2">
+      {leak.tags.map((tag) => (
+        <span class="text-caption rounded-full border border-border-default px-2.5 py-1 text-text-muted">#{tag}</span>
+      ))}
+    </div>
+
+    {sourceUrl && (
+      <a
+        href={sourceUrl}
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+        class="press text-label mt-10 inline-flex items-center gap-2 rounded-full bg-accent-secondary px-6 py-3 text-text-on-accent transition-transform duration-150 hover:scale-105"
+      >
+        Read the full story at {sourceName ?? 'the source'} &#8599;
+      </a>
+    )}
+
+    <div class="mt-10 border-t border-border-subtle pt-6">
+      <a href="/leaks" class="text-label inline-block text-accent-secondary hover:text-accent-secondary/80">
+        &larr; Back to Leaks &amp; Updates
+      </a>
+    </div>
+  </article>
+</Layout>

@@ -1,0 +1,89 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Countdown from '../components/Countdown.astro';
+import LeakCard from '../components/LeakCard.astro';
+import HeroArt from '../components/HeroArt.astro';
+import NotifySignup from '../components/NotifySignup.astro';
+import { getLatestLeaks } from '../lib/leaks';
+
+const latestLeaksResult = await getLatestLeaks(3);
+// Defensive: getLatestLeaks can only reject to [] on a Mongo error today, but a
+// crashed homepage on a leaks hiccup is worse than a briefly-empty section.
+const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
+---
+
+<Layout title="GTA6 Cheat Codes, Leaks & Updates">
+  <section class="bg-scanlines relative overflow-hidden border-b border-border-subtle" data-cursor-glow>
+    <div
+      class="pointer-events-none absolute inset-0"
+      style="background: radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--color-pink-500) 18%, transparent), transparent 45%), radial-gradient(circle at 80% 30%, color-mix(in srgb, var(--color-cyan-500) 16%, transparent), transparent 50%), radial-gradient(circle at 50% 90%, color-mix(in srgb, var(--color-purple-500) 14%, transparent), transparent 55%);"
+    >
+    </div>
+    <HeroArt />
+    <div
+      data-hero-timeline
+      class="relative mx-auto flex max-w-6xl flex-col items-center gap-8 px-5 pb-24 pt-20 text-center sm:px-8 sm:pb-32 sm:pt-28"
+    >
+      <span data-hero-item class="text-label text-accent-secondary">GTA6 launches November 19, 2026</span>
+      <h1 class="text-display-xl text-4xl text-text-primary sm:text-7xl">
+        EVERY <span class="text-accent-primary">CHEAT CODE</span><br />THE MOMENT IT DROPS
+      </h1>
+      <p data-hero-item class="text-body-lg max-w-xl text-text-secondary">
+        Cross-referenced, rewritten, and verified — plus every leak and update worth knowing before launch.
+      </p>
+      <div data-hero-item>
+        <Countdown />
+      </div>
+      <div class="flex flex-wrap justify-center gap-3 pt-2">
+        <a
+          href="/cheats"
+          class="press shadow-glow-pink text-label rounded-full bg-accent-primary px-6 py-3 text-text-on-accent transition-transform duration-150 hover:scale-105"
+        >
+          Browse Cheat Codes
+        </a>
+        <a
+          href="/leaks"
+          class="press text-label rounded-full border border-border-default px-6 py-3 text-text-primary transition-colors duration-150 hover:border-accent-secondary/60"
+        >
+          Latest Leaks
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-5 py-16 sm:px-8" data-reveal-group>
+    <div class="mb-8 flex items-center justify-between" data-reveal>
+      <h2 class="text-heading-lg text-text-primary">Cheat Codes</h2>
+      <a href="/cheats" class="text-label text-accent-secondary hover:text-accent-secondary/80">Learn more</a>
+    </div>
+    <div
+      data-reveal
+      class="flex flex-col items-center gap-3 rounded-2xl border border-border-default bg-bg-surface px-6 py-16 text-center"
+    >
+      <span class="text-label text-accent-primary">Coming Soon</span>
+      <p class="text-body-lg max-w-xl text-text-secondary">
+        No verified GTA6 cheat codes exist yet. Once Rockstar ships the game on November 19, 2026, this section
+        fills in with real, cross-referenced codes as our pipeline confirms them.
+      </p>
+      <div class="mt-2 w-full max-w-md border-t border-border-subtle pt-6">
+        <p class="text-label mb-3 text-text-muted">Don't want to check back manually?</p>
+        <NotifySignup />
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-section-alt mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:rounded-3xl" data-reveal-group>
+    <div class="mb-8 flex items-center justify-between" data-reveal>
+      <h2 class="text-heading-lg text-text-primary">Leaks &amp; Updates</h2>
+      <a href="/leaks" class="text-label text-accent-secondary hover:text-accent-secondary/80">View all</a>
+    </div>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      {latestLeaks.map((leak) => (
+        <div data-reveal data-tilt style="transform-style: preserve-3d;">
+          <LeakCard leak={leak} />
+        </div>
+      ))}
+    </div>
+  </section>
+
+</Layout>

@@ -1,0 +1,60 @@
+---
+// Original glyph set for cheat categories — abstract icons, no game assets.
+import type { CheatIconName } from '../lib/cheats';
+
+interface Props {
+  icon: CheatIconName;
+  class?: string;
+}
+
+const { icon, class: className = 'h-8 w-8' } = Astro.props;
+---
+
+{icon === 'player' && (
+  <svg viewBox="0 0 32 32" class={className} fill="none" stroke="currentColor" stroke-width="1.6">
+    <path d="M16 4l11 4v8c0 8-5 12.5-11 14-6-1.5-11-6-11-14v-8z" />
+    <path d="M11 16.5l3.5 3.5 6.5-7" />
+  </svg>
+)}
+{icon === 'weapons' && (
+  <svg viewBox="0 0 32 32" class={className} fill="none" stroke="currentColor" stroke-width="1.6">
+    <circle cx="16" cy="16" r="11" />
+    <circle cx="16" cy="16" r="5" />
+    <path d="M16 2v6M16 24v6M2 16h6M24 16h6" />
+  </svg>
+)}
+{icon === 'vehicles' && (
+  <svg viewBox="0 0 32 32" class={className} fill="none" stroke="currentColor" stroke-width="1.6">
+    <path d="M4 21l2.5-8a3 3 0 0 1 2.9-2.2h13.2a3 3 0 0 1 2.9 2.2L28 21" />
+    <path d="M3 21h26v4a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2H7v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" />
+    <circle cx="9" cy="21" r="2" fill="currentColor" stroke="none" />
+    <circle cx="23" cy="21" r="2" fill="currentColor" stroke="none" />
+  </svg>
+)}
+{icon === 'wanted' && (
+  <svg viewBox="0 0 32 32" class={className} fill="none" stroke="currentColor" stroke-width="1.6">
+    <path d="M16 3l3.5 8.5L28 13l-6.5 6 1.6 9L16 24l-7.1 4 1.6-9L4 13l8.5-1.5z" />
+  </svg>
+)}
+{icon === 'weather' && (
+  <svg viewBox="0 0 32 32" class={className} fill="none" stroke="currentColor" stroke-width="1.6">
+    <circle cx="11" cy="11" r="5" />
+    <path d="M11 2v3M11 17v3M2 11h3M17 11h3M4.8 4.8l2 2M15.2 4.8l-2 2" />
+    <path d="M12 24a5 5 0 0 1 4.8-6.9 6.5 6.5 0 0 1 12.6 2A4.5 4.5 0 0 1 28.5 28H14a4 4 0 0 1-2-4z" />
+  </svg>
+)}
+{icon === 'gameplay' && (
+  <svg viewBox="0 0 32 32" class={className} fill="none" stroke="currentColor" stroke-width="1.6">
+    <rect x="3" y="12" width="26" height="12" rx="6" />
+    <path d="M9 15v6M6 18h6" />
+    <circle cx="21" cy="16" r="1.4" fill="currentColor" stroke="none" />
+    <circle cx="25" cy="20" r="1.4" fill="currentColor" stroke="none" />
+  </svg>
+)}
+{icon === 'combat' && (
+  <svg viewBox="0 0 32 32" class={className} fill="none" stroke="currentColor" stroke-width="1.6">
+    <path d="M16 3v9M16 3l-4 4M16 3l4 4" />
+    <path d="M6 29c2-8 5.5-12 10-12s8 4 10 12" />
+    <path d="M16 15v14" stroke-dasharray="1.5 3" />
+  </svg>
+)}

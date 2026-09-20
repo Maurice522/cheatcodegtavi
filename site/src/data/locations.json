@@ -1,0 +1,56 @@
+[
+  {
+    "slug": "vice-city",
+    "name": "Vice City",
+    "kind": "City",
+    "icon": "skyline",
+    "heroImage": "/gta_images/postcard-vicecity.jpg",
+    "description": "The main city on Leonida's coast and the hub of the story — dense, colorful, and split into distinct neighborhoods along the waterfront.",
+    "bio": "Vice City returns as the beating heart of Leonida, and it's the name that made longtime fans do a double take the moment it was confirmed — this isn't a new city built to replace an old favorite, it's the same one, rebuilt from scratch for a new console generation. Every trailer so far treats it as the anchor the rest of the map orbits around.\n\nWhat's been shown is a city split into distinct districts along the waterfront, each with its own visual identity — glassy downtown towers, sun-bleached residential strips, marinas packed with boats that look considerably more expensive than anything parked nearby. It's dense in a way earlier GTA cities weren't quite able to pull off, with detail packed into blocks rather than just spread across a wider map.\n\nIt's also where most of the story's supporting cast does business. Boobie Ike's real estate and nightlife interests, Dre'Quan Priest's record label, the entire music scene that produced Real Dimez — all of it lives inside Vice City rather than out in the surrounding regions, which makes the city function as much as a social network as a place on the map.\n\nDay and night versions of the city have been shown to look and feel meaningfully different, continuing a series tradition but pushed further than before — the neon-soaked nightlife side and the sun-drenched daytime side almost read as two different cities sharing the same streets."
+  },
+  {
+    "slug": "leonida-keys",
+    "name": "Leonida Keys",
+    "kind": "Island Chain",
+    "icon": "keys",
+    "heroImage": "/gta_images/postcard-leonidakeys.jpg",
+    "description": "A string of islands south of the mainland with a slower, tourist-driven pace and easy access to open water.",
+    "bio": "The Leonida Keys stretch south off the mainland as a string of smaller islands, and everything about how they've been depicted so far leans into a slower, sun-soaked rhythm — a place people visit to relax, not somewhere the main hustle of Vice City reaches easily. That contrast in pace is clearly intentional.\n\nTourism is the visible economy here: boat rentals, waterfront bars, the kind of small businesses that live and die with the season. But the islands' real value, at least to the story's criminal cast, is what that same isolation and open water access makes possible once the tourists go home for the night.\n\nThat's exactly the territory Brian Heder has carved out for himself, running his boat yard and smuggling operation out of the Keys precisely because it's easier to move things quietly through a scattered island chain than through a dense, watched-over city. It's also where Jason has roots, giving the region a personal weight beyond just scenery.\n\nExpect the Keys to lean heavily on boating in a way the mainland doesn't — open water traversal, island-hopping, and the kind of geography that rewards a good boat over a good car, a first for how central that traversal style has been to a GTA setting."
+  },
+  {
+    "slug": "grassrivers",
+    "name": "Grassrivers",
+    "kind": "Wetlands",
+    "icon": "wetlands",
+    "heroImage": "/gta_images/postcard-grassrivers.jpg",
+    "description": "An inland wetlands region of swamps and waterways, sparsely populated outside of a few small towns.",
+    "bio": "Grassrivers is Leonida's wetlands interior, a stretch of swamp and waterway that trades Vice City's density for something a lot quieter and considerably harder to navigate on foot. It's the kind of terrain that rewards knowing the back routes and punishes anyone who doesn't.\n\nOutside of a handful of small towns, the region is sparsely populated, and that emptiness is doing a lot of the atmospheric work — long stretches of reeds and slow water instead of skyline, the sense that help is a long way off if something goes wrong out here. It's a deliberate tonal break from the neon of Vice City.\n\nSparse population in a GTA map has historically meant one thing gameplay-wise: fewer witnesses, fewer cops, and more room for things to happen that wouldn't survive city streets. Grassrivers reads like the kind of place a smart character goes when they need to disappear for a while, or when a job requires more privacy than downtown can offer.\n\nIt also sets up a strong visual and emotional contrast with the rest of the map — after the saturation of Vice City, Grassrivers' muted greens and slow water function almost as a palette cleanser between the louder set pieces elsewhere in Leonida."
+  },
+  {
+    "slug": "port-gellhorn",
+    "name": "Port Gellhorn",
+    "kind": "Coastal Town",
+    "icon": "motel",
+    "heroImage": "/gta_images/postcard-portgellhorn.jpg",
+    "description": "A faded coastal town on Leonida's less prosperous shoreline, past its tourism prime.",
+    "bio": "Port Gellhorn sits on the part of Leonida's coastline that tourism forgot — a town that clearly had its moment decades ago and has been quietly fading ever since. Peeling motel signs, half-empty boardwalks, and the general sense of a place running on momentum rather than money define its look so far.\n\nThat faded quality gives it a different texture than either Vice City's glitz or the Keys' vacation-brochure appeal. Port Gellhorn reads as working-class Leonida, the kind of town that real people actually grew up in rather than the version built for postcards, and it's exactly the sort of setting GTA has always used to ground its more outlandish stories in something believable.\n\nA town like this typically exists in these games as connective tissue — a place characters pass through, hide out in, or do a small job in on the way to somewhere bigger — rather than a central hub. Expect it to carry more narrative and side-content weight than its size on the map would suggest.\n\nThere's also an obvious opportunity for exactly the kind of local color GTA has always excelled at: a town past its prime is a town full of people looking for one more score to turn things around, which tends to make for some of the most memorable side characters in any given entry."
+  },
+  {
+    "slug": "ambrosia",
+    "name": "Ambrosia",
+    "kind": "Farmland",
+    "icon": "farmland",
+    "heroImage": "/gta_images/postcard-ambrosia.jpg",
+    "description": "An inland agricultural and industrial area built around large-scale farming operations.",
+    "bio": "Ambrosia is Leonida's agricultural backbone, a stretch of inland farmland built around the kind of large-scale operations that look more like industrial facilities than the family farms the name might suggest. Silos, processing plants, and long straight roads cutting through open fields define the region's look.\n\nThat industrial scale matters. Big agriculture in a GTA map has always doubled as fertile ground — pun very much intended — for corporate corruption, labor exploitation, and the kind of storylines that let the series poke at real-world issues through a satirical lens. Ambrosia looks built for exactly that kind of subplot.\n\nIt's also a sharp visual departure from everywhere else revealed so far: no coastline, no neon, no water — just flat open land and machinery. That makes it valuable purely as a change of pace, both visually and in terms of the kind of missions and vehicles it's likely to support, from crop dusters to heavy farm equipment repurposed for less agricultural uses.\n\nExpect Ambrosia to function as one of the map's quieter, more rural stretches — long drives, wide-open sightlines, and the sense that whatever trouble finds you out here, you're a long way from the nearest police response."
+  },
+  {
+    "slug": "mount-kalaga",
+    "name": "Mount Kalaga",
+    "kind": "Mountain Region",
+    "icon": "mountain",
+    "heroImage": "/gta_images/places-mountkalaga-background.jpg",
+    "description": "A rural, mountainous area near Leonida's northern border, known for backwoods terrain.",
+    "bio": "Mount Kalaga anchors the northern edge of the map, a mountainous, heavily wooded region that's about as far from Vice City's skyline as Leonida gets, both geographically and in tone. It's rural in the specific way GTA likes to portray rural — backwoods terrain, isolated properties, and a landscape that suggests a very different way of life than anything happening on the coast.\n\nSeries history is a useful guide here. Mountainous, sparsely policed terrain has consistently been where GTA puts its more remote hideouts, its stranger side characters, and its highest-elevation vantage points for the map — the kind of place a story sends someone when they need to lie low, or when the plot needs a dramatic overlook shot.\n\nThe terrain itself is likely to shape how it plays as much as how it looks: winding elevation changes, dense tree cover, and roads that presumably thin out into dirt tracks the further from civilization you get. That's a meaningfully different driving and traversal experience than the flat grid of a city.\n\nBeing positioned at Leonida's northern border also gives Mount Kalaga a natural role as the edge of the map narratively as well as geographically — the place where the state's usual rules feel like they apply a little less, for characters and players alike."
+  }
+]

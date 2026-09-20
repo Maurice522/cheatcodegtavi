@@ -1,0 +1,48 @@
+---
+// Original monogram badge — deliberately not a likeness or portrait.
+import CharacterIcon from './CharacterIcon.astro';
+
+interface Props {
+  name: string;
+  index: number;
+  size?: 'sm' | 'md' | 'lg';
+  icon?: 'star' | 'signal' | 'briefcase' | 'music' | 'mic' | 'mask' | 'boat';
+}
+
+const { name, index, size = 'md', icon } = Astro.props;
+
+const palette = ['bg-accent-primary', 'bg-accent-secondary', 'bg-accent-tertiary', 'bg-accent-purple'];
+const sizes = {
+  sm: 'h-11 w-11 text-base',
+  md: 'h-16 w-16 text-2xl',
+  lg: 'h-24 w-24 text-4xl',
+};
+const badgeSizes = {
+  sm: 'h-5 w-5 -right-1 -bottom-1',
+  md: 'h-7 w-7 -right-1 -bottom-1',
+  lg: 'h-9 w-9 -right-1.5 -bottom-1.5',
+};
+---
+
+<div class="relative inline-flex shrink-0">
+  <div
+    class:list={[
+      'flex items-center justify-center rounded-full font-bold text-text-on-accent',
+      sizes[size],
+      palette[index % palette.length],
+    ]}
+    style="font-family: var(--font-display);"
+  >
+    {name.charAt(0)}
+  </div>
+  {icon && (
+    <div
+      class:list={[
+        'absolute flex items-center justify-center rounded-full border-2 border-bg-surface bg-bg-elevated text-accent-secondary',
+        badgeSizes[size],
+      ]}
+    >
+      <CharacterIcon icon={icon} class="h-1/2 w-1/2" />
+    </div>
+  )}
+</div>

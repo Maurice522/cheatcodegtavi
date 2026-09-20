@@ -1,0 +1,204 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+
+<Layout title="Favorites" description="Your saved GTA6 cheat codes.">
+  <PageHero eyebrow="Your List" title="Favorites" subtitle="Cheats you've saved, kept on this device — nothing sent anywhere." accent="gold" />
+
+  <div class="mx-auto max-w-3xl px-5 py-14 sm:px-8 sm:py-20">
+    <favorites-page>
+      <div data-empty class="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border-default p-10 text-center">
+        <p class="text-body-lg text-text-secondary">Nothing saved yet.</p>
+        <p class="text-body-sm max-w-sm text-text-muted">
+          Tap the star on any cheat to save it here. There's nothing to save until GTA6's real cheat codes go
+          live — until then, browse the <a href="/cheats/gta5-vs-gta6" class="text-accent-secondary hover:underline">GTA5 archive</a>
+          to see how this'll look.
+        </p>
+      </div>
+
+      <div data-filled hidden class="flex flex-col gap-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <p class="text-body-sm text-text-muted"><span data-count>0</span> saved</p>
+          <div class="flex gap-2">
+            <button
+              type="button"
+              data-share
+              class="press text-label shadow-glow-pink rounded-full bg-accent-primary px-5 py-2.5 text-text-on-accent transition-transform duration-150 hover:scale-105"
+            >
+              Share My Cheat Sheet
+            </button>
+            <button
+              type="button"
+              data-clear
+              class="press text-label rounded-full border border-border-default px-5 py-2.5 text-text-secondary transition-colors duration-150 hover:text-text-primary"
+            >
+              Clear All
+            </button>
+          </div>
+        </div>
+
+        <div data-list class="flex flex-col gap-3"></div>
+      </div>
+    </favorites-page>
+  </div>
+
+  <canvas data-share-canvas width="1080" height="1080" class="hidden"></canvas>
+</Layout>
+
+<script>
+  import { readFavorites, removeFavorite, type FavoriteEntry } from '../lib/favorites-client';
+
+  class FavoritesPage extends HTMLElement {
+    connectedCallback() {
+      this.render();
+      window.addEventListener('favorites:change', () => this.render());
+    }
+
+    render() {
+      const entries = readFavorites();
+      const empty = this.querySelector<HTMLElement>('[data-empty]');
+      const filled = this.querySelector<HTMLElement>('[data-filled]');
+      const list = this.querySelector<HTMLElement>('[data-list]');
+      const count = this.querySelector<HTMLElement>('[data-count]');
+      if (!empty || !filled || !list || !count) return;
+
+      if (entries.length === 0) {
+        empty.hidden = false;
+        filled.hidden = true;
+        return;
+      }
+      empty.hidden = true;
+      filled.hidden = false;
+      count.textContent = String(entries.length);
+
+      list.innerHTML = '';
+      for (const entry of entries) {
+        const row = document.createElement('div');
+        row.className =
+          'flex items-center justify-between gap-3 rounded-xl border border-border-default bg-bg-surface p-4';
+        row.innerHTML = `
+          <a href="/cheats/${entry.slug}" class="min-w-0 flex-1">
+            <span class="text-label text-accent-secondary">${escapeHtml(entry.category)}</span>
+            <p class="text-heading-sm truncate text-text-primary">${escapeHtml(entry.title)}</p>
+          </a>
+          <button type="button" data-remove="${escapeHtml(entry.slug)}" aria-label="Remove ${escapeHtml(entry.title)}"
+            class="press flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border-default text-text-muted hover:border-error/60 hover:text-error">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M1 1L11 11M11 1L1 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </button>
+        `;
+        list.appendChild(row);
+      }
+
+      list.querySelectorAll<HTMLButtonElement>('[data-remove]').forEach((btn) => {
+        btn.addEventListener('click', () => removeFavorite(btn.dataset.remove ?? ''));
+      });
+    }
+  }
+
+  function escapeHtml(str: string) {
+    return str.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c);
+  }
+
+  customElements.define('favorites-page', FavoritesPage);
+
+  // --- Shareable cheat-sheet image — pure client-side canvas render, no backend.
+  const shareBtn = document.querySelector<HTMLButtonElement>('[data-share]');
+  const clearBtn = document.querySelector<HTMLButtonElement>('[data-clear]');
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-share-canvas]');
+
+  clearBtn?.addEventListener('click', () => {
+    if (!confirm('Remove all saved cheats?')) return;
+    for (const entry of readFavorites()) removeFavorite(entry.slug);
+  });
+
+  shareBtn?.addEventListener('click', async () => {
+    const entries = readFavorites();
+    if (!canvas || entries.length === 0) return;
+    const dataUrl = renderCheatSheet(canvas, entries);
+
+    const blob = await (await fetch(dataUrl)).blob();
+    const file = new File([blob], 'my-gta6-cheat-sheet.png', { type: 'image/png' });
+
+    if (navigator.canShare?.({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: 'My GTA6 Cheat Sheet' });
+        return;
+      } catch {
+        // user cancelled the share sheet — fall through to download
+      }
+    }
+
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = 'my-gta6-cheat-sheet.png';
+    link.click();
+  });
+
+  function renderCheatSheet(canvas: HTMLCanvasElement, entries: FavoriteEntry[]): string {
+    const ctx = canvas.getContext('2d')!;
+    const W = canvas.width;
+    const H = canvas.height;
+
+    // Background — Vice-noir gradient, matches the site's ink/neon palette.
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, '#1b0f26');
+    bg.addColorStop(0.5, '#05060a');
+    bg.addColorStop(1, '#07131a');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Glow blobs
+    const glow = (x: number, y: number, r: number, color: string) => {
+      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0, color);
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    };
+    glow(120, 120, 500, 'rgba(255,46,158,0.22)');
+    glow(W - 120, H - 200, 550, 'rgba(33,230,230,0.18)');
+
+    // Header
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 34px Arial';
+    ctx.fillText('CHEATCODE', 64, 100);
+    ctx.fillStyle = '#ff2e9e';
+    ctx.font = '700 34px Arial';
+    const w1 = ctx.measureText('CHEATCODE').width;
+    ctx.fillText('GTAVI', 64 + w1, 100);
+
+    ctx.fillStyle = '#a8adc4';
+    ctx.font = '400 22px Arial';
+    ctx.fillText('MY CHEAT SHEET', 64, 140);
+
+    // List
+    let y = 220;
+    ctx.font = '700 40px Arial';
+    for (const entry of entries.slice(0, 10)) {
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(entry.title, 64, y);
+      ctx.fillStyle = '#21e6e6';
+      ctx.font = '600 20px Arial';
+      ctx.fillText(entry.category.toUpperCase(), 64, y + 32);
+      ctx.font = '700 40px Arial';
+      y += 96;
+      if (y > H - 140) break;
+    }
+
+    if (entries.length > 10) {
+      ctx.fillStyle = '#565d7a';
+      ctx.font = '400 22px Arial';
+      ctx.fillText(`+ ${entries.length - 10} more`, 64, y);
+    }
+
+    // Footer
+    ctx.fillStyle = '#565d7a';
+    ctx.font = '400 22px Arial';
+    ctx.fillText('cheatcodegtavi.com', 64, H - 64);
+
+    return canvas.toDataURL('image/png');
+  }
+</script>

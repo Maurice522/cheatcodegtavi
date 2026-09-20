@@ -1,0 +1,22 @@
+[
+  { "title": "Invincibility", "category": "player", "code": "1-999-724-654-5537", "effect": "Temporary god mode for about five minutes." },
+  { "title": "Max Health & Armor", "category": "player", "code": "1-999-887-853", "effect": "Instantly restores health and armor to full." },
+  { "title": "Give Weapons & Ammo", "category": "weapons", "code": "1-999-8665-87", "effect": "Grants a full arsenal with ammo for every weapon." },
+  { "title": "Explosive Rounds", "category": "weapons", "code": "1-999-444-439", "effect": "Bullets explode on impact." },
+  { "title": "Explosive Melee Attacks", "category": "combat", "code": "1-999-4684-2637", "effect": "Punches and kicks become explosive." },
+  { "title": "Lower Wanted Level", "category": "wanted", "code": "1-999-5299-3787", "effect": "Removes one wanted star." },
+  { "title": "Raise Wanted Level", "category": "wanted", "code": "1-999-3844-8483", "effect": "Adds one wanted star." },
+  { "title": "Super Jump", "category": "gameplay", "code": "1-999-467-8648", "effect": "Massively increases jump height." },
+  { "title": "Slow-Motion Aim", "category": "combat", "code": "1-999-756-966", "effect": "Slows the entire game's speed." },
+  { "title": "Drunk Mode", "category": "gameplay", "code": "1-999-547-861", "effect": "Intoxicated on-foot movement and camera sway." },
+  { "title": "Moon Gravity", "category": "gameplay", "code": "1-999-356-2837", "effect": "Low-gravity physics for the whole map." },
+  { "title": "Change Weather", "category": "weather", "code": "1-999-625-348-7246", "effect": "Cycles to the next weather pattern." },
+  { "title": "Skyfall", "category": "gameplay", "code": "1-999-759-3255", "effect": "Drops the player from the sky with no parachute." },
+  { "title": "Fast Run", "category": "gameplay", "code": "1-999-228-2463", "effect": "Increases on-foot running speed." },
+  { "title": "Fast Swim", "category": "gameplay", "code": "1-999-468-44557", "effect": "Increases swimming speed." },
+  { "title": "Spawn Sports Car", "category": "vehicles", "code": "1-999-266-38", "effect": "Spawns a Comet sports car in front of you." },
+  { "title": "Spawn BMX", "category": "vehicles", "code": "1-999-226-348", "effect": "Spawns a BMX bicycle." },
+  { "title": "Spawn Motorcycle", "category": "vehicles", "code": "1-999-762-538", "effect": "Spawns a PCJ-600 motorcycle." },
+  { "title": "Spawn Attack Helicopter", "category": "vehicles", "code": "1-999-289-9633", "effect": "Spawns an armed Buzzard helicopter." },
+  { "title": "Spawn Garbage Truck", "category": "vehicles", "code": "1-999-872-433", "effect": "Spawns a Trashmaster garbage truck." }
+]
