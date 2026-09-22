@@ -6,6 +6,11 @@ dist/
 # into git history. See conversation notes; excluded until resolved.
 site/public/gta_images/
 
+# HyperFrames video project outputs (brag/social clips) — large generated
+# media, not site source, not needed in git history.
+brag-output/
+videos/
+
 .env
 .env.local
 .env.production

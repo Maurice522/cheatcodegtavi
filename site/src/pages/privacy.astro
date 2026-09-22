@@ -1,0 +1,90 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const lastUpdated = 'September 2026';
+---
+
+<Layout
+  title="Privacy Policy"
+  description="How CheatCodeGTAVI.com handles data: what we collect, what we don't, and how to contact us about it."
+>
+  <PageHero eyebrow="Legal" title="Privacy Policy" subtitle={`Last updated ${lastUpdated}.`} accent="gold" />
+
+  <div class="mx-auto flex max-w-3xl flex-col gap-8 px-5 py-14 text-text-secondary sm:px-8 sm:py-20" data-reveal-group>
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Summary</h2>
+      <p class="text-body-md">
+        CheatCodeGTAVI.com collects the minimum data needed to run its features. We don't run third-party
+        advertising trackers or sell any data to anyone. This page describes exactly what is collected and why.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Email addresses (launch notifications)</h2>
+      <p class="text-body-md">
+        If you sign up for a launch notification via the "Notify Me" form, we store your email address so we can
+        send you a one-time notification when GTA 6 cheat codes go live. We do not use this address for any other
+        marketing, and we do not share it with third parties. You can request deletion at any time — see Contact
+        below.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Favorites</h2>
+      <p class="text-body-md">
+        Cheats you save to your Favorites list are stored only in your browser's local storage. This data never
+        leaves your device and we never see it — clearing your browser data or using a different device/browser
+        will reset your favorites.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Voting</h2>
+      <p class="text-body-md">
+        Upvotes/downvotes on cheat codes are stored anonymously as aggregate counts — we do not tie a vote to your
+        identity, account, or email address.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Hosting and standard logs</h2>
+      <p class="text-body-md">
+        This site is hosted on Cloudflare's network, which, like virtually every host on the internet, processes
+        standard connection metadata (IP address, request timing, user agent) to serve pages and protect against
+        abuse. We do not run Google Analytics, Meta Pixel, or any other third-party analytics or advertising
+        tracker on this site.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Cookies</h2>
+      <p class="text-body-md">
+        We don't set tracking or advertising cookies. Your theme preference (light/dark) and favorites are stored
+        via your browser's local storage, not cookies, and never transmitted to us.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Children's privacy</h2>
+      <p class="text-body-md">
+        This site is not directed at children under 13, and we do not knowingly collect personal information from
+        them.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Changes to this policy</h2>
+      <p class="text-body-md">
+        If how we handle data changes, we'll update this page and the "Last updated" date above.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Contact</h2>
+      <p class="text-body-md">
+        Questions about this policy, or want your data deleted? Email <a href="mailto:contact@cheatcodegtavi.com" class="text-accent-secondary hover:text-accent-secondary/80">contact@cheatcodegtavi.com</a> or visit our <a href="/contact" class="text-accent-secondary hover:text-accent-secondary/80">Contact page</a>.
+      </p>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+
+<Layout
+  title="About Us"
+  description="What CheatCodeGTAVI.com is, how our automated GTA 6 leak pipeline works, and why every article links back to its source."
+>
+  <PageHero
+    eyebrow="Who We Are"
+    title="About CheatCodeGTAVI.com"
+    subtitle="A fan-built tracker for GTA 6 cheat codes, leaks, and news — built to be fast, sourced, and honest about what's actually confirmed."
+    accent="purple"
+  />
+
+  <div class="mx-auto flex max-w-3xl flex-col gap-8 px-5 py-14 text-text-secondary sm:px-8 sm:py-20" data-reveal-group>
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">What this site is</h2>
+      <p class="text-body-md">
+        CheatCodeGTAVI.com exists to answer one question fast and accurately: what's actually confirmed about GTA 6
+        right now, and what's just a rumor? Grand Theft Auto 6 launches November 19, 2026, and between now and then
+        the internet fills up with recycled GTA 5 codes relabeled as GTA 6, screenshots of unclear origin, and
+        leaks that never get fact-checked. We built this site to cut through that — a single place that tracks
+        cheat codes, leaks, characters, and locations, and clearly marks what's verified versus what's still a
+        rumor.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">How the pipeline works</h2>
+      <p class="text-body-md">
+        Our leak coverage runs on an automated pipeline that checks official sources and reputable GTA news outlets
+        on a schedule, cross-references new claims against what's already published, and rewrites confirmed stories
+        in original wording rather than copy-pasting. Every article links back to where it came from. Nothing is
+        labeled "Verified" until at least two independent sources agree, or Rockstar confirms it directly — see our <a href="/faq" class="text-accent-secondary hover:text-accent-secondary/80">FAQ</a> for exactly how that
+        system works.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Why there are no cheat codes published yet</h2>
+      <p class="text-body-md">
+        Because there aren't any real ones yet. GTA 6 hasn't shipped, and no cheat code is testable — let alone
+        verifiable — before launch day. Rather than publish guessed or recycled GTA 5 codes dressed up as GTA 6
+        content, our <a href="/cheats" class="text-accent-secondary hover:text-accent-secondary/80">Cheat Codes</a> page stays honest about that and fills in with real, cross-referenced codes the moment Rockstar ships the
+        game.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Independence</h2>
+      <p class="text-body-md">
+        CheatCodeGTAVI.com is an unofficial fan resource and is not affiliated with, endorsed by, or sponsored by
+        Rockstar Games, Take-Two Interactive, or any of their subsidiaries. Grand Theft Auto and GTA6 are trademarks
+        of Take-Two Interactive Software, Inc.
+      </p>
+    </div>
+
+    <div data-reveal class="mt-2 flex flex-col items-center gap-3 rounded-xl border border-dashed border-border-default p-8 text-center">
+      <p class="text-body-md text-text-secondary">Have a correction, a tip, or a question?</p>
+      <a
+        href="/contact"
+        class="press text-label rounded-full border border-border-default px-6 py-3 text-text-primary transition-colors duration-150 hover:border-accent-secondary/60"
+      >
+        Contact Us
+      </a>
+    </div>
+  </div>
+</Layout>

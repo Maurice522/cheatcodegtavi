@@ -12,7 +12,10 @@ const latestLeaksResult = await getLatestLeaks(3);
 const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
 ---
 
-<Layout title="GTA6 Cheat Codes, Leaks & Updates">
+<Layout
+  title="GTA 6 Cheat Codes, Leaks & Release Date Countdown"
+  description="Auto-updated, verified GTA 6 cheat codes, leaks, and news — plus a live countdown to the GTA 6 release date on November 19, 2026. Every leak sourced and cross-referenced."
+>
   <section class="bg-scanlines relative overflow-hidden border-b border-border-subtle" data-cursor-glow>
     <div
       class="pointer-events-none absolute inset-0"
@@ -86,4 +89,92 @@ const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
     </div>
   </section>
 
+  <section class="mx-auto max-w-4xl px-5 py-16 sm:px-8" data-reveal-group>
+    <div class="flex flex-col gap-10 text-text-secondary">
+      <div data-reveal>
+        <h2 class="text-heading-lg text-text-primary">Everything You Need to Know About GTA 6 Cheat Codes</h2>
+      </div>
+
+      <div data-reveal class="flex flex-col gap-3">
+        <h3 class="text-heading-sm text-text-primary">Will GTA 6 have cheat codes?</h3>
+        <p class="text-body-md">
+          Every mainline Grand Theft Auto game since GTA III has shipped with a set of built-in cheat codes, so it
+          would be a genuine first for the series if Grand Theft Auto 6 skipped them entirely. Rockstar hasn't
+          published an official list yet — and won't until close to launch — but GTA 6 cheat codes existing in some
+          form is close to a certainty based on two decades of series history. What's genuinely unknown is the
+          delivery method: GTA 5 used a phone dial-in system instead of a button-code menu, and GTA 6's marketing
+          leans even further into phone-based interaction, so a similar approach looks like the most likely
+          carryover.
+        </p>
+      </div>
+
+      <div data-reveal class="flex flex-col gap-3">
+        <h3 class="text-heading-sm text-text-primary">When do GTA 6 cheats come out?</h3>
+        <p class="text-body-md">
+          Short answer: not yet, and that's by design, not a bug on this site. GTA 6 cheat codes are not available
+          yet because the game itself hasn't launched — Rockstar has confirmed a GTA 6 release date of November 19,
+          2026, and no cheat code becomes real, testable, or "Verified" a day before that. Anyone claiming to have a
+          working GTA 6 cheat codes list right now is guessing, recycling GTA 5 codes, or making it up outright. The
+          countdown at the top of this page tracks the actual release date in real time, and the moment Rockstar
+          ships the game, our automated pipeline starts cross-referencing every code claim as it appears.
+        </p>
+      </div>
+
+      <div data-reveal class="flex flex-col gap-3">
+        <h3 class="text-heading-sm text-text-primary">GTA 6 cheat codes on PS5 and Xbox</h3>
+        <p class="text-body-md">
+          GTA 6 is launching on PlayStation 5 and Xbox Series X|S — there's no PC release date announced yet. That
+          matters for cheats, because historically GTA cheat codes have worked identically across console platforms;
+          the input method differs (phone dial-in versus a button sequence, depending on the game) but the effects
+          themselves don't. Once real codes are confirmed, we'll publish GTA 6 cheat codes for PS5 and GTA 6 cheat
+          codes for Xbox side by side, flagging any platform-specific quirks the moment we find them.
+        </p>
+      </div>
+
+      <div data-reveal class="flex flex-col gap-3">
+        <h3 class="text-heading-sm text-text-primary">Coming from GTA 5? Start with the comparison</h3>
+        <p class="text-body-md">
+          If you're wondering whether your favorite GTA 5 cheat codes carry over, our <a href="/cheats/gta5-vs-gta6" class="text-accent-secondary hover:text-accent-secondary/80">GTA 5 vs GTA 6 cheat codes</a> page tracks every classic code — invincibility, infinite ammo, weather changes, wanted-level resets — and
+          whether it's been confirmed to return. It's the fastest way to see what's likely to still work before
+          Rockstar makes anything official.
+        </p>
+      </div>
+
+      <div data-reveal class="flex flex-col gap-3">
+        <h3 class="text-heading-sm text-text-primary">GTA 6 leaks, news, and rumors — sourced, not guessed</h3>
+        <p class="text-body-md">
+          Beyond cheat codes, this site runs a live newsroom for <a href="/leaks" class="text-accent-secondary hover:text-accent-secondary/80">GTA 6 leaks and updates</a>: official Rockstar Newswire posts alongside community leaks and rumors, each one clearly labeled "Verified"
+          or "Rumored" so you always know how solid the source is. Nothing gets published as fact until at least two
+          independent sources agree, or Rockstar confirms it directly — and every article links back to where it
+          came from.
+        </p>
+      </div>
+
+      <div data-reveal class="flex flex-col gap-3">
+        <h3 class="text-heading-sm text-text-primary">Explore the world before you play it</h3>
+        <p class="text-body-md">
+          While you wait, our <a href="/characters" class="text-accent-secondary hover:text-accent-secondary/80">Characters</a> and <a href="/locations" class="text-accent-secondary hover:text-accent-secondary/80">Locations</a> pages
+          break down what's known about Jason, Lucia, and the rest of the cast, plus the current state of Leonida —
+          GTA 6's Miami-inspired map, including Vice City itself. It's the deepest rundown of the world you'll find
+          outside actually playing the game.
+        </p>
+      </div>
+
+      <p data-reveal class="text-body-md">
+        Bookmark this page and check back — this site rewrites itself automatically every two hours as new leaks
+        land, so it stays current without you having to dig through forums yourself.
+      </p>
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'VideoGame',
+    name: 'Grand Theft Auto VI',
+    alternateName: 'GTA 6',
+    releaseDate: '2026-11-19',
+    publisher: { '@type': 'Organization', name: 'Rockstar Games' },
+    gamePlatform: ['PlayStation 5', 'Xbox Series X|S'],
+    url: 'https://cheatcodegtavi.com',
+  })} />
 </Layout>

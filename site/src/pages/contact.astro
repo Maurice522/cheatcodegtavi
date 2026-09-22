@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+
+<Layout
+  title="Contact Us"
+  description="Get in touch with CheatCodeGTAVI.com — report a correction, submit a leak tip, or ask a question about GTA 6 cheat codes."
+>
+  <PageHero
+    eyebrow="Get in Touch"
+    title="Contact Us"
+    subtitle="Spotted a mistake, have a lead on a leak, or just have a question? Here's how to reach us."
+    accent="cyan"
+  />
+
+  <div class="mx-auto flex max-w-2xl flex-col gap-8 px-5 py-14 text-text-secondary sm:px-8 sm:py-20" data-reveal-group>
+    <div data-reveal class="flex flex-col gap-3 rounded-xl border border-border-default bg-bg-surface p-6">
+      <h2 class="text-heading-sm text-text-primary">Email</h2>
+      <p class="text-body-md">
+        For corrections, leak tips, or general questions, email us at <a href="mailto:contact@cheatcodegtavi.com" class="text-accent-secondary hover:text-accent-secondary/80">contact@cheatcodegtavi.com</a>. We read every message; response times vary since this is a small, automation-heavy operation, but
+        corrections and factual errors get priority.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Reporting a leak or a correction</h2>
+      <p class="text-body-md">
+        If you've spotted a GTA 6 leak we haven't covered, or think something we've published is wrong or
+        outdated, include a link to your source in the email — our verification process (see the <a href="/faq" class="text-accent-secondary hover:text-accent-secondary/80">FAQ</a>) requires at least two
+        independent sources before anything gets marked "Verified," so a solid source link is the fastest way to
+        get something checked.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Press and legal</h2>
+      <p class="text-body-md">
+        For press inquiries or copyright/legal concerns, use the same address above and note it in your subject
+        line so it gets routed correctly.
+      </p>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,92 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const lastUpdated = 'September 2026';
+---
+
+<Layout
+  title="Terms &amp; Conditions"
+  description="The terms governing use of CheatCodeGTAVI.com, an unofficial GTA 6 cheat codes, leaks, and news tracker."
+>
+  <PageHero eyebrow="Legal" title="Terms &amp; Conditions" subtitle={`Last updated ${lastUpdated}.`} accent="gold" />
+
+  <div class="mx-auto flex max-w-3xl flex-col gap-8 px-5 py-14 text-text-secondary sm:px-8 sm:py-20" data-reveal-group>
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Acceptance of terms</h2>
+      <p class="text-body-md">
+        By using CheatCodeGTAVI.com, you agree to these terms. If you don't agree, please don't use the site.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Not an official Rockstar or Take-Two site</h2>
+      <p class="text-body-md">
+        CheatCodeGTAVI.com is an independent, unofficial fan resource. It is not affiliated with, endorsed by, or
+        sponsored by Rockstar Games, Take-Two Interactive Software, Inc., or any of their subsidiaries. Grand Theft
+        Auto, GTA6, and all related names, characters, and imagery are trademarks and copyrighted property of
+        Take-Two Interactive Software, Inc. and its subsidiaries. Nothing on this site should be taken as an
+        official statement from Rockstar Games.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Content accuracy</h2>
+      <p class="text-body-md">
+        We work to verify leaks and cheat codes against multiple independent sources before labeling anything
+        "Verified" (see our <a href="/faq" class="text-accent-secondary hover:text-accent-secondary/80">FAQ</a>),
+        but GTA 6 has not launched and information about it is inherently subject to change. Content on this site
+        — including release dates, cheat codes, character details, and leaks — is provided "as is," without
+        warranty of any kind, and may be updated, corrected, or removed at any time as new information emerges.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Cheat code use</h2>
+      <p class="text-body-md">
+        Any cheat codes published here are informational only. Using cheat codes in-game is entirely at your own
+        discretion and risk, including any effect on achievements/trophies or online play eligibility, per the
+        game's own rules.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Third-party links</h2>
+      <p class="text-body-md">
+        Leak and news articles link back to their original sources. We aren't responsible for the content,
+        accuracy, or availability of external sites we link to.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Acceptable use</h2>
+      <p class="text-body-md">
+        Don't attempt to disrupt the site, scrape it at abusive volume, or use it to distribute malware, spam, or
+        illegal content. We reserve the right to block access from any source that does.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Limitation of liability</h2>
+      <p class="text-body-md">
+        CheatCodeGTAVI.com is provided free of charge with no guarantee of uptime, accuracy, or fitness for a
+        particular purpose. We are not liable for any damages arising from your use of, or reliance on, this site.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Changes to these terms</h2>
+      <p class="text-body-md">
+        We may update these terms as the site evolves. Continued use after a change means you accept the updated
+        terms.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Contact</h2>
+      <p class="text-body-md">
+        Questions about these terms? Visit our <a href="/contact" class="text-accent-secondary hover:text-accent-secondary/80">Contact page</a>.
+      </p>
+    </div>
+  </div>
+</Layout>
