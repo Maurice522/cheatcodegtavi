@@ -17,7 +17,7 @@ const currentPath = Astro.url.pathname;
       CHEAT<span class="text-accent-primary">CODE</span>GTAVI
     </a>
 
-    <ul class="hidden items-center gap-1 lg:flex">
+    <ul class="hidden items-center gap-0.5 xl:flex">
       {
         links.map((link) => {
           const active = currentPath.startsWith(link.href);
@@ -26,7 +26,7 @@ const currentPath = Astro.url.pathname;
               <a
                 href={link.href}
                 class:list={[
-                  'press text-label rounded-full px-4 py-2 transition-colors duration-150',
+                  'press text-label whitespace-nowrap rounded-full px-3 py-2 transition-colors duration-150',
                   active
                     ? 'bg-accent-primary/15 text-accent-primary'
                     : 'text-text-secondary hover:text-text-primary',
@@ -40,7 +40,7 @@ const currentPath = Astro.url.pathname;
       }
     </ul>
 
-    <div class="ml-auto flex items-center gap-2 lg:ml-0">
+    <div class="ml-auto flex items-center gap-2 xl:ml-0">
       <site-search class="relative">
         <button
           type="button"
@@ -118,7 +118,7 @@ const currentPath = Astro.url.pathname;
         </button>
       </theme-toggle>
 
-      <site-nav-menu class="lg:hidden">
+      <site-nav-menu class="xl:hidden">
       <button
         type="button"
         data-menu-toggle
