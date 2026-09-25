@@ -6,7 +6,7 @@ import Parser from "rss-parser";
 
 import { connectDb, alreadyExists, recentTopicExists } from "./db.js";
 import { isGta6Related, isPromo } from "./filter.js";
-import { extractImage } from "./image.js";
+import { extractImage, downloadImageAsDataUri } from "./image.js";
 import { rewriteLeak } from "./llm.js";
 import { slugify } from "./slugify.js";
 
@@ -68,13 +68,17 @@ async function main() {
         }
 
         const publishedAt = item.isoDate ?? item.pubDate ?? new Date().toISOString();
+        // Downloaded and re-encoded, not hotlinked — see downloadImageAsDataUri's
+        // own comment for why. Stored on the leak document itself (Mongo, not a
+        // separate file host) so the built page can embed it directly.
+        const image = await downloadImageAsDataUri(extractImage(item));
         const leak = {
           slug: slugify(item.title, publishedAt),
           title: item.title,
           summary: rewritten.summary,
           credibility: rewritten.credibility,
           tags: rewritten.tags,
-          image: extractImage(item),
+          image,
           sourceUrl,
           sourceName: feed.name,
           sourceLinks: [{ title: feed.name, url: sourceUrl }],

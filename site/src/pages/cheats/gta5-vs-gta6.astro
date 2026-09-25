@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
 import CheatIcon from '../../components/CheatIcon.astro';
-import { getAllCheats, getCheatIcon, type CheatIconName } from '../../lib/cheats';
+import { getCheatIcon, type CheatIconName } from '../../lib/cheats';
 import gta5Cheats from '../../data/gta5-cheats.json';
 
 interface Gta5Cheat {
@@ -14,13 +14,12 @@ interface Gta5Cheat {
 
 const cheats = gta5Cheats as Gta5Cheat[];
 
-// Auto-upgrades the moment the real GTA6 pipeline publishes a cheat with a
-// matching title — no manual edits needed here when Phase 3 ships.
-const gta6Cheats = getAllCheats();
-const rows = cheats.map((cheat) => {
-  const match = gta6Cheats.find((c) => c.title.toLowerCase() === cheat.title.toLowerCase());
-  return { ...cheat, icon: getCheatIcon(cheat.category) as CheatIconName, gta6Match: match };
-});
+// getAllCheats() only ever returns internal GTA V test fixtures (see
+// src/data/cheats.json's own header comment) — matching against it here would
+// render a false "Confirmed in GTA6" claim linking to a page that doesn't
+// exist yet ([slug].astro's getStaticPaths() is intentionally empty). Every
+// row stays "Not confirmed yet" until Phase 3's real cheat pipeline ships.
+const rows = cheats.map((cheat) => ({ ...cheat, icon: getCheatIcon(cheat.category) as CheatIconName }));
 ---
 
 <Layout
@@ -56,18 +55,9 @@ const rows = cheats.map((cheat) => {
             <p class="text-caption mt-1 text-accent-secondary" style="font-family: var(--font-heading);">{row.code}</p>
           </div>
           <div class="shrink-0">
-            {row.gta6Match ? (
-              <a
-                href={`/cheats/${row.gta6Match.slug}`}
-                class="text-label inline-flex items-center gap-1.5 rounded-full border border-verified/30 bg-verified/15 px-3 py-1.5 text-verified transition-colors hover:bg-verified/25"
-              >
-                Confirmed in GTA6 →
-              </a>
-            ) : (
-              <span class="text-label inline-flex items-center rounded-full border border-border-default px-3 py-1.5 text-text-muted">
-                Not yet in GTA6
-              </span>
-            )}
+            <span class="text-label inline-flex items-center rounded-full border border-border-default px-3 py-1.5 text-text-muted">
+              Not confirmed yet
+            </span>
           </div>
         </div>
       ))}

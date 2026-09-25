@@ -34,7 +34,14 @@ const date = new Date(leak.publishedAt).toLocaleDateString('en-US', {
 });
 ---
 
-<Layout title={leak.title} description={leak.summary}>
+{/*
+  noindex: these pages are auto-rewritten from RSS sources on a schedule with
+  no human editorial review before publish. Keeping the pipeline running (per
+  team decision) but excluding every leak article from search/AdSense review
+  until T4's human-reviewed news format replaces this. See
+  CheatCodeGTAVI Content Quality & Pre-Launch Plan, T3.
+*/}
+<Layout title={leak.title} description={leak.summary} noindex>
   <article class="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
     <nav class="text-caption mb-6 text-text-muted">
       <a href="/leaks" class="hover:text-text-primary">Leaks &amp; Updates</a>
