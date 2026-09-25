@@ -55,13 +55,25 @@ async function getMongoLeaks(): Promise<Leak[]> {
   }
 }
 
+// Every leak article page calls getLeakBySlug() independently at build time
+// (on top of getAllLeaks() from the homepage, the leaks index, and the RSS
+// feed), which without caching means one full collection scan per generated
+// page — dozens today, growing by one per build as the pipeline publishes
+// more leaks. Memoize the merged result so the whole build does exactly one
+// Mongo query and every caller reuses it.
+let mergedLeaksPromise: Promise<Leak[]> | null = null;
+
 async function getMergedLeaks(): Promise<Leak[]> {
-  const seed = rawLeaks as Leak[];
-  const live = await getMongoLeaks();
-  const bySlug = new Map<string, Leak>();
-  for (const leak of seed) bySlug.set(leak.slug, leak);
-  for (const leak of live) bySlug.set(leak.slug, leak);
-  return [...bySlug.values()];
+  if (mergedLeaksPromise) return mergedLeaksPromise;
+  mergedLeaksPromise = (async () => {
+    const seed = rawLeaks as Leak[];
+    const live = await getMongoLeaks();
+    const bySlug = new Map<string, Leak>();
+    for (const leak of seed) bySlug.set(leak.slug, leak);
+    for (const leak of live) bySlug.set(leak.slug, leak);
+    return [...bySlug.values()];
+  })();
+  return mergedLeaksPromise;
 }
 
 export async function getAllLeaks(): Promise<Leak[]> {
