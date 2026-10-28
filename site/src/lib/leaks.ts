@@ -44,11 +44,41 @@ async function getDb(): Promise<Db> {
 // facts from Rockstar's own announcements) and are always shown; pipeline
 // leaks are merged in on top, deduped by slug so a live leak can supersede a
 // seed entry with the same slug.
+// Pipeline images are stored in Mongo as data: URIs (self-hosted, no
+// hotlinking). Inlining them in the HTML made /leaks/ over 65 MiB, past
+// Cloudflare's 25 MiB per-asset limit, so they're split out here: the leak's
+// `image` becomes a short /leak-images/<file> path, and the bytes are served
+// as real static files by pages/leak-images/[file].ts.
+const MIME_EXT: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'image/gif': 'gif',
+  'image/avif': 'avif',
+};
+const leakImageFiles = new Map<string, { mime: string; data: Buffer }>();
+
+export function getLeakImageFiles() {
+  return leakImageFiles;
+}
+
+function externalizeImage(leak: Leak): Leak {
+  const match = typeof leak.image === 'string' ? leak.image.match(/^data:([^;,]+);base64,(.+)$/s) : null;
+  if (!match) return leak;
+  const ext = MIME_EXT[match[1]];
+  if (!ext) return { ...leak, image: null };
+  const file = `${leak.slug}.${ext}`;
+  leakImageFiles.set(file, { mime: match[1], data: Buffer.from(match[2], 'base64') });
+  return { ...leak, image: `/leak-images/${file}` };
+}
+
 async function getMongoLeaks(): Promise<Leak[]> {
   try {
     const database = await getDb();
     const docs = await database.collection<Leak>('leaks').find({}).toArray();
-    return JSON.parse(JSON.stringify(docs));
+    const leaks: Leak[] = JSON.parse(JSON.stringify(docs));
+    return leaks.map(externalizeImage);
   } catch (err) {
     console.warn(`[leaks] Skipping MongoDB leaks, could not connect: ${(err as Error).message}`);
     return [];
