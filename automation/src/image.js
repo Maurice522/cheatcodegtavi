@@ -1,11 +1,32 @@
-const MAX_IMAGE_BYTES = 3 * 1024 * 1024; // 3MB — plenty for an article thumbnail, keeps Mongo docs small
+import sharp from "sharp";
+
+const MAX_SOURCE_BYTES = 10 * 1024 * 1024; // refuse to even process absurd source files
+const MAX_OUTPUT_BYTES = 500 * 1024; // what we actually store/serve per image
 const FETCH_TIMEOUT_MS = 10_000;
 
-// Downloads the source image and re-encodes it as a data: URI so the built
-// page embeds it directly rather than hotlinking a third-party CDN (IGN,
-// GamesRadar, etc.) — no rights to those images, and hotlinking is a common
-// AdSense rejection reason. Never throws: a failed/oversized/non-image fetch
-// just means the leak publishes without an image, same as before this existed.
+// Resize + re-encode as WebP so a thumbnail never costs visitors (or the
+// Cloudflare 25 MiB per-asset limit) more than a few hundred KB. Tries a
+// progressively smaller render until it fits MAX_OUTPUT_BYTES; null if none do.
+export async function compressToDataUri(buffer) {
+  for (const [width, quality] of [[1200, 78], [1000, 65], [800, 50]]) {
+    const out = await sharp(buffer)
+      .rotate()
+      .resize({ width, withoutEnlargement: true })
+      .webp({ quality })
+      .toBuffer();
+    if (out.byteLength <= MAX_OUTPUT_BYTES) {
+      return `data:image/webp;base64,${out.toString("base64")}`;
+    }
+  }
+  return null;
+}
+
+// Downloads the source image and re-encodes it as a small data: URI (the
+// site build splits these out into static files) rather than hotlinking a
+// third-party CDN (IGN, GamesRadar, etc.) — no rights to those images, and
+// hotlinking is a common AdSense rejection reason. Never throws: a
+// failed/oversized/non-image fetch just means the leak publishes without an
+// image, same as before this existed.
 export async function downloadImageAsDataUri(url) {
   if (!url) return null;
 
@@ -26,18 +47,20 @@ export async function downloadImageAsDataUri(url) {
     }
 
     const contentLength = Number(res.headers.get("content-length") ?? 0);
-    if (contentLength > MAX_IMAGE_BYTES) {
+    if (contentLength > MAX_SOURCE_BYTES) {
       console.warn(`Skipping oversized image (${contentLength} bytes): ${url}`);
       return null;
     }
 
     const buffer = Buffer.from(await res.arrayBuffer());
-    if (buffer.byteLength > MAX_IMAGE_BYTES) {
+    if (buffer.byteLength > MAX_SOURCE_BYTES) {
       console.warn(`Skipping oversized image (${buffer.byteLength} bytes after download): ${url}`);
       return null;
     }
 
-    return `data:${contentType};base64,${buffer.toString("base64")}`;
+    const dataUri = await compressToDataUri(buffer);
+    if (!dataUri) console.warn(`Could not compress under ${MAX_OUTPUT_BYTES} bytes: ${url}`);
+    return dataUri;
   } catch (err) {
     console.warn(`Image download failed for ${url}: ${err.message}`);
     return null;

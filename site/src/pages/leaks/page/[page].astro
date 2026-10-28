@@ -1,0 +1,21 @@
+---
+import LeaksListing from '../../../components/LeaksListing.astro';
+import { getAllLeaks, LEAKS_PER_PAGE } from '../../../lib/leaks';
+
+// Page 1 lives at /leaks/ (leaks/index.astro); this route only generates 2+.
+export async function getStaticPaths() {
+  const leaks = await getAllLeaks();
+  const totalPages = Math.ceil(leaks.length / LEAKS_PER_PAGE);
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, i) => {
+    const page = i + 2;
+    return {
+      params: { page: String(page) },
+      props: { leaks: leaks.slice((page - 1) * LEAKS_PER_PAGE, page * LEAKS_PER_PAGE), page, totalPages },
+    };
+  });
+}
+
+const { leaks, page, totalPages } = Astro.props;
+---
+
+<LeaksListing {leaks} {page} {totalPages} />

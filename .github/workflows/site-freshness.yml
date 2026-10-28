@@ -1,0 +1,32 @@
+name: Site freshness check
+
+# Catches a silently failing deploy: the scrape job can keep saving leaks to
+# MongoDB while build-and-deploy fails, leaving the live site frozen for days
+# (this happened once). If the newest leak on the live RSS feed is older than
+# the threshold, this run fails and GitHub emails you.
+on:
+  schedule:
+    - cron: "30 */6 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      MAX_AGE_HOURS: 36
+    steps:
+      - name: Check newest leak on the live site
+        run: |
+          feed=$(curl -fsSL --retry 3 https://cheatcodegtavi.com/leaks/rss.xml)
+          newest=$(echo "$feed" | grep -o '<pubDate>[^<]*</pubDate>' | head -1 | sed 's/<[^>]*>//g')
+          if [ -z "$newest" ]; then
+            echo "::error::Could not find any <pubDate> in the live leaks feed"
+            exit 1
+          fi
+          age_hours=$(( ( $(date +%s) - $(date -d "$newest" +%s) ) / 3600 ))
+          echo "Newest leak on cheatcodegtavi.com: $newest (${age_hours}h old, limit ${MAX_AGE_HOURS}h)"
+          if [ "$age_hours" -gt "$MAX_AGE_HOURS" ]; then
+            echo "::error::Live site looks stale: newest leak is ${age_hours}h old. Check the 'Leaks pipeline' workflow for a failing build-and-deploy."
+            exit 1
+          fi

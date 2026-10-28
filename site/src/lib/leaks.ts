@@ -106,6 +106,10 @@ async function getMergedLeaks(): Promise<Leak[]> {
   return mergedLeaksPromise;
 }
 
+// The /leaks/ listing is paginated so its HTML stays a fixed size no matter
+// how many leaks the pipeline has published (it adds ~12 a day).
+export const LEAKS_PER_PAGE = 24;
+
 export async function getAllLeaks(): Promise<Leak[]> {
   const leaks = await getMergedLeaks();
   return leaks.sort((a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt));

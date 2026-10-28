@@ -7,9 +7,16 @@ on:
     - cron: "0 */2 * * *"
   workflow_dispatch: {}
 
+# One run at a time. A slow scrape (Gemini free tier is 5 requests/minute) used
+# to let runs pile up; now a newer scheduled run waits instead of stacking.
+concurrency:
+  group: leaks-pipeline
+  cancel-in-progress: false
+
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     defaults:
       run:
         working-directory: automation
@@ -31,6 +38,7 @@ jobs:
   build-and-deploy:
     needs: run-pipeline
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: site
@@ -48,6 +56,26 @@ jobs:
       - run: npm run build
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
+
+      # Cloudflare Workers rejects any single asset over 25 MiB, and wrangler's
+      # own error for it is easy to miss. Fail here with a clear message first
+      # (this is what broke deploys when /leaks/ ballooned to 65 MiB). Any HTML
+      # page over 5 MB is a bug regardless of the hard limit.
+      - name: Check asset sizes
+        run: |
+          too_big=$(find dist -type f -size +20M)
+          big_html=$(find dist -type f -name '*.html' -size +5M)
+          if [ -n "$too_big" ]; then
+            echo "::error::Assets over 20 MB (Cloudflare limit is 25 MiB):"
+            echo "$too_big" | xargs ls -lh
+            exit 1
+          fi
+          if [ -n "$big_html" ]; then
+            echo "::error::HTML pages over 5 MB (something is being inlined or not paginated):"
+            echo "$big_html" | xargs ls -lh
+            exit 1
+          fi
+          echo "Asset sizes OK"
 
       - run: npx wrangler deploy
         env:

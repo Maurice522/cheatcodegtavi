@@ -1,0 +1,90 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from './PageHero.astro';
+import LeakCard from './LeakCard.astro';
+import type { Leak } from '../lib/leaks';
+
+interface Props {
+  leaks: Leak[];
+  page: number;
+  totalPages: number;
+}
+
+const { leaks, page, totalPages } = Astro.props;
+
+const pageHref = (n: number) => (n === 1 ? '/leaks/' : `/leaks/page/${n}/`);
+const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+const title = page === 1 ? 'GTA 6 Leaks, News & Rumors' : `GTA 6 Leaks, News & Rumors — Page ${page}`;
+---
+
+<Layout
+  title={title}
+  description="Every GTA 6 leak, rumor, and official update — tracked, sourced, and cross-referenced, refreshed automatically every 2 hours."
+  noindex={page > 1}
+>
+  <PageHero
+    eyebrow="Tracked Daily"
+    title="GTA 6 Leaks &amp; News"
+    subtitle="Official announcements and community leaks, clearly labeled so you always know how solid the source is."
+    accent="cyan"
+  />
+  <div class="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16" data-reveal-group>
+    <div class="mb-6 flex justify-end">
+      <a
+        href="/leaks/rss.xml"
+        class="text-label inline-flex items-center gap-1.5 rounded-full border border-border-default px-3 py-1.5 text-text-secondary transition-colors duration-150 hover:border-accent-tertiary/60 hover:text-accent-tertiary"
+      >
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+          <circle cx="3.5" cy="12.5" r="1.5" fill="currentColor" />
+          <path d="M2 7a7 7 0 0 1 7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          <path d="M2 2a12 12 0 0 1 12 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+        RSS Feed
+      </a>
+    </div>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {leaks.map((leak) => (
+        <div id={leak.slug} data-reveal>
+          <LeakCard leak={leak} />
+        </div>
+      ))}
+    </div>
+
+    {totalPages > 1 && (
+      <nav aria-label="Leaks pages" class="mt-12 flex flex-wrap items-center justify-center gap-2">
+        {page > 1 && (
+          <a
+            href={pageHref(page - 1)}
+            rel="prev"
+            class="text-label rounded-full border border-border-default px-4 py-2 text-text-secondary transition-colors duration-150 hover:border-accent-secondary/60 hover:text-text-primary"
+          >
+            Previous
+          </a>
+        )}
+        {pages.map((n) => (
+          <a
+            href={pageHref(n)}
+            aria-current={n === page ? 'page' : undefined}
+            class:list={[
+              'text-label rounded-full border px-4 py-2 transition-colors duration-150',
+              n === page
+                ? 'border-accent-primary/40 bg-accent-primary/15 text-accent-primary'
+                : 'border-border-default text-text-secondary hover:border-accent-secondary/60 hover:text-text-primary',
+            ]}
+          >
+            {n}
+          </a>
+        ))}
+        {page < totalPages && (
+          <a
+            href={pageHref(page + 1)}
+            rel="next"
+            class="text-label rounded-full border border-border-default px-4 py-2 text-text-secondary transition-colors duration-150 hover:border-accent-secondary/60 hover:text-text-primary"
+          >
+            Next
+          </a>
+        )}
+      </nav>
+    )}
+  </div>
+</Layout>
