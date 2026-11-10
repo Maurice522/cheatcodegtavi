@@ -1,66 +1,92 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
-import CheatIcon from '../../components/CheatIcon.astro';
-import { getCheatIcon, type CheatIconName } from '../../lib/cheats';
-import gta5Cheats from '../../data/gta5-cheats.json';
+import { allCheats, cheatGroups, getGroup, groupPath } from '../../lib/gta5-cheats';
 
-interface Gta5Cheat {
-  title: string;
-  category: string;
-  code: string;
-  effect: string;
-}
-
-const cheats = gta5Cheats as Gta5Cheat[];
-
-// getAllCheats() only ever returns internal GTA V test fixtures (see
-// src/data/cheats.json's own header comment) — matching against it here would
-// render a false "Confirmed in GTA6" claim linking to a page that doesn't
-// exist yet ([slug].astro's getStaticPaths() is intentionally empty). Every
-// row stays "Not confirmed yet" until Phase 3's real cheat pipeline ships.
-const rows = cheats.map((cheat) => ({ ...cheat, icon: getCheatIcon(cheat.category) as CheatIconName }));
+const rows = allCheats.map((cheat) => ({ ...cheat, group: getGroup(cheat.group)! }));
 ---
 
 <Layout
   title="GTA 5 vs GTA 6 Cheat Codes — Full List"
-  description="The complete GTA 5 cheat codes list for PS5, Xbox, and PC — and whether each one has been confirmed to return in GTA 6 yet."
+  description="All 35 GTA 5 cheat codes with PS5 inputs, and whether each is confirmed to return in GTA 6. None are confirmed yet; GTA 6 launches Nov 19, 2026."
 >
   <PageHero
-    eyebrow="GTA V Archive"
-    title="GTA5 vs GTA6 Cheat Codes"
-    subtitle="GTA6's own cheat codes haven't been confirmed yet — here's every classic GTA V code while you wait, and whether it's shown up in GTA6 so far."
+    eyebrow="GTA V vs GTA 6"
+    title="GTA 5 vs GTA 6 Cheat Codes"
+    subtitle="GTA 6's own cheat codes haven't been confirmed. Here is every GTA V cheat we list, and where each one stands for GTA 6."
     accent="gold"
   />
 
   <div class="mx-auto max-w-4xl px-5 py-14 sm:px-8 sm:py-20">
     <div class="mb-8 rounded-xl border border-dashed border-border-default bg-bg-surface p-5">
       <p class="text-body-sm text-text-secondary">
-        These are <strong class="text-text-primary">GTA V codes</strong>, published here as a reference —
-        not GTA6 content. See our <a href="/faq" class="text-accent-secondary hover:underline">FAQ</a> for how
-        we expect GTA6's cheat system to work, and <a href="/cheats" class="text-accent-secondary hover:underline">Cheat Codes</a> for
-        the real, verified GTA6 list once it exists.
+        These are <strong class="text-text-primary">GTA V codes</strong>, shown for comparison, not GTA 6 content. Open any category below for
+        the PS5 inputs, or see the <a href="/cheats/" class="text-accent-secondary hover:underline">full GTA 6 cheat codes (PS5) list</a>.
+        Our <a href="/faq/" class="text-accent-secondary hover:underline">FAQ</a> covers how we expect GTA 6's cheat system to work.
       </p>
     </div>
 
-    <div class="flex flex-col gap-3" data-reveal-group>
-      {rows.map((row) => (
-        <div data-reveal class="flex flex-col gap-3 rounded-xl border border-border-default bg-bg-surface p-5 sm:flex-row sm:items-center sm:gap-5">
-          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-bg-elevated text-accent-secondary">
-            <CheatIcon icon={row.icon} class="h-6 w-6" />
-          </div>
-          <div class="flex-1">
-            <p class="text-heading-sm text-text-primary">{row.title}</p>
-            <p class="text-body-sm text-text-secondary">{row.effect}</p>
-            <p class="text-caption mt-1 text-accent-secondary" style="font-family: var(--font-heading);">{row.code}</p>
-          </div>
-          <div class="shrink-0">
-            <span class="text-label inline-flex items-center rounded-full border border-border-default px-3 py-1.5 text-text-muted">
-              Not confirmed yet
-            </span>
-          </div>
-        </div>
-      ))}
+    <h2 class="text-heading-md text-text-primary">How cheat input has changed across GTA games</h2>
+    <div class="mt-3 flex max-w-3xl flex-col gap-3 text-text-secondary">
+      <p class="text-body-md">
+        The older 3D-era games (GTA III, Vice City and San Andreas) used button combinations entered during gameplay. GTA IV moved
+        cheats onto the in-game cell phone, where you dial a number. GTA V supports both: a button sequence on console, or a phone
+        number, plus typed words on PC.
+      </p>
+      <p class="text-body-md">
+        That history is why we list both a PS5 button input and a phone number for the GTA V codes. GTA 6's trailers lean heavily on
+        phones, so a dial-in system is a reasonable expectation, but Rockstar hasn't said how, or whether, GTA 6 cheats will be entered.
+      </p>
     </div>
+
+    <h2 class="text-heading-md mt-12 text-text-primary">Every GTA V cheat, and its GTA 6 status</h2>
+    <div class="mt-4 overflow-x-auto rounded-xl border border-border-default">
+      <table class="w-full min-w-[32rem] border-collapse text-left">
+        <caption class="sr-only">GTA V cheat codes and their confirmation status in GTA 6</caption>
+        <thead class="bg-bg-surface">
+          <tr class="text-label text-text-muted">
+            <th scope="col" class="px-4 py-3">GTA V cheat</th>
+            <th scope="col" class="px-4 py-3">Category</th>
+            <th scope="col" class="px-4 py-3">In GTA 6</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            rows.map((row) => (
+              <tr class="border-t border-border-default">
+                <th scope="row" class="text-body-sm px-4 py-3 font-semibold text-text-primary">
+                  <a href={`${groupPath(row.group.slug)}#${row.slug}`} class="hover:text-accent-secondary">{row.title}</a>
+                </th>
+                <td class="text-body-sm px-4 py-3 text-text-secondary">
+                  <a href={groupPath(row.group.slug)} class="hover:text-accent-secondary">{row.group.name}</a>
+                </td>
+                <td class="text-body-sm px-4 py-3 text-text-muted">Not confirmed yet</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="text-heading-md mt-12 text-text-primary">Browse GTA V cheats by category</h2>
+    <ul class="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+      {
+        cheatGroups.map((g) => (
+          <li>
+            <a href={groupPath(g.slug)} class="text-body-md text-accent-secondary hover:underline">{g.name}</a>
+          </li>
+        ))
+      }
+    </ul>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cheatcodegtavi.com/' },
+      { '@type': 'ListItem', position: 2, name: 'GTA 6 Cheat Codes (PS5)', item: 'https://cheatcodegtavi.com/cheats/' },
+      { '@type': 'ListItem', position: 3, name: 'GTA 5 vs GTA 6 Cheat Codes', item: 'https://cheatcodegtavi.com/cheats/gta5-vs-gta6/' },
+    ],
+  })} />
 </Layout>

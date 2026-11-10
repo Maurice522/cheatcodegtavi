@@ -1,0 +1,44 @@
+---
+import ButtonSequence from './ButtonSequence.astro';
+import type { Gta5Cheat } from '../lib/gta5-cheats';
+
+interface Props {
+  cheat: Gta5Cheat;
+  /** Compact omits the phone number and note (used on the hub list and homepage). */
+  compact?: boolean;
+  headingLevel?: 'h3' | 'h4';
+}
+
+const { cheat, compact = false, headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
+---
+
+<div id={cheat.slug} class="scroll-mt-24 rounded-xl border border-border-default bg-bg-surface p-5">
+  <div class="flex flex-wrap items-start justify-between gap-2">
+    <Heading class="text-heading-sm text-text-primary">{cheat.title}</Heading>
+    <span class="text-label inline-flex items-center gap-1.5 rounded-full border border-border-default px-2.5 py-1 text-text-muted">
+      <span class="h-1.5 w-1.5 rounded-full bg-rumored" aria-hidden="true"></span>
+      Unconfirmed in GTA 6
+    </span>
+  </div>
+  <p class="text-body-sm mt-2 text-text-secondary">{cheat.effect}</p>
+
+  {
+    cheat.ps5 && (
+      <div class="mt-3">
+        <p class="text-caption mb-1.5 text-text-muted">PS5 input (GTA V)</p>
+        <ButtonSequence buttons={cheat.ps5} />
+      </div>
+    )
+  }
+
+  {
+    !compact && (
+      <p class="text-caption mt-3 text-text-muted">
+        {cheat.ps5 ? 'Or dial on the in-game phone: ' : 'Dial on the in-game phone: '}
+        <span class="font-semibold text-text-secondary">{cheat.phone}</span>
+      </p>
+    )
+  }
+  {!compact && cheat.note && <p class="text-caption mt-1 text-text-muted">{cheat.note}</p>}
+</div>

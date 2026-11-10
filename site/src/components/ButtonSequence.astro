@@ -1,0 +1,30 @@
+---
+import { GLYPHS, sequenceLabel, type Button } from '../lib/gta5-cheats';
+
+interface Props {
+  buttons: Button[];
+  size?: 'sm' | 'md';
+}
+
+const { buttons, size = 'md' } = Astro.props;
+const chip =
+  size === 'sm'
+    ? 'h-6 min-w-6 px-1 text-[11px]'
+    : 'h-8 min-w-8 px-1.5 text-xs';
+---
+
+<span role="img" aria-label={`PS5 input: ${sequenceLabel(buttons)}`} class="flex flex-wrap items-center gap-1">
+  {
+    buttons.map((b) => (
+      <span
+        aria-hidden="true"
+        class:list={[
+          chip,
+          'inline-flex items-center justify-center rounded-md border border-border-default bg-bg-elevated font-bold leading-none text-text-primary',
+        ]}
+      >
+        {GLYPHS[b].glyph}
+      </span>
+    ))
+  }
+</span>

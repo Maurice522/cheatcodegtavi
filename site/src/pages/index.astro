@@ -4,7 +4,11 @@ import Countdown from '../components/Countdown.astro';
 import LeakCard from '../components/LeakCard.astro';
 import HeroArt from '../components/HeroArt.astro';
 import NotifySignup from '../components/NotifySignup.astro';
+import CheatEntry from '../components/CheatEntry.astro';
 import { getLatestLeaks } from '../lib/leaks';
+import { allCheats, cheatGroups, getFeatured, groupPath } from '../lib/gta5-cheats';
+
+const featuredCheats = getFeatured();
 
 const latestLeaksResult = await getLatestLeaks(3);
 // Defensive: getLatestLeaks can only reject to [] on a Mongo error today, but a
@@ -13,8 +17,8 @@ const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
 ---
 
 <Layout
-  title="GTA 6 Cheat Codes, Leaks & Release Date Countdown"
-  description="Auto-updated, verified GTA 6 cheat codes, leaks, and news — plus a live countdown to the GTA 6 release date on November 19, 2026. Every leak sourced and cross-referenced."
+  title="GTA 6 Cheat Codes, Leaks & Countdown"
+  description="35 PS5 cheat codes likely to return in GTA 6 (unconfirmed until launch), plus leaks and a live countdown to the Nov 19, 2026 release."
 >
   <section class="bg-scanlines relative overflow-hidden border-b border-border-subtle" data-cursor-glow>
     <div
@@ -29,23 +33,34 @@ const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
     >
       <span data-hero-item class="text-label text-accent-secondary">GTA6 launches November 19, 2026</span>
       <h1 class="text-display-xl text-4xl text-text-primary sm:text-7xl">
-        EVERY <span class="text-accent-primary">CHEAT CODE</span><br />THE MOMENT IT DROPS
+        GTA 6 <span class="text-accent-primary">CHEAT CODES</span><br />BEFORE THE GAME DROPS
       </h1>
       <p data-hero-item class="text-body-lg max-w-xl text-text-secondary">
-        Cross-referenced, rewritten, and verified — plus every leak and update worth knowing before launch.
+        {allCheats.length} PS5 cheat codes are listed now: GTA V codes most likely to return, marked unconfirmed for GTA 6. Plus every leak and update before launch.
       </p>
+      <a
+        data-hero-item
+        href="/cheats/"
+        class="press text-label inline-flex items-center gap-2.5 rounded-full border border-accent-primary/50 bg-accent-primary/10 px-5 py-2.5 text-accent-primary transition-colors duration-150 hover:bg-accent-primary/20"
+      >
+        <span class="relative flex h-2 w-2" aria-hidden="true">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-primary opacity-60"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-accent-primary"></span>
+        </span>
+        {allCheats.length} cheat codes available · PS5
+      </a>
       <div data-hero-item>
         <Countdown />
       </div>
       <div class="flex flex-wrap justify-center gap-3 pt-2">
         <a
-          href="/cheats"
+          href="/cheats/"
           class="press shadow-glow-pink text-label rounded-full bg-accent-primary px-6 py-3 text-text-on-accent transition-transform duration-150 hover:scale-105"
         >
-          Browse Cheat Codes
+          Browse PS5 Cheat Codes
         </a>
         <a
-          href="/leaks"
+          href="/leaks/"
           class="press text-label rounded-full border border-border-default px-6 py-3 text-text-primary transition-colors duration-150 hover:border-accent-secondary/60"
         >
           Latest Leaks
@@ -55,30 +70,41 @@ const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
   </section>
 
   <section class="mx-auto max-w-6xl px-5 py-16 sm:px-8" data-reveal-group>
-    <div class="mb-8 flex items-center justify-between" data-reveal>
-      <h2 class="text-heading-lg text-text-primary">Cheat Codes</h2>
-      <a href="/cheats" class="text-label text-accent-secondary hover:text-accent-secondary/80">Learn more</a>
+    <div class="mb-3 flex flex-wrap items-end justify-between gap-3" data-reveal>
+      <h2 class="text-heading-lg text-text-primary">PS5 Cheat Codes</h2>
+      <a href="/cheats/" class="text-label text-accent-secondary hover:text-accent-secondary/80">View all {allCheats.length} codes</a>
     </div>
-    <div
-      data-reveal
-      class="flex flex-col items-center gap-3 rounded-2xl border border-border-default bg-bg-surface px-6 py-16 text-center"
-    >
-      <span class="text-label text-accent-primary">Coming Soon</span>
-      <p class="text-body-lg max-w-xl text-text-secondary">
-        No verified GTA6 cheat codes exist yet. Once Rockstar ships the game on November 19, 2026, this section
-        fills in with real, cross-referenced codes as our pipeline confirms them.
-      </p>
-      <div class="mt-2 w-full max-w-md border-t border-border-subtle pt-6">
-        <p class="text-label mb-3 text-text-muted">Don't want to check back manually?</p>
-        <NotifySignup />
-      </div>
+    <p data-reveal class="text-body-md mb-8 max-w-2xl text-text-secondary">
+      GTA 6 cheat codes aren't confirmed yet. These {allCheats.length} GTA V cheats are the most likely to return, shown with PS5 inputs. Each is marked unconfirmed until we can test it after launch.
+    </p>
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+      {featuredCheats.map((cheat) => (
+        <div data-reveal>
+          <CheatEntry cheat={cheat} compact />
+        </div>
+      ))}
+    </div>
+    <div data-reveal class="mt-6 flex flex-wrap items-center gap-2">
+      <span class="text-caption text-text-muted">Browse by category:</span>
+      {cheatGroups.map((group) => (
+        <a
+          href={groupPath(group.slug)}
+          class="press text-caption rounded-full border border-border-default px-3 py-1.5 text-text-secondary transition-colors duration-150 hover:border-accent-secondary/60 hover:text-text-primary"
+        >
+          {group.name}
+        </a>
+      ))}
+    </div>
+    <div data-reveal class="mt-10 w-full max-w-md border-t border-border-subtle pt-6">
+      <p class="text-label mb-3 text-text-muted">Want a heads-up when GTA 6 codes are confirmed?</p>
+      <NotifySignup />
     </div>
   </section>
 
   <section class="bg-section-alt mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:rounded-3xl" data-reveal-group>
     <div class="mb-8 flex items-center justify-between" data-reveal>
       <h2 class="text-heading-lg text-text-primary">Leaks &amp; Updates</h2>
-      <a href="/leaks" class="text-label text-accent-secondary hover:text-accent-secondary/80">View all</a>
+      <a href="/leaks/" class="text-label text-accent-secondary hover:text-accent-secondary/80">View all</a>
     </div>
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
       {latestLeaks.map((leak) => (
@@ -111,12 +137,7 @@ const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
       <div data-reveal class="flex flex-col gap-3">
         <h3 class="text-heading-sm text-text-primary">When do GTA 6 cheats come out?</h3>
         <p class="text-body-md">
-          Short answer: not yet, and that's by design, not a bug on this site. GTA 6 cheat codes are not available
-          yet because the game itself hasn't launched — Rockstar has confirmed a GTA 6 release date of November 19,
-          2026, and no cheat code becomes real, testable, or "Verified" a day before that. Anyone claiming to have a
-          working GTA 6 cheat codes list right now is guessing, recycling GTA 5 codes, or making it up outright. The
-          countdown at the top of this page tracks the actual release date in real time, and the moment Rockstar
-          ships the game, our automated pipeline starts cross-referencing every code claim as it appears.
+          Short answer: confirmed GTA 6 cheat codes aren't available yet, because the game itself hasn't launched. Rockstar has confirmed a GTA 6 release date of November 19, 2026, and no cheat code becomes real, testable, or "Verified" a day before that. Anyone presenting a working GTA 6 cheat codes list right now is guessing, passing off GTA 5 codes as GTA 6, or making it up outright. So we do it differently: the <a href="/cheats/" class="text-accent-secondary hover:text-accent-secondary/80">PS5 cheat codes</a> listed above are GTA V codes, each labeled unconfirmed until we can test it in the released game. The countdown at the top of this page tracks the release date in real time.
         </p>
       </div>
 
@@ -134,8 +155,7 @@ const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
       <div data-reveal class="flex flex-col gap-3">
         <h3 class="text-heading-sm text-text-primary">Coming from GTA 5? Start with the comparison</h3>
         <p class="text-body-md">
-          If you're wondering whether your favorite GTA 5 cheat codes carry over, our <a href="/cheats/gta5-vs-gta6" class="text-accent-secondary hover:text-accent-secondary/80">GTA 5 vs GTA 6 cheat codes</a> page tracks every classic code — invincibility, infinite ammo, weather changes, wanted-level resets — and
-          whether it's been confirmed to return. It's the fastest way to see what's likely to still work before
+          If you're wondering whether your favorite GTA 5 cheat codes carry over, our <a href="/cheats/gta5-vs-gta6/" class="text-accent-secondary hover:text-accent-secondary/80">GTA 5 vs GTA 6 cheat codes</a> page tracks every classic code — invincibility, explosive ammo, weather changes, wanted-level resets — and whether it's been confirmed to return. It's the fastest way to see what's likely to still work before
           Rockstar makes anything official.
         </p>
       </div>
@@ -143,7 +163,7 @@ const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
       <div data-reveal class="flex flex-col gap-3">
         <h3 class="text-heading-sm text-text-primary">GTA 6 leaks, news, and rumors — sourced, not guessed</h3>
         <p class="text-body-md">
-          Beyond cheat codes, this site runs a live newsroom for <a href="/leaks" class="text-accent-secondary hover:text-accent-secondary/80">GTA 6 leaks and updates</a>: official Rockstar Newswire posts alongside community leaks and rumors, each one clearly labeled "Verified"
+          Beyond cheat codes, this site runs a live newsroom for <a href="/leaks/" class="text-accent-secondary hover:text-accent-secondary/80">GTA 6 leaks and updates</a>: official Rockstar Newswire posts alongside community leaks and rumors, each one clearly labeled "Verified"
           or "Rumored" so you always know how solid the source is. Nothing gets published as fact until at least two
           independent sources agree, or Rockstar confirms it directly — and every article links back to where it
           came from.
@@ -153,7 +173,7 @@ const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
       <div data-reveal class="flex flex-col gap-3">
         <h3 class="text-heading-sm text-text-primary">Explore the world before you play it</h3>
         <p class="text-body-md">
-          While you wait, our <a href="/characters" class="text-accent-secondary hover:text-accent-secondary/80">Characters</a> and <a href="/locations" class="text-accent-secondary hover:text-accent-secondary/80">Locations</a> pages
+          While you wait, our <a href="/characters/" class="text-accent-secondary hover:text-accent-secondary/80">Characters</a> and <a href="/locations/" class="text-accent-secondary hover:text-accent-secondary/80">Locations</a> pages
           break down what's known about Jason, Lucia, and the rest of the cast, plus the current state of Leonida —
           GTA 6's Miami-inspired map, including Vice City itself. It's the deepest rundown of the world you'll find
           outside actually playing the game.

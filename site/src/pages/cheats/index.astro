@@ -1,38 +1,170 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
+import CheatEntry from '../../components/CheatEntry.astro';
+import NotifySignup from '../../components/NotifySignup.astro';
+import { allCheats, cheatGroups, cheatsInGroup, groupPath } from '../../lib/gta5-cheats';
+
+const faqs = [
+  {
+    q: 'Are these real GTA 6 cheat codes?',
+    a: "No. Rockstar hasn't published any GTA 6 cheat codes. Every code on this page is a GTA V cheat, listed because it is the most likely to return. Each one is marked unconfirmed, and we'll only mark a code as confirmed after testing it in the released game.",
+  },
+  {
+    q: 'How do I enter cheat codes on PS5?',
+    a: "In GTA V on PS5 you enter a button sequence during normal gameplay (no pause menu) or dial the matching number on the in-game phone, then a short message confirms the cheat. GTA 6 hasn't confirmed how its cheats are entered; a phone-based system is the most likely carryover.",
+  },
+  {
+    q: 'Will these cheat codes work in GTA 6 on PS5?',
+    a: "That's unknown until the game launches on November 19, 2026. Some GTA V inputs may carry over unchanged and some, especially vehicle spawns, can't, because GTA 6 has a different roster. We'll test and update this page.",
+  },
+  {
+    q: 'Do cheat codes disable trophies?',
+    a: 'In GTA V, activating a cheat disables trophy unlocks for that play session. We expect GTA 6 to follow the same rule, but it has not been confirmed.',
+  },
+  {
+    q: 'Why only PS5?',
+    a: "We list PS5 inputs first. GTA 6 launches on PS5 and Xbox Series X|S, and there is no PC release date yet, so Xbox and PC inputs aren't listed here.",
+  },
+];
 ---
 
 <Layout
-  title="GTA 6 Cheat Codes — PS5 & Xbox"
-  description="GTA 6 cheat codes for PS5, Xbox, and PC aren't available yet — Rockstar hasn't shipped the game. Track the countdown and get notified the moment verified codes go live."
+  title="GTA 6 Cheat Codes (PS5)"
+  description="35 GTA V cheat codes most likely to return in GTA 6, with PS5 inputs. Every code is marked unconfirmed until we test it after launch on Nov 19, 2026."
 >
   <PageHero
-    eyebrow="Coming Soon"
-    title="GTA 6 Cheat Codes"
-    subtitle="We don't publish cheat codes sourced from leaks, guesses, or GTA V holdovers."
+    eyebrow="PS5 · 35 codes · Unconfirmed for GTA 6"
+    title="GTA 6 Cheat Codes (PS5)"
+    subtitle="Rockstar hasn't published any GTA 6 cheat codes yet. Here are the 35 GTA V cheats most likely to return, with PS5 inputs."
     accent="pink"
   />
-  <div class="mx-auto flex max-w-xl flex-col items-center gap-4 px-5 py-16 text-center">
-    <p class="text-body-lg text-text-secondary">
-      GTA 6 cheat codes are not available yet. Once GTA 6 launches on November 19, 2026, this page fills in with
-      real cheat codes as our pipeline cross-references and verifies them — PS5 first, Xbox alongside it, and PC
-      once Rockstar ships a version to support.
-    </p>
-    <div class="mt-2 flex flex-wrap justify-center gap-3">
-      <a
-        href="/leaks"
-        class="press text-label rounded-full border border-border-default px-6 py-3 text-text-primary transition-colors duration-150 hover:border-accent-secondary/60"
-      >
-        See Leaks &amp; Updates
-      </a>
-      <a
-        href="/cheats/gta5-vs-gta6"
-        class="press text-label rounded-full border border-border-default px-6 py-3 text-text-primary transition-colors duration-150 hover:border-accent-secondary/60"
-      >
-        GTA5 vs GTA6 Cheats
-      </a>
+
+  <div class="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
+    <div class="grid grid-cols-2 gap-3 lg:grid-cols-4" data-reveal-group>
+      <div data-reveal class="rounded-xl border border-border-default bg-bg-surface p-4">
+        <p class="text-caption text-text-muted">GTA 6 cheats confirmed</p>
+        <p class="text-heading-md text-text-primary">0 so far</p>
+        <p class="text-caption text-text-muted">Rockstar has not published any.</p>
+      </div>
+      <div data-reveal class="rounded-xl border border-border-default bg-bg-surface p-4">
+        <p class="text-caption text-text-muted">Launch</p>
+        <p class="text-heading-md text-text-primary">Nov 19, 2026</p>
+        <p class="text-caption text-text-muted">PS5 and Xbox Series X|S.</p>
+      </div>
+      <div data-reveal class="rounded-xl border border-border-default bg-bg-surface p-4">
+        <p class="text-caption text-text-muted">Codes listed here</p>
+        <p class="text-heading-md text-text-primary">{allCheats.length} from GTA V</p>
+        <p class="text-caption text-text-muted">The most likely to return.</p>
+      </div>
+      <div data-reveal class="rounded-xl border border-border-default bg-bg-surface p-4">
+        <p class="text-caption text-text-muted">Platform</p>
+        <p class="text-heading-md text-text-primary">PS5 only</p>
+        <p class="text-caption text-text-muted">Xbox and PC aren't listed.</p>
+      </div>
     </div>
-    <a href="/faq" class="text-body-sm text-accent-secondary hover:underline">How will cheat codes work in GTA6? →</a>
+
+    <div class="mt-8 max-w-3xl text-text-secondary">
+      <p class="text-body-md">
+        GTA 6 cheat codes aren't available yet, because the game hasn't launched. Until it does, this page lists the
+        GTA V codes most likely to carry over, laid out the way you'd enter them on a PS5 controller. Every entry is
+        labeled <strong class="text-text-primary">Unconfirmed in GTA 6</strong>: it is a GTA V code that we haven't
+        been able to test in the new game. After launch we'll test each one and update its status.
+      </p>
+    </div>
+
+    <h2 class="text-heading-md mt-12 text-text-primary">Browse by category</h2>
+    <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        cheatGroups.map((group) => (
+          <a
+            href={groupPath(group.slug)}
+            class="press group rounded-xl border border-border-default bg-bg-surface p-4 transition-colors duration-150 hover:border-accent-secondary/60"
+          >
+            <p class="text-heading-sm text-text-primary">{group.name}</p>
+            <p class="text-caption mt-1 text-text-muted">{cheatsInGroup(group.slug).length} codes · PS5</p>
+          </a>
+        ))
+      }
+    </div>
+
+    {
+      cheatGroups.map((group) => (
+        <section class="mt-14">
+          <div class="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+            <h2 id={group.slug} class="text-heading-md scroll-mt-24 text-text-primary">{group.name}</h2>
+            <a href={groupPath(group.slug)} class="text-label text-accent-secondary hover:text-accent-secondary/80">
+              Full guide
+            </a>
+          </div>
+          <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+            {cheatsInGroup(group.slug).map((cheat) => (
+              <CheatEntry cheat={cheat} compact headingLevel="h3" />
+            ))}
+          </div>
+        </section>
+      ))
+    }
+
+    <section class="mt-16 max-w-3xl">
+      <h2 class="text-heading-md text-text-primary">GTA 6 cheat codes: common questions</h2>
+      <div class="mt-4 flex flex-col gap-3">
+        {
+          faqs.map((item) => (
+            <details class="group rounded-xl border border-border-default bg-bg-surface p-5 open:border-accent-secondary/40">
+              <summary class="text-heading-sm flex cursor-pointer list-none items-center justify-between gap-4 text-text-primary marker:content-none">
+                {item.q}
+                <svg class="h-4 w-4 shrink-0 text-text-muted transition-transform duration-200 group-open:rotate-45" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2V14M2 8H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                </svg>
+              </summary>
+              <p class="text-body-md mt-3 text-text-secondary">{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <div class="mt-14 flex flex-col items-center gap-4 rounded-2xl border border-dashed border-border-default p-8 text-center">
+      <p class="text-label text-text-muted">Get told when GTA 6 codes are confirmed</p>
+      <NotifySignup />
+      <div class="flex flex-wrap justify-center gap-3 pt-2">
+        <a href="/cheats/gta5-vs-gta6/" class="text-body-sm text-accent-secondary hover:underline">GTA 5 vs GTA 6 cheats</a>
+        <a href="/faq/" class="text-body-sm text-accent-secondary hover:underline">Cheat code FAQ</a>
+        <a href="/leaks/" class="text-body-sm text-accent-secondary hover:underline">Leaks &amp; updates</a>
+      </div>
+    </div>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cheatcodegtavi.com/' },
+          { '@type': 'ListItem', position: 2, name: 'GTA 6 Cheat Codes (PS5)', item: 'https://cheatcodegtavi.com/cheats/' },
+        ],
+      },
+      {
+        '@type': 'ItemList',
+        name: 'GTA V cheat codes likely to return in GTA 6 (PS5)',
+        numberOfItems: allCheats.length,
+        itemListElement: allCheats.map((cheat, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: cheat.title,
+          url: `https://cheatcodegtavi.com/cheats/${cheat.group}/#${cheat.slug}`,
+        })),
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((item) => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: { '@type': 'Answer', text: item.a },
+        })),
+      },
+    ],
+  })} />
 </Layout>
