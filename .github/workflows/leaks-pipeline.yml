@@ -16,7 +16,7 @@ concurrency:
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 40
     defaults:
       run:
         working-directory: automation
@@ -37,6 +37,9 @@ jobs:
 
   build-and-deploy:
     needs: run-pipeline
+    # Rebuild and deploy even if the scrape job failed or timed out: stories it
+    # already saved should still go live, and the site must not go stale.
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:

@@ -29,8 +29,17 @@ async function main() {
   const { client, leaks } = await connectDb(MONGODB_URI);
   let addedCount = 0;
 
+  // Gemini's free tier allows ~5 requests/minute, so a backlog of new stories
+  // can keep one run busy for hours. Bound each run by both story count and
+  // wall-clock time so it always finishes (the rest are picked up next run)
+  // and the site still gets rebuilt and deployed on schedule.
+  const startedAt = Date.now();
+  const maxItems = Number(process.env.MAX_ITEMS_PER_RUN ?? 10);
+  const maxRuntimeMs = Number(process.env.MAX_RUNTIME_MINUTES ?? 25) * 60_000;
+  let attempted = 0;
+
   try {
-    for (const feed of feeds) {
+    feedLoop: for (const feed of feeds) {
       console.log(`Fetching ${feed.name}...`);
       let parsedFeed;
       try {
@@ -52,6 +61,12 @@ async function main() {
           console.log(`Skipping promo/deal post: ${item.title}`);
           continue;
         }
+
+        if (attempted >= maxItems || Date.now() - startedAt > maxRuntimeMs) {
+          console.log(`Work budget reached (${attempted} stories, ${Math.round((Date.now() - startedAt) / 60000)} min); remaining stories wait for the next run.`);
+          break feedLoop;
+        }
+        attempted += 1;
 
         console.log(`Relevant: ${item.title}`);
 
