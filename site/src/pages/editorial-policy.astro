@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+
+const lastUpdated = 'November 2026';
+---
+
+<Layout
+  title="Editorial Policy"
+  description="How CheatCodeGTAVI.com labels GTA 6 news, tests cheat codes, uses AI, and corrects mistakes."
+>
+  <PageHero
+    eyebrow="How We Work"
+    title="Editorial Policy"
+    subtitle={`How we label sources, test cheat codes, and fix mistakes. Last updated ${lastUpdated}.`}
+    accent="purple"
+  />
+
+  <div class="mx-auto flex max-w-3xl flex-col gap-8 px-5 py-14 text-text-secondary sm:px-8 sm:py-20" data-reveal-group>
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Cheat codes</h2>
+      <p class="text-body-md">
+        Rockstar hasn't published any GTA 6 cheat codes. The codes we list are GTA V codes that are likely to return, and every one is labeled <strong class="text-text-primary">Unconfirmed in GTA 6</strong>. We list PS5 inputs only.
+      </p>
+      <p class="text-body-md">
+        After GTA 6 launches we test each code on a PS5 in the released game. A code is only marked <strong class="text-text-primary">Tested: works in GTA 6</strong> or <strong class="text-text-primary">Tested: doesn't work in GTA 6</strong> after we've tried it ourselves, and we show the date we last tested it. Player reports ("Worked" and "Didn't") are shown separately from our own testing and never change a code's status on their own.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">News labels</h2>
+      <p class="text-body-md">Every news item carries one of three labels:</p>
+      <ul class="text-body-md flex list-disc flex-col gap-2 pl-6">
+        <li><strong class="text-text-primary">Official</strong>: a direct statement or announcement from Rockstar or Take-Two.</li>
+        <li><strong class="text-text-primary">Confirmed</strong>: widely corroborated by several reputable outlets, or shown in official trailers or marketing.</li>
+        <li><strong class="text-text-primary">Rumor</strong>: a single-source claim, leak, or datamine that hasn't been corroborated. When in doubt, we use this label.</li>
+      </ul>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">How news gets onto the site, and our use of AI</h2>
+      <p class="text-body-md">
+        Our leaks and news section is built by an automated pipeline. It reads the public RSS feeds of named gaming outlets, and an AI model (Google Gemini) writes a short summary in original wording and suggests a label. Every item links back to the original story, and we name the outlet it came from.
+      </p>
+      <p class="text-body-md">
+        These summaries are not individually reviewed by an editor before they appear, so a label can occasionally be wrong. If you spot one, please tell us and we'll correct it. The news section is separate from our cheat code pages, which are written and checked by people.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Corrections</h2>
+      <p class="text-body-md">
+        If something here is wrong, use the <a href="/contact/" class="text-accent-secondary hover:text-accent-secondary/80">contact form</a> and include a link to your source. We fix confirmed factual errors promptly and note significant changes on the page or in the cheat codes changelog.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Independence and advertising</h2>
+      <p class="text-body-md">
+        CheatCodeGTAVI.com is an unofficial fan site, not affiliated with Rockstar Games or Take-Two Interactive. We show ads through Google AdSense to cover running costs. Advertisers have no say over what we publish or how we label it. See our <a href="/privacy/" class="text-accent-secondary hover:text-accent-secondary/80">privacy policy</a> for how ads and analytics work.
+      </p>
+    </div>
+  </div>
+</Layout>

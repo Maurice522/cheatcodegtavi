@@ -26,6 +26,11 @@ export type GroupSlug =
   | 'vehicle-spawn'
   | 'phone-only';
 
+// Every cheat starts "unconfirmed". After launch, set status to "works" or
+// "broken" in src/data/gta5-cheats.json only once we have tested it in the
+// released game on a PS5, and record the date in testedAt (YYYY-MM-DD).
+export type CheatStatus = 'unconfirmed' | 'works' | 'broken';
+
 export interface Gta5Cheat {
   slug: string;
   title: string;
@@ -34,6 +39,27 @@ export interface Gta5Cheat {
   ps5?: Button[];
   phone: string;
   note?: string;
+  status?: CheatStatus;
+  testedAt?: string;
+}
+
+export const STATUS_LABELS: Record<CheatStatus, string> = {
+  unconfirmed: 'Unconfirmed in GTA 6',
+  works: 'Tested: works in GTA 6',
+  broken: "Tested: doesn't work in GTA 6",
+};
+
+export function statusOf(cheat: Gta5Cheat): CheatStatus {
+  return cheat.status ?? 'unconfirmed';
+}
+
+export function formatTestedDate(iso: string): string {
+  return new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
 }
 
 export interface CheatGroup {

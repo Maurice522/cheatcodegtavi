@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import LeakCard from '../../components/LeakCard.astro';
 import { getAllLeaks, getLeakBySlug } from '../../lib/leaks';
 
 export async function getStaticPaths() {
@@ -10,7 +11,19 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const leak = await getLeakBySlug(slug as string);
 
-if (!leak) return Astro.redirect('/leaks');
+if (!leak) return Astro.redirect('/leaks/');
+
+// Up to three more stories: prefer ones sharing a tag, then fill with the latest.
+const allLeaks = await getAllLeaks();
+const others = allLeaks.filter((l) => l.slug !== leak.slug);
+const sharesTag = others.filter((l) => l.tags.some((t) => leak.tags.includes(t)));
+const related = [...sharesTag, ...others.filter((l) => !sharesTag.includes(l))].slice(0, 3);
+
+const labelMeaning: Record<typeof leak.credibility, string> = {
+  official: 'A direct statement or announcement from Rockstar or Take-Two.',
+  confirmed: 'Widely corroborated by several outlets, or shown in official trailers or marketing.',
+  rumor: 'A single-source claim, leak, or datamine that has not been corroborated.',
+};
 
 const credibilityStyles: Record<typeof leak.credibility, string> = {
   official: 'bg-verified/15 text-verified border-verified/30',
@@ -44,7 +57,7 @@ const date = new Date(leak.publishedAt).toLocaleDateString('en-US', {
 <Layout title={leak.title} description={leak.summary} noindex>
   <article class="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
     <nav class="text-caption mb-6 text-text-muted">
-      <a href="/leaks" class="hover:text-text-primary">Leaks &amp; Updates</a>
+      <a href="/leaks/" class="hover:text-text-primary">Leaks &amp; Updates</a>
       <span class="mx-2">/</span>
       <span class="text-text-secondary">{leak.title}</span>
     </nav>
@@ -86,8 +99,23 @@ const date = new Date(leak.publishedAt).toLocaleDateString('en-US', {
       </a>
     )}
 
+    <p class="text-caption mt-6 text-text-muted">
+      <strong class="text-text-secondary">{credibilityLabels[leak.credibility]}:</strong> {labelMeaning[leak.credibility]} This summary is generated automatically from the linked story; read <a href="/editorial-policy/" class="text-accent-secondary hover:underline">how we label and write news</a>.
+    </p>
+
+    {related.length > 0 && (
+      <section class="mt-12">
+        <h2 class="text-heading-md text-text-primary">More GTA 6 stories</h2>
+        <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {related.map((r) => (
+            <LeakCard leak={r} />
+          ))}
+        </div>
+      </section>
+    )}
+
     <div class="mt-10 border-t border-border-subtle pt-6">
-      <a href="/leaks" class="text-label inline-block text-accent-secondary hover:text-accent-secondary/80">
+      <a href="/leaks/" class="text-label inline-block text-accent-secondary hover:text-accent-secondary/80">
         &larr; Back to Leaks &amp; Updates
       </a>
     </div>

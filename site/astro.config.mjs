@@ -15,9 +15,11 @@ export default defineConfig({
       // /favorites is a personal-state page with nothing to index. A sitemap
       // should only list pages worth a reviewer's or crawler's time.
       filter: (page) => {
-        const url = new URL(page);
-        if (url.pathname === '/favorites/') return false;
-        if (/^\/leaks\/.+\/$/.test(url.pathname)) return false;
+        const { pathname } = new URL(page);
+        // personal-state, tool, or noindexed pages
+        if (['/favorites/', '/search/', '/missions/', '/cheats/cheat-sheet/', '/unsubscribe/'].includes(pathname)) return false;
+        // individual leak articles and paginated leak lists are noindexed
+        if (/^\/leaks\/.+\/$/.test(pathname)) return false;
         return true;
       },
     }),

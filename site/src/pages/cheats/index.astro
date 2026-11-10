@@ -3,7 +3,13 @@ import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
 import CheatEntry from '../../components/CheatEntry.astro';
 import NotifySignup from '../../components/NotifySignup.astro';
-import { allCheats, cheatGroups, cheatsInGroup, groupPath } from '../../lib/gta5-cheats';
+import { allCheats, cheatGroups, cheatsInGroup, formatTestedDate, groupPath, statusOf } from '../../lib/gta5-cheats';
+import { hasLaunched } from '../../lib/launch';
+import changelog from '../../data/cheat-changelog.json';
+
+const launched = hasLaunched();
+const testedCount = allCheats.filter((c) => statusOf(c) !== 'unconfirmed').length;
+const recentUpdates = [...changelog].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
 
 const faqs = [
   {
@@ -36,63 +42,67 @@ const faqs = [
   <PageHero
     eyebrow="PS5 · 35 codes · Unconfirmed for GTA 6"
     title="GTA 6 Cheat Codes (PS5)"
-    subtitle="Rockstar hasn't published any GTA 6 cheat codes yet. Here are the 35 GTA V cheats most likely to return, with PS5 inputs."
+    subtitle={launched ? "GTA 6 is out. We're testing each of these GTA V cheats on PS5 and updating their status as we go." : "Rockstar hasn't published any GTA 6 cheat codes yet. Here are the 35 GTA V cheats most likely to return, with PS5 inputs."}
     accent="pink"
   />
 
-  <div class="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
-    <div class="grid grid-cols-2 gap-3 lg:grid-cols-4" data-reveal-group>
-      <div data-reveal class="rounded-xl border border-border-default bg-bg-surface p-4">
-        <p class="text-caption text-text-muted">GTA 6 cheats confirmed</p>
-        <p class="text-heading-md text-text-primary">0 so far</p>
-        <p class="text-caption text-text-muted">Rockstar has not published any.</p>
-      </div>
-      <div data-reveal class="rounded-xl border border-border-default bg-bg-surface p-4">
-        <p class="text-caption text-text-muted">Launch</p>
-        <p class="text-heading-md text-text-primary">Nov 19, 2026</p>
-        <p class="text-caption text-text-muted">PS5 and Xbox Series X|S.</p>
-      </div>
-      <div data-reveal class="rounded-xl border border-border-default bg-bg-surface p-4">
-        <p class="text-caption text-text-muted">Codes listed here</p>
-        <p class="text-heading-md text-text-primary">{allCheats.length} from GTA V</p>
-        <p class="text-caption text-text-muted">The most likely to return.</p>
-      </div>
-      <div data-reveal class="rounded-xl border border-border-default bg-bg-surface p-4">
-        <p class="text-caption text-text-muted">Platform</p>
-        <p class="text-heading-md text-text-primary">PS5 only</p>
-        <p class="text-caption text-text-muted">Xbox and PC aren't listed.</p>
-      </div>
+  <div class="sticky top-[72px] z-30 border-b border-border-subtle bg-bg-primary/90 backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-3 sm:px-8 lg:flex-row lg:items-center lg:gap-4">
+      <label class="relative block lg:w-72 lg:shrink-0">
+        <span class="sr-only">Filter cheat codes</span>
+        <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.6" />
+          <path d="M11 11L15 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+        <input
+          data-cheat-filter
+          type="search"
+          placeholder="Filter codes: e.g. wanted, jump, helicopter"
+          autocomplete="off"
+          class="text-body-sm w-full rounded-full border border-border-default bg-bg-surface py-2 pl-9 pr-4 text-text-primary placeholder:text-text-muted focus:border-accent-secondary/60 focus:outline-none"
+        />
+      </label>
+      <nav aria-label="Cheat categories" class="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] sm:mx-0 sm:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden">
+        {
+          cheatGroups.map((group) => (
+            <a
+              href={`#${group.slug}`}
+              class="press text-caption shrink-0 rounded-full border border-border-default px-3 py-1.5 text-text-secondary transition-colors duration-150 hover:border-accent-secondary/60 hover:text-text-primary"
+            >
+              {group.name}
+            </a>
+          ))
+        }
+      </nav>
     </div>
+  </div>
 
-    <div class="mt-8 max-w-3xl text-text-secondary">
+  <div class="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-12">
+    <div class="max-w-3xl text-text-secondary">
       <p class="text-body-md">
-        GTA 6 cheat codes aren't available yet, because the game hasn't launched. Until it does, this page lists the
-        GTA V codes most likely to carry over, laid out the way you'd enter them on a PS5 controller. Every entry is
-        labeled <strong class="text-text-primary">Unconfirmed in GTA 6</strong>: it is a GTA V code that we haven't
-        been able to test in the new game. After launch we'll test each one and update its status.
+        GTA 6 cheat codes aren't available yet, because the game hasn't launched. Until it does, this page lists the GTA V codes most likely to carry over, laid out the way you'd enter them on a PS5 controller. Every entry is labeled <strong class="text-text-primary">Unconfirmed in GTA 6</strong> until we've tested it in the new game.
+      </p>
+      <ul class="mt-4 flex flex-wrap gap-2" aria-label="Status summary">
+        <li class="text-caption rounded-full border border-border-default bg-bg-surface px-3 py-1.5">GTA 6 codes confirmed by Rockstar: <strong class="text-text-primary">0</strong></li>
+        <li class="text-caption rounded-full border border-border-default bg-bg-surface px-3 py-1.5">Listed here: <strong class="text-text-primary">{allCheats.length} from GTA V</strong></li>
+        <li class="text-caption rounded-full border border-border-default bg-bg-surface px-3 py-1.5">Tested in GTA 6: <strong class="text-text-primary">{testedCount}</strong></li>
+        <li class="text-caption rounded-full border border-border-default bg-bg-surface px-3 py-1.5">Launch: <strong class="text-text-primary">Nov 19, 2026</strong></li>
+        <li class="text-caption rounded-full border border-border-default bg-bg-surface px-3 py-1.5">Platform: <strong class="text-text-primary">PS5 only</strong></li>
+      </ul>
+      <p class="text-caption mt-3 text-text-muted">
+        Tip: tap the star to save a code, or <a href="/cheats/cheat-sheet/" class="text-accent-secondary hover:underline">open the printable cheat sheet</a>. After launch you'll also be able to report whether each code worked.
       </p>
     </div>
 
-    <h2 class="text-heading-md mt-12 text-text-primary">Browse by category</h2>
-    <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        cheatGroups.map((group) => (
-          <a
-            href={groupPath(group.slug)}
-            class="press group rounded-xl border border-border-default bg-bg-surface p-4 transition-colors duration-150 hover:border-accent-secondary/60"
-          >
-            <p class="text-heading-sm text-text-primary">{group.name}</p>
-            <p class="text-caption mt-1 text-text-muted">{cheatsInGroup(group.slug).length} codes · PS5</p>
-          </a>
-        ))
-      }
-    </div>
+    <p data-no-results hidden class="text-body-md mt-10 rounded-xl border border-dashed border-border-default p-8 text-center text-text-secondary">
+      No codes match that filter. Try a word from the effect, like "weapons", "car" or "weather".
+    </p>
 
     {
       cheatGroups.map((group) => (
-        <section class="mt-14">
+        <section data-cheat-group class="mt-12">
           <div class="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-            <h2 id={group.slug} class="text-heading-md scroll-mt-24 text-text-primary">{group.name}</h2>
+            <h2 id={group.slug} class="text-heading-md scroll-mt-40 text-text-primary">{group.name}</h2>
             <a href={groupPath(group.slug)} class="text-label text-accent-secondary hover:text-accent-secondary/80">
               Full guide
             </a>
@@ -105,6 +115,19 @@ const faqs = [
         </section>
       ))
     }
+
+    <section class="mt-16 max-w-3xl">
+      <h2 class="text-heading-md text-text-primary">Recent updates</h2>
+      <ul class="mt-3 flex flex-col gap-2">
+        {
+          recentUpdates.map((entry) => (
+            <li class="text-body-sm text-text-secondary">
+              <span class="font-semibold text-text-primary">{formatTestedDate(entry.date)}:</span> {entry.text}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
 
     <section class="mt-16 max-w-3xl">
       <h2 class="text-heading-md text-text-primary">GTA 6 cheat codes: common questions</h2>
@@ -135,6 +158,32 @@ const faqs = [
       </div>
     </div>
   </div>
+
+  <script>
+    const input = document.querySelector<HTMLInputElement>('[data-cheat-filter]');
+    const cards = [...document.querySelectorAll<HTMLElement>('[data-cheat-card]')];
+    const groups = [...document.querySelectorAll<HTMLElement>('[data-cheat-group]')];
+    const empty = document.querySelector<HTMLElement>('[data-no-results]');
+
+    function applyFilter() {
+      const terms = (input?.value ?? '').toLowerCase().split(/\s+/).filter(Boolean);
+      for (const card of cards) {
+        const text = card.dataset.filterText ?? '';
+        card.hidden = !terms.every((t) => text.includes(t));
+      }
+      for (const group of groups) {
+        group.hidden = [...group.querySelectorAll<HTMLElement>('[data-cheat-card]')].every((c) => c.hidden);
+      }
+      if (empty) empty.hidden = groups.some((g) => !g.hidden);
+    }
+
+    if (input) {
+      const q = new URLSearchParams(location.search).get('q');
+      if (q) input.value = q;
+      input.addEventListener('input', applyFilter);
+      applyFilter();
+    }
+  </script>
 
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',

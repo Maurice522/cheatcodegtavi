@@ -167,6 +167,11 @@
 }
 
 :root {
+  /* PlayStation face-button colors, used by the cheat input chips. */
+  --btn-triangle: #3ddc97;
+  --btn-circle: #ff6b7a;
+  --btn-cross: #7fb0ff;
+  --btn-square: #ff9ad5;
   /* Stronger custom easing curves — the built-in CSS easings read as weak/generic. */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
@@ -179,6 +184,10 @@
    contrast as text/borders against white, so light mode trades a little
    vibrancy for legibility rather than reusing the dark-mode accent 1:1. ---- */
 :root[data-theme="light"] {
+  --btn-triangle: #0a7a4c;
+  --btn-circle: #c4182f;
+  --btn-cross: #1d4fbf;
+  --btn-square: #a82375;
   --color-bg-primary: #ffffff;
   --color-bg-surface: #f5f5fa;
   --color-bg-elevated: #eaebf3;

@@ -11,24 +11,35 @@ const { slug } = Astro.params;
 const index = characters.findIndex((c) => c.slug === slug);
 const character = characters[index];
 
+// Original artwork only: a per-character neon gradient, no game screenshots.
+const accents = ['--color-pink-500', '--color-cyan-500', '--color-purple-500', '--color-gold-500'];
+const glow = `var(${accents[index % accents.length]})`;
+const heroBg = `background: radial-gradient(circle at 18% 30%, color-mix(in srgb, ${glow} 38%, transparent), transparent 55%), radial-gradient(circle at 85% 80%, color-mix(in srgb, var(--color-cyan-500) 18%, transparent), transparent 60%);`;
+
 const connections = (character.connections ?? [])
   .map((connSlug) => characters.find((c) => c.slug === connSlug))
   .filter((c): c is NonNullable<typeof c> => Boolean(c));
 ---
 
-<Layout title={character.name} description={character.description}>
+<Layout title={`${character.name} (GTA 6 Character)`} description={character.description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cheatcodegtavi.com/' },
+      { '@type': 'ListItem', position: 2, name: 'GTA 6 Characters', item: 'https://cheatcodegtavi.com/characters/' },
+      { '@type': 'ListItem', position: 3, name: character.name, item: `https://cheatcodegtavi.com/characters/${character.slug}/` },
+    ],
+  })} />
   <div class="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
     <nav class="text-caption mb-6 text-text-muted">
-      <a href="/characters" class="hover:text-text-primary">Characters</a>
+      <a href="/characters/" class="hover:text-text-primary">Characters</a>
       <span class="mx-2">/</span>
       <span class="text-text-secondary">{character.name}</span>
     </nav>
 
-    <div class="relative h-64 overflow-hidden rounded-xl border border-border-default sm:h-80 lg:h-[26rem]">
-      {character.heroImage && (
-        <img src={character.heroImage} alt={character.name} class="h-full w-full object-cover object-center" />
-      )}
-      <div class="absolute inset-0 bg-gradient-to-r from-bg-primary/15 via-bg-primary/5 to-bg-primary/20"></div>
+    <div class="bg-scanlines relative h-56 overflow-hidden rounded-xl border border-border-default sm:h-72">
+      <div class="absolute inset-0" style={heroBg}></div>
       <div class="relative flex h-full items-end p-8">
         <div class="flex flex-wrap items-center gap-5">
           <CharacterAvatar name={character.name} index={index} size="lg" icon={character.icon} />
@@ -50,7 +61,7 @@ const connections = (character.connections ?? [])
         <div class="flex flex-wrap gap-3">
           {connections.map((c) => (
             <a
-              href={`/characters/${c.slug}`}
+              href={`/characters/${c.slug}/`}
               class="press text-body-sm rounded-full border border-border-default bg-bg-surface px-4 py-2 text-text-secondary transition-colors duration-150 hover:border-accent-secondary/50 hover:text-text-primary"
             >
               {c.name}
@@ -60,7 +71,7 @@ const connections = (character.connections ?? [])
       </div>
     )}
 
-    <a href="/characters" class="text-label mt-12 inline-block text-accent-secondary hover:text-accent-secondary/80">
+    <a href="/characters/" class="text-label mt-12 inline-block text-accent-secondary hover:text-accent-secondary/80">
       &larr; Back to Characters
     </a>
   </div>

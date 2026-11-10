@@ -3,12 +3,13 @@ interface Props {
   slug: string;
   title: string;
   category: string;
+  url?: string;
   class?: string;
 }
-const { slug, title, category, class: className = '' } = Astro.props;
+const { slug, title, category, url = '', class: className = '' } = Astro.props;
 ---
 
-<favorite-button data-slug={slug} data-title={title} data-category={category} class:list={['inline-flex', className]}>
+<favorite-button data-slug={slug} data-title={title} data-category={category} data-url={url} class:list={['inline-flex', className]}>
   <button
     type="button"
     data-favorite-toggle
@@ -39,6 +40,7 @@ const { slug, title, category, class: className = '' } = Astro.props;
       const slug = this.dataset.slug ?? '';
       const title = this.dataset.title ?? '';
       const category = this.dataset.category ?? '';
+      const url = this.dataset.url || undefined;
 
       const sync = () => {
         const active = isFavorited(slug);
@@ -54,7 +56,7 @@ const { slug, title, category, class: className = '' } = Astro.props;
         // click fall through to the card's own navigation.
         e.preventDefault();
         e.stopPropagation();
-        toggleFavorite({ slug, title, category });
+        toggleFavorite({ slug, title, category, url });
         sync();
       });
 

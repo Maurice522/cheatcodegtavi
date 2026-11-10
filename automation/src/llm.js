@@ -7,7 +7,7 @@ const GEMINI_MODEL = "gemini-3.6-flash";
 const SYSTEM_PROMPT = `You write for a GTA6 (Grand Theft Auto VI) news and leaks tracker.
 Given a news article, respond with ONLY a JSON object with these fields:
 - "summary": 2-3 sentences, in your own original words, stating what the article reports about GTA6. Do not closely mirror the source's phrasing. Do not invent details that aren't in the source.
-- "credibility": one of "official" (a direct Rockstar/Take-Two statement), "confirmed" (widely corroborated by multiple reputable outlets, or directly shown in official trailers/marketing), or "rumor" (a single-source claim, leak, or datamine not yet corroborated elsewhere). Default to "rumor" when unsure.
+- "credibility": one of "official" (the article relays something Rockstar or Take-Two themselves said or published: an announcement, statement, interview, press release or official trailer), "confirmed" (widely corroborated by multiple reputable outlets, or directly shown in official trailers/marketing), or "rumor" (a single-source claim, leak, or datamine not yet corroborated elsewhere). A story about an official event is NOT official if it is based on store listings, datamined files, leaked builds or anonymous sources, or if it calls itself unofficial: use "rumor" for those. Default to "rumor" when unsure.
 - "tags": an array of 1-4 short lowercase kebab-case tags (e.g. "map", "characters", "release-date", "gameplay", "leak").
 Never state a rumored or leaked claim as settled fact — use "reportedly"/"allegedly" language in the summary whenever credibility is not "official".`;
 

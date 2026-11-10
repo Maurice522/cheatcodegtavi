@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 
-const lastUpdated = 'September 2026';
+const lastUpdated = 'November 2026';
 ---
 
 <Layout
@@ -26,8 +26,25 @@ const lastUpdated = 'September 2026';
       <p class="text-body-md">
         If you sign up for a launch notification via the "Notify Me" form, we store your email address so we can
         send you a one-time notification when GTA 6 cheat codes go live. We do not use this address for any other
-        marketing, and we do not share it with third parties. You can request deletion at any time — see Contact
-        below.
+        marketing, and we do not share it with third parties. Every launch email includes an unsubscribe link, and you can
+        also ask us to delete your address at any time (see Contact below).
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Contact form</h2>
+      <p class="text-body-md">
+        If you send a message through the contact form, we store the message and any name or email address you choose
+        to include so we can read it and reply. We use a one-way hash of your IP address only to limit spam, and we
+        delete messages on request.
+      </p>
+    </div>
+
+    <div data-reveal class="flex flex-col gap-3">
+      <h2 class="text-heading-sm text-text-primary">Site search</h2>
+      <p class="text-body-md">
+        Search runs in your browser against a list of pages that is downloaded to your device. What you type is not
+        sent to us.
       </p>
     </div>
 
@@ -43,8 +60,10 @@ const lastUpdated = 'September 2026';
     <div data-reveal class="flex flex-col gap-3">
       <h2 class="text-heading-sm text-text-primary">Voting</h2>
       <p class="text-body-md">
-        Upvotes/downvotes on cheat codes are stored anonymously as aggregate counts — we do not tie a vote to your
-        identity, account, or email address.
+        After launch you can report whether a cheat code worked. To stop one person voting many times, we store a
+        one-way hash of your IP address next to your vote. The hash can't be turned back into your IP address, and we
+        never store the address itself. Votes are shown only as totals, and we don't connect them to your name or
+        email address.
       </p>
     </div>
 
@@ -64,11 +83,7 @@ const lastUpdated = 'September 2026';
         This site displays ads served by Google AdSense to help cover hosting and pipeline costs. Google and its
         advertising partners use cookies and similar technology to serve ads based on your visits to this and other
         sites, and to measure ad performance. Google may use this data to personalize the ads you see. You can
-        control the ads Google shows you, or opt out of personalized advertising entirely, at
-        <a href="https://adssettings.google.com" class="text-accent-secondary hover:text-accent-secondary/80" target="_blank" rel="noopener">Google Ads Settings</a>,
-        and third-party vendors' use of cookies is described in Google's
-        <a href="https://policies.google.com/technologies/partner-sites" class="text-accent-secondary hover:text-accent-secondary/80" target="_blank" rel="noopener">Advertising Partners policy</a>.
-        We don't control what specific ads are shown or receive your personal data from the ad network.
+        control the ads Google shows you, or opt out of personalized advertising entirely, at <a href="https://adssettings.google.com" class="text-accent-secondary hover:text-accent-secondary/80" target="_blank" rel="noopener">Google Ads Settings</a>, and third-party vendors' use of cookies is described in Google's <a href="https://policies.google.com/technologies/partner-sites" class="text-accent-secondary hover:text-accent-secondary/80" target="_blank" rel="noopener">Advertising Partners policy</a>. We don't control what specific ads are shown or receive your personal data from the ad network.
       </p>
     </div>
 
@@ -77,13 +92,9 @@ const lastUpdated = 'September 2026';
       <p class="text-body-md">
         We use Google Analytics (GA4) to understand aggregate traffic — which pages get read, roughly how many
         visitors we get, and what device/browser they're on. Google Analytics sets cookies and collects your IP
-        address and usage data to do this; that data is processed by Google under its own
-        <a href="https://policies.google.com/privacy" class="text-accent-secondary hover:text-accent-secondary/80" target="_blank" rel="noopener">privacy policy</a>.
-        We use this data in aggregate only — we don't use it to identify individual visitors, and we don't combine
+        address and usage data to do this; that data is processed by Google under its own <a href="https://policies.google.com/privacy" class="text-accent-secondary hover:text-accent-secondary/80" target="_blank" rel="noopener">privacy policy</a>. We use this data in aggregate only — we don't use it to identify individual visitors, and we don't combine
         it with the email addresses collected for launch notifications. You can opt out of Google Analytics
-        tracking site-wide using a browser extension like
-        <a href="https://tools.google.com/dlpage/gaoptout" class="text-accent-secondary hover:text-accent-secondary/80" target="_blank" rel="noopener">Google's opt-out add-on</a>,
-        or by using a browser/extension that blocks third-party analytics scripts.
+        tracking site-wide using a browser extension like <a href="https://tools.google.com/dlpage/gaoptout" class="text-accent-secondary hover:text-accent-secondary/80" target="_blank" rel="noopener">Google's opt-out add-on</a>, or by using a browser/extension that blocks third-party analytics scripts.
       </p>
     </div>
 
@@ -92,8 +103,8 @@ const lastUpdated = 'September 2026';
       <p class="text-body-md">
         We don't set our own tracking or advertising cookies directly. Google Analytics and Google AdSense (see
         above) set their own cookies to distinguish visitors and serve/measure ads. Your theme preference
-        (light/dark) and favorites are stored via your browser's local storage, not cookies, and never transmitted
-        to us.
+        (light/dark), saved favorites and your own vote choices are stored in your browser's local storage on your
+        device, not in cookies, and are not sent to us.
       </p>
     </div>
 
@@ -115,7 +126,7 @@ const lastUpdated = 'September 2026';
     <div data-reveal class="flex flex-col gap-3">
       <h2 class="text-heading-sm text-text-primary">Contact</h2>
       <p class="text-body-md">
-        Questions about this policy, or want your data deleted? Email <a href="mailto:contact@cheatcodegtavi.com" class="text-accent-secondary hover:text-accent-secondary/80">contact@cheatcodegtavi.com</a> or visit our <a href="/contact" class="text-accent-secondary hover:text-accent-secondary/80">Contact page</a>.
+        Questions about this policy, or want your data deleted? Email <a href="mailto:contact@cheatcodegtavi.com" class="text-accent-secondary hover:text-accent-secondary/80">contact@cheatcodegtavi.com</a> or visit our <a href="/contact/" class="text-accent-secondary hover:text-accent-secondary/80">Contact page</a>.
       </p>
     </div>
   </div>

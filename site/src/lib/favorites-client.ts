@@ -9,6 +9,8 @@ export interface FavoriteEntry {
   slug: string;
   title: string;
   category: string;
+  /** Where the saved cheat lives, e.g. /cheats/wanted-level/#lower-wanted-level */
+  url?: string;
   savedAt: string;
 }
 

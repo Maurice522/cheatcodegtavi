@@ -3,13 +3,20 @@
   "compatibility_date": "2026-09-19",
   // "main" turns this from a plain static-assets deploy into a Worker that
   // handles /api/* itself and falls through to the static build for
-  // everything else — see worker/index.ts and README-worker.md.
+  // everything else — see worker/index.ts.
   "main": "worker/index.ts",
   "assets": {
     "directory": "./dist",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    // Serve the built 404.html (with a real 404 status) for unknown URLs
+    // instead of an empty response.
+    "not_found_handling": "404-page"
   },
-  "kv_namespaces": [{ "binding": "CHEATCODEGTAVI_KV", "id": "9e75802518014a1abc3f4b8fe4a8bc38" }],
+  // Votes and email signups live in one SQLite-backed Durable Object.
+  "durable_objects": {
+    "bindings": [{ "name": "STORE", "class_name": "SiteStore" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["SiteStore"] }],
   "routes": [
     { "pattern": "cheatcodegtavi.com", "custom_domain": true },
     { "pattern": "www.cheatcodegtavi.com", "custom_domain": true }

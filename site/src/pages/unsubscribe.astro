@@ -1,0 +1,65 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+
+<Layout title="Unsubscribe" description="Stop receiving launch emails from CheatCodeGTAVI.com." noindex>
+  <PageHero eyebrow="Email Preferences" title="Unsubscribe" subtitle="Stop receiving launch emails from CheatCodeGTAVI.com." accent="gold" />
+
+  <div class="mx-auto max-w-xl px-5 py-14 sm:px-8 sm:py-20">
+    <unsubscribe-box class="flex flex-col items-start gap-4">
+      <p data-unsub-text class="text-body-md text-text-secondary">Checking your link...</p>
+      <button
+        type="button"
+        data-unsub-confirm
+        hidden
+        class="press text-label rounded-full bg-accent-primary px-6 py-3 text-text-on-accent transition-transform duration-150 hover:scale-105 disabled:opacity-60"
+      >
+        Confirm unsubscribe
+      </button>
+    </unsubscribe-box>
+  </div>
+
+  <script>
+    class UnsubscribeBox extends HTMLElement {
+      connectedCallback() {
+        const text = this.querySelector<HTMLElement>('[data-unsub-text]');
+        const button = this.querySelector<HTMLButtonElement>('[data-unsub-confirm]');
+        if (!text || !button) return;
+
+        const params = new URLSearchParams(location.search);
+        const email = params.get('e') ?? '';
+        const token = params.get('t') ?? '';
+        if (!email || !token) {
+          text.textContent = 'This unsubscribe link is incomplete. Use the link in the email we sent you, or contact us and we will remove you.';
+          return;
+        }
+
+        text.textContent = `Unsubscribe ${email} from launch emails?`;
+        button.hidden = false;
+        button.addEventListener('click', async () => {
+          button.disabled = true;
+          try {
+            const res = await fetch('/api/unsubscribe', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify({ email, token }),
+            });
+            if (res.ok) {
+              text.textContent = `Done. ${email} has been removed and won't get launch emails.`;
+              button.hidden = true;
+            } else {
+              const body = (await res.json().catch(() => ({}))) as { error?: string };
+              text.textContent = body.error ?? 'Something went wrong. Please try again.';
+              button.disabled = false;
+            }
+          } catch {
+            text.textContent = 'Could not reach the server. Please try again.';
+            button.disabled = false;
+          }
+        });
+      }
+    }
+    customElements.define('unsubscribe-box', UnsubscribeBox);
+  </script>
+</Layout>

@@ -7,20 +7,31 @@ interface Props {
 }
 
 const { buttons, size = 'md' } = Astro.props;
-const chip =
-  size === 'sm'
-    ? 'h-6 min-w-6 px-1 text-[11px]'
-    : 'h-8 min-w-8 px-1.5 text-xs';
+
+// PlayStation face buttons keep their console colors so long sequences scan
+// at a glance; everything else stays neutral.
+const FACE_COLORS: Partial<Record<Button, string>> = {
+  Triangle: 'var(--btn-triangle)',
+  Circle: 'var(--btn-circle)',
+  X: 'var(--btn-cross)',
+  Square: 'var(--btn-square)',
+};
+
+const chip = size === 'sm' ? 'h-7 min-w-7 px-1.5' : 'h-9 min-w-9 px-2';
+const textSize = (face: boolean) => (size === 'sm' ? (face ? 'text-sm' : 'text-xs') : face ? 'text-lg' : 'text-sm');
 ---
 
-<span role="img" aria-label={`PS5 input: ${sequenceLabel(buttons)}`} class="flex flex-wrap items-center gap-1">
+<span role="img" aria-label={`PS5 input: ${sequenceLabel(buttons)}`} class="flex flex-wrap items-center gap-1.5">
   {
     buttons.map((b) => (
       <span
         aria-hidden="true"
+        style={FACE_COLORS[b] ? `color: ${FACE_COLORS[b]}; border-color: ${FACE_COLORS[b]};` : undefined}
         class:list={[
           chip,
-          'inline-flex items-center justify-center rounded-md border border-border-default bg-bg-elevated font-bold leading-none text-text-primary',
+          'inline-flex items-center justify-center rounded-md border bg-bg-elevated font-bold leading-none',
+          textSize(Boolean(FACE_COLORS[b])),
+          !FACE_COLORS[b] && 'border-border-default text-text-primary',
         ]}
       >
         {GLYPHS[b].glyph}

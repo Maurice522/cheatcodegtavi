@@ -1,0 +1,81 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ButtonSequence from '../../components/ButtonSequence.astro';
+import { allCheats, cheatGroups, cheatsInGroup } from '../../lib/gta5-cheats';
+
+const withInput = (slug: Parameters<typeof cheatsInGroup>[0]) => cheatsInGroup(slug);
+---
+
+<Layout
+  title="Printable PS5 Cheat Sheet"
+  description="Every GTA V cheat code on one printable page, with PS5 inputs. Unconfirmed for GTA 6."
+  noindex
+>
+  <div class="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-14">
+    <div class="flex flex-wrap items-start justify-between gap-4">
+      <div class="max-w-2xl">
+        <h1 class="text-display-md text-3xl text-text-primary sm:text-4xl">PS5 cheat sheet</h1>
+        <p class="text-body-md mt-2 text-text-secondary">
+          {allCheats.length} GTA V cheat codes with PS5 inputs. These are unconfirmed for GTA 6: Rockstar hasn't published any GTA 6 cheat codes, and we'll update this sheet after launch.
+        </p>
+      </div>
+      <div data-no-print class="flex gap-2">
+        <button
+          type="button"
+          data-print
+          class="press shadow-glow-pink text-label rounded-full bg-accent-primary px-5 py-2.5 text-text-on-accent transition-transform duration-150 hover:scale-105"
+        >
+          Print or save as PDF
+        </button>
+        <a href="/cheats/" class="press text-label rounded-full border border-border-default px-5 py-2.5 text-text-primary">All codes</a>
+      </div>
+    </div>
+
+    <div class="mt-8 gap-x-8 lg:columns-2">
+      {
+        cheatGroups.map((group) => (
+          <section class="mb-6 break-inside-avoid">
+            <h2 class="text-heading-sm border-b border-border-default pb-1 text-text-primary">{group.name}</h2>
+            <ul class="mt-2 flex flex-col gap-3">
+              {withInput(group.slug).map((cheat) => (
+                <li class="break-inside-avoid">
+                  <p class="text-body-sm font-semibold text-text-primary">{cheat.title}</p>
+                  {cheat.ps5 ? (
+                    <ButtonSequence buttons={cheat.ps5} size="sm" />
+                  ) : (
+                    <p class="text-caption text-text-muted">Phone only: {cheat.phone}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+    <p class="text-caption mt-6 text-text-muted">cheatcodegtavi.com/cheats/ · GTA V inputs, unconfirmed for GTA 6</p>
+  </div>
+
+  <script>
+    document.querySelector('[data-print]')?.addEventListener('click', () => window.print());
+  </script>
+</Layout>
+
+<style is:global>
+  @media print {
+    header,
+    footer,
+    .pt-overlay,
+    [data-no-print] {
+      display: none !important;
+    }
+    html,
+    body {
+      background: #fff !important;
+    }
+    body * {
+      color: #000 !important;
+      background: transparent !important;
+      border-color: #999 !important;
+    }
+  }
+</style>

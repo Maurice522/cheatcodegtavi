@@ -1,0 +1,115 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Search" description="Search GTA 6 cheat codes, news, characters and locations." noindex>
+  <div class="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
+    <h1 class="text-display-md text-3xl text-text-primary sm:text-5xl">Search</h1>
+
+    <form action="/search/" method="get" role="search" class="mt-6">
+      <label class="sr-only" for="search-input">Search the site</label>
+      <input
+        id="search-input"
+        data-search-page-input
+        type="search"
+        name="q"
+        placeholder="Search cheats, news, characters, locations"
+        autocomplete="off"
+        autofocus
+        class="text-body-md w-full rounded-full border border-border-default bg-bg-surface px-5 py-3 text-text-primary placeholder:text-text-muted focus:border-accent-secondary/60 focus:outline-none"
+      />
+    </form>
+
+    <p data-search-status role="status" class="text-body-sm mt-4 text-text-muted"></p>
+    <ul data-search-results class="mt-4 flex flex-col gap-3"></ul>
+
+    <noscript>
+      <p class="text-body-md mt-6 text-text-secondary">
+        Search needs JavaScript. You can still browse the <a href="/cheats/" class="text-accent-secondary hover:underline">cheat codes</a>, <a href="/leaks/" class="text-accent-secondary hover:underline">leaks</a>, <a href="/characters/" class="text-accent-secondary hover:underline">characters</a> and <a href="/locations/" class="text-accent-secondary hover:underline">locations</a> directly.
+      </p>
+    </noscript>
+  </div>
+
+  <script>
+    interface Entry {
+      t: string;
+      d: string;
+      u: string;
+      k: string;
+    }
+
+    const input = document.querySelector<HTMLInputElement>('[data-search-page-input]');
+    const status = document.querySelector<HTMLElement>('[data-search-status]');
+    const list = document.querySelector<HTMLElement>('[data-search-results]');
+    let index: Entry[] | null = null;
+
+    const KIND_WEIGHT: Record<string, number> = { Cheat: 2, 'Cheat category': 2, Page: 1.5, Character: 1, Location: 1, News: 0 };
+
+    function escapeHtml(str: string) {
+      return str.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c);
+    }
+
+    function search(query: string): Entry[] {
+      const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+      if (!index || terms.length === 0) return [];
+      const scored: { entry: Entry; score: number }[] = [];
+      for (const entry of index) {
+        const title = entry.t.toLowerCase();
+        const body = entry.d.toLowerCase();
+        let score = 0;
+        let matched = true;
+        for (const term of terms) {
+          if (title.includes(term)) score += 3;
+          else if (body.includes(term)) score += 1;
+          else {
+            matched = false;
+            break;
+          }
+        }
+        if (matched) scored.push({ entry, score: score + (KIND_WEIGHT[entry.k] ?? 0) });
+      }
+      return scored.sort((a, b) => b.score - a.score).slice(0, 40).map((s) => s.entry);
+    }
+
+    async function render() {
+      if (!input || !status || !list) return;
+      const query = input.value.trim();
+      const url = new URL(location.href);
+      if (query) url.searchParams.set('q', query);
+      else url.searchParams.delete('q');
+      history.replaceState(null, '', url);
+
+      if (!query) {
+        status.textContent = '';
+        list.innerHTML = '';
+        return;
+      }
+      if (!index) {
+        status.textContent = 'Searching...';
+        try {
+          index = (await (await fetch('/search-index.json')).json()) as Entry[];
+        } catch {
+          status.textContent = 'Search is unavailable right now. Please try again.';
+          return;
+        }
+      }
+      const results = search(query);
+      status.textContent = results.length === 0 ? `No results for "${query}".` : `${results.length} result${results.length === 1 ? '' : 's'}`;
+      list.innerHTML = results
+        .map(
+          (r) => `<li><a href="${escapeHtml(r.u)}" class="press block rounded-xl border border-border-default bg-bg-surface p-4 transition-colors duration-150 hover:border-accent-secondary/60">
+            <span class="text-label text-accent-secondary">${escapeHtml(r.k)}</span>
+            <p class="text-heading-sm text-text-primary">${escapeHtml(r.t)}</p>
+            <p class="text-body-sm mt-1 text-text-secondary">${escapeHtml(r.d.length > 140 ? r.d.slice(0, 140) + '...' : r.d)}</p>
+          </a></li>`,
+        )
+        .join('');
+    }
+
+    if (input) {
+      input.value = new URLSearchParams(location.search).get('q') ?? '';
+      input.addEventListener('input', render);
+      render();
+    }
+  </script>
+</Layout>

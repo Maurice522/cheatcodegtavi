@@ -1,6 +1,14 @@
 ---
 import ButtonSequence from './ButtonSequence.astro';
-import type { Gta5Cheat } from '../lib/gta5-cheats';
+import FavoriteButton from './FavoriteButton.astro';
+import {
+  STATUS_LABELS,
+  formatTestedDate,
+  getGroup,
+  groupPath,
+  statusOf,
+  type Gta5Cheat,
+} from '../lib/gta5-cheats';
 
 interface Props {
   cheat: Gta5Cheat;
@@ -11,17 +19,31 @@ interface Props {
 
 const { cheat, compact = false, headingLevel = 'h3' } = Astro.props;
 const Heading = headingLevel;
+const status = statusOf(cheat);
+const group = getGroup(cheat.group);
+const url = `${groupPath(cheat.group)}#${cheat.slug}`;
+const dot = { unconfirmed: 'bg-rumored', works: 'bg-verified', broken: 'bg-error' }[status];
 ---
 
-<div id={cheat.slug} class="scroll-mt-24 rounded-xl border border-border-default bg-bg-surface p-5">
+<div
+  id={cheat.slug}
+  data-cheat-card
+  data-filter-text={`${cheat.title} ${cheat.effect} ${group?.name ?? ''}`.toLowerCase()}
+  class="scroll-mt-40 rounded-xl border border-border-default bg-bg-surface p-5"
+>
   <div class="flex flex-wrap items-start justify-between gap-2">
     <Heading class="text-heading-sm text-text-primary">{cheat.title}</Heading>
     <span class="text-label inline-flex items-center gap-1.5 rounded-full border border-border-default px-2.5 py-1 text-text-muted">
-      <span class="h-1.5 w-1.5 rounded-full bg-rumored" aria-hidden="true"></span>
-      Unconfirmed in GTA 6
+      <span class={`h-1.5 w-1.5 rounded-full ${dot}`} aria-hidden="true"></span>
+      {STATUS_LABELS[status]}
     </span>
   </div>
   <p class="text-body-sm mt-2 text-text-secondary">{cheat.effect}</p>
+  {
+    cheat.testedAt && (
+      <p class="text-caption mt-1 text-text-muted">Last tested {formatTestedDate(cheat.testedAt)}</p>
+    )
+  }
 
   {
     cheat.ps5 && (
@@ -41,4 +63,143 @@ const Heading = headingLevel;
     )
   }
   {!compact && cheat.note && <p class="text-caption mt-1 text-text-muted">{cheat.note}</p>}
+
+  <div class="mt-4 flex flex-wrap items-center gap-2 border-t border-border-subtle pt-3">
+    <FavoriteButton slug={cheat.slug} title={cheat.title} category={group?.name ?? 'Cheat'} url={url} />
+    <cheat-share data-url={url} data-title={`${cheat.title} cheat (GTA V, unconfirmed for GTA 6)`}>
+      <button
+        type="button"
+        data-share-btn
+        aria-label={`Share ${cheat.title}`}
+        class="press text-caption flex h-8 items-center gap-1.5 rounded-full border border-border-default px-3 text-text-secondary transition-colors duration-150 hover:border-accent-secondary/60 hover:text-text-primary"
+      >
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M8 10V2M8 2L5 5M8 2l3 3M3 9v4h10V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span data-share-label>Share</span>
+      </button>
+    </cheat-share>
+
+    <cheat-vote data-slug={cheat.slug} hidden class="ml-auto flex items-center gap-1.5">
+      <span class="text-caption text-text-muted">Did it work in GTA 6?</span>
+      <button
+        type="button"
+        data-vote="up"
+        aria-pressed="false"
+        class="press text-caption rounded-full border border-border-default px-3 py-1.5 text-text-secondary transition-colors duration-150 hover:border-verified/60 aria-pressed:border-verified aria-pressed:text-verified"
+      >
+        Worked <span data-count-up class="font-semibold"></span>
+      </button>
+      <button
+        type="button"
+        data-vote="down"
+        aria-pressed="false"
+        class="press text-caption rounded-full border border-border-default px-3 py-1.5 text-text-secondary transition-colors duration-150 hover:border-error/60 aria-pressed:border-error aria-pressed:text-error"
+      >
+        Didn't <span data-count-down class="font-semibold"></span>
+      </button>
+    </cheat-vote>
+  </div>
 </div>
+
+<script>
+  import { EARLIEST_UNLOCK_MS } from '../lib/launch';
+
+  class CheatShare extends HTMLElement {
+    connectedCallback() {
+      const button = this.querySelector<HTMLButtonElement>('[data-share-btn]');
+      const label = this.querySelector<HTMLElement>('[data-share-label]');
+      if (!button || !label) return;
+      button.addEventListener('click', async () => {
+        const url = new URL(this.dataset.url ?? '', location.origin).toString();
+        const title = this.dataset.title ?? document.title;
+        if (navigator.share) {
+          try {
+            await navigator.share({ title, url });
+            return;
+          } catch {
+            // dismissed the share sheet, or sharing failed: fall back to copying
+          }
+        }
+        try {
+          await navigator.clipboard.writeText(url);
+          label.textContent = 'Link copied';
+        } catch {
+          label.textContent = 'Copy failed';
+        }
+        setTimeout(() => (label.textContent = 'Share'), 1800);
+      });
+    }
+  }
+  customElements.define('cheat-share', CheatShare);
+
+  // One counts request shared by every vote control on the page.
+  type Counts = Record<string, { up: number; down: number }>;
+  let countsPromise: Promise<Counts> | null = null;
+  const loadCounts = () =>
+    (countsPromise ??= fetch('/api/votes')
+      .then((r) => (r.ok ? (r.json() as Promise<Counts>) : {}))
+      .catch(() => ({})));
+
+  const VOTES_KEY = 'cheatcodegtavi:votes';
+  const readMine = (): Record<string, 'up' | 'down'> => {
+    try {
+      return JSON.parse(localStorage.getItem(VOTES_KEY) ?? '{}');
+    } catch {
+      return {};
+    }
+  };
+  const writeMine = (mine: Record<string, 'up' | 'down'>) => {
+    try {
+      localStorage.setItem(VOTES_KEY, JSON.stringify(mine));
+    } catch {
+      // storage unavailable: the vote still counts, we just can't remember it
+    }
+  };
+
+  class CheatVote extends HTMLElement {
+    async connectedCallback() {
+      // Nobody can have tested a code in GTA 6 before it is playable, so
+      // player reports stay hidden (and the API refuses them) until launch.
+      if (Date.now() < EARLIEST_UNLOCK_MS) return;
+      this.hidden = false;
+
+      const slug = this.dataset.slug ?? '';
+      const up = this.querySelector<HTMLButtonElement>('[data-vote="up"]');
+      const down = this.querySelector<HTMLButtonElement>('[data-vote="down"]');
+      const upCount = this.querySelector<HTMLElement>('[data-count-up]');
+      const downCount = this.querySelector<HTMLElement>('[data-count-down]');
+      if (!up || !down || !upCount || !downCount) return;
+
+      const render = (c: { up: number; down: number } | undefined, mine?: 'up' | 'down') => {
+        upCount.textContent = c && c.up > 0 ? String(c.up) : '';
+        downCount.textContent = c && c.down > 0 ? String(c.down) : '';
+        up.setAttribute('aria-pressed', String(mine === 'up'));
+        down.setAttribute('aria-pressed', String(mine === 'down'));
+      };
+      render((await loadCounts())[slug], readMine()[slug]);
+
+      for (const [button, direction] of [[up, 'up'], [down, 'down']] as const) {
+        button.addEventListener('click', async () => {
+          button.disabled = true;
+          try {
+            const res = await fetch('/api/vote', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify({ slug, direction }),
+            });
+            if (!res.ok) return;
+            const counts = (await res.json()) as { up: number; down: number };
+            const mine = readMine();
+            mine[slug] = direction;
+            writeMine(mine);
+            render(counts, direction);
+          } finally {
+            button.disabled = false;
+          }
+        });
+      }
+    }
+  }
+  customElements.define('cheat-vote', CheatVote);
+</script>

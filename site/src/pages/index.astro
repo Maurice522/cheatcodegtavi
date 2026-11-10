@@ -7,6 +7,9 @@ import NotifySignup from '../components/NotifySignup.astro';
 import CheatEntry from '../components/CheatEntry.astro';
 import { getLatestLeaks } from '../lib/leaks';
 import { allCheats, cheatGroups, getFeatured, groupPath } from '../lib/gta5-cheats';
+import { hasLaunched } from '../lib/launch';
+
+const launched = hasLaunched();
 
 const featuredCheats = getFeatured();
 
@@ -31,12 +34,14 @@ const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
       data-hero-timeline
       class="relative mx-auto flex max-w-6xl flex-col items-center gap-8 px-5 pb-24 pt-20 text-center sm:px-8 sm:pb-32 sm:pt-28"
     >
-      <span data-hero-item class="text-label text-accent-secondary">GTA6 launches November 19, 2026</span>
+      <span data-hero-item class="text-label text-accent-secondary">{launched ? 'GTA 6 is out: we are testing the cheat codes now' : 'GTA6 launches November 19, 2026'}</span>
       <h1 class="text-display-xl text-4xl text-text-primary sm:text-7xl">
         GTA 6 <span class="text-accent-primary">CHEAT CODES</span><br />BEFORE THE GAME DROPS
       </h1>
       <p data-hero-item class="text-body-lg max-w-xl text-text-secondary">
-        {allCheats.length} PS5 cheat codes are listed now: GTA V codes most likely to return, marked unconfirmed for GTA 6. Plus every leak and update before launch.
+        {launched
+          ? `${allCheats.length} PS5 cheat codes are listed. We're testing each one in GTA 6 and updating its status as we go.`
+          : `${allCheats.length} PS5 cheat codes are listed now: GTA V codes most likely to return, marked unconfirmed for GTA 6. Plus every leak and update before launch.`}
       </p>
       <a
         data-hero-item

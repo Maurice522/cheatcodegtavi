@@ -9,6 +9,7 @@ import { isGta6Related, isPromo } from "./filter.js";
 import { extractImage, downloadImageAsDataUri } from "./image.js";
 import { rewriteLeak } from "./llm.js";
 import { slugify } from "./slugify.js";
+import { normalizeCredibility } from "./credibility.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -76,7 +77,7 @@ async function main() {
           slug: slugify(item.title, publishedAt),
           title: item.title,
           summary: rewritten.summary,
-          credibility: rewritten.credibility,
+          credibility: normalizeCredibility(rewritten.credibility, item),
           tags: rewritten.tags,
           image,
           sourceUrl,

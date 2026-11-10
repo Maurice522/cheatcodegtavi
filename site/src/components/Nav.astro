@@ -1,12 +1,12 @@
 ---
 const links = [
-  { href: '/cheats', label: 'Cheat Codes' },
-  { href: '/leaks', label: 'Leaks & Updates' },
-  { href: '/characters', label: 'Characters' },
-  { href: '/locations', label: 'Locations' },
-  { href: '/trailers', label: 'Trailers' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/cheats/', label: 'Cheat Codes' },
+  { href: '/leaks/', label: 'Leaks & Updates' },
+  { href: '/characters/', label: 'Characters' },
+  { href: '/locations/', label: 'Locations' },
+  { href: '/trailers/', label: 'Trailers' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
 ];
 const currentPath = Astro.url.pathname;
 ---
@@ -45,7 +45,7 @@ const currentPath = Astro.url.pathname;
         <button
           type="button"
           data-search-toggle
-          aria-label="Search cheat codes"
+          aria-label="Search the site"
           aria-expanded="false"
           class="press flex h-10 w-10 items-center justify-center rounded-full border border-border-default text-text-primary hover:border-accent-secondary/60"
         >
@@ -57,14 +57,14 @@ const currentPath = Astro.url.pathname;
         <form
           data-search-form
           hidden
-          action="/cheats"
+          action="/search/"
           class="absolute right-0 top-full mt-2 flex w-[min(78vw,320px)] items-center gap-2 rounded-xl border border-border-default bg-bg-surface p-2 shadow-elevation-md"
         >
           <input
             data-search-input
             type="search"
             name="q"
-            placeholder="Search cheat codes…"
+            placeholder="Search cheats, news, characters…"
             autocomplete="off"
             class="text-body-sm w-full rounded-lg border border-border-default bg-bg-primary px-3 py-2 text-text-primary placeholder:text-text-muted focus:border-accent-secondary/60 focus:outline-none"
           />
@@ -72,7 +72,7 @@ const currentPath = Astro.url.pathname;
       </site-search>
 
       <a
-        href="/favorites"
+        href="/favorites/"
         aria-label="Your saved cheats"
         class="press relative flex h-10 w-10 items-center justify-center rounded-full border border-border-default text-text-primary hover:border-accent-tertiary/60"
       >

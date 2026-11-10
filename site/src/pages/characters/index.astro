@@ -20,7 +20,7 @@ const mentioned = characters.filter((c) => c.role === 'Mentioned');
       {
         leads.map((c, i) => (
           <a
-            href={`/characters/${c.slug}`}
+            href={`/characters/${c.slug}/`}
             data-reveal
             class="press flex items-center gap-4 rounded-xl border border-border-default bg-bg-surface p-6 transition-colors duration-150 hover:border-accent-primary/50"
           >
@@ -40,7 +40,7 @@ const mentioned = characters.filter((c) => c.role === 'Mentioned');
       {
         supporting.map((c, i) => (
           <a
-            href={`/characters/${c.slug}`}
+            href={`/characters/${c.slug}/`}
             data-reveal
             class="press flex items-start gap-3 rounded-xl border border-border-default bg-bg-surface p-5 transition-colors duration-150 hover:border-accent-primary/50"
           >
@@ -60,7 +60,7 @@ const mentioned = characters.filter((c) => c.role === 'Mentioned');
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2" data-reveal-group>
           {mentioned.map((c, i) => (
             <a
-              href={`/characters/${c.slug}`}
+              href={`/characters/${c.slug}/`}
               data-reveal
               class="press flex items-start gap-3 rounded-xl border border-border-default bg-bg-surface p-5 transition-colors duration-150 hover:border-accent-primary/50"
             >

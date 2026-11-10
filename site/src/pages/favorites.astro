@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 ---
 
-<Layout title="Favorites" description="Your saved GTA6 cheat codes.">
+<Layout title="Favorites" description="Your saved GTA6 cheat codes." noindex>
   <PageHero eyebrow="Your List" title="Favorites" subtitle="Cheats you've saved, kept on this device — nothing sent anywhere." accent="gold" />
 
   <div class="mx-auto max-w-3xl px-5 py-14 sm:px-8 sm:py-20">
@@ -11,9 +11,7 @@ import PageHero from '../components/PageHero.astro';
       <div data-empty class="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border-default p-10 text-center">
         <p class="text-body-lg text-text-secondary">Nothing saved yet.</p>
         <p class="text-body-sm max-w-sm text-text-muted">
-          Tap the star on any cheat to save it here. There's nothing to save until GTA6's real cheat codes go
-          live — until then, browse the <a href="/cheats/gta5-vs-gta6" class="text-accent-secondary hover:underline">GTA5 archive</a> to
-          see how this'll look.
+          Tap the star on any cheat to save it here. Browse the <a href="/cheats/" class="text-accent-secondary hover:underline">PS5 cheat codes</a> to start your list.
         </p>
       </div>
 
@@ -78,7 +76,7 @@ import PageHero from '../components/PageHero.astro';
         row.className =
           'flex items-center justify-between gap-3 rounded-xl border border-border-default bg-bg-surface p-4';
         row.innerHTML = `
-          <a href="/cheats/${entry.slug}" class="min-w-0 flex-1">
+          <a href="${escapeHtml(entry.url ?? `/cheats/#${entry.slug}`)}" class="min-w-0 flex-1">
             <span class="text-label text-accent-secondary">${escapeHtml(entry.category)}</span>
             <p class="text-heading-sm truncate text-text-primary">${escapeHtml(entry.title)}</p>
           </a>

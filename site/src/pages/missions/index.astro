@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
 ---
 
-<Layout title="Missions" description="GTA6 mission list — coming once the game launches.">
+<Layout title="Missions" description="GTA6 mission list — coming once the game launches." noindex>
   <PageHero eyebrow="Coming Soon" title="Missions" accent="purple" />
   <div class="mx-auto flex max-w-xl flex-col items-center gap-4 px-5 py-16 text-center">
     <p class="text-body-lg text-text-secondary">
@@ -11,7 +11,7 @@ import PageHero from '../../components/PageHero.astro';
       this page will fill in with verified mission details as our pipeline confirms them.
     </p>
     <a
-      href="/leaks"
+      href="/leaks/"
       class="press text-label mt-2 rounded-full border border-border-default px-6 py-3 text-text-primary transition-colors duration-150 hover:border-accent-secondary/60"
     >
       See Leaks &amp; Updates

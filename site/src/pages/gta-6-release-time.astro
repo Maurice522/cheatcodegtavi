@@ -1,0 +1,207 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import NotifySignup from '../components/NotifySignup.astro';
+
+// UTC instant at which a given calendar date starts in an IANA time zone.
+function tzOffsetMs(timeZone: string, atMs: number): number {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  }).formatToParts(new Date(atMs));
+  const get = (type: string) => Number(parts.find((p) => p.type === type)?.value);
+  const asUtc = Date.UTC(get('year'), get('month') - 1, get('day'), get('hour'), get('minute'), get('second'));
+  return asUtc - Math.floor(atMs / 1000) * 1000;
+}
+function midnightIn(timeZone: string, year: number, month: number, day: number): Date {
+  const guess = Date.UTC(year, month - 1, day, 0, 0, 0);
+  const first = guess - tzOffsetMs(timeZone, guess);
+  return new Date(guess - tzOffsetMs(timeZone, first));
+}
+
+// The two points the published reports agree on. Both come from reporting on
+// PlayStation Store listings, not from Rockstar.
+const anchors = [
+  {
+    label: 'New Zealand (reported first to unlock)',
+    zone: 'Pacific/Auckland',
+    note: 'Midnight on November 19 in New Zealand.',
+    at: midnightIn('Pacific/Auckland', 2026, 11, 19),
+  },
+  {
+    label: 'US and Canada (reported near the end)',
+    zone: 'America/New_York',
+    note: 'Midnight Eastern on November 19, which is 11pm Central, 10pm Mountain and 9pm Pacific on November 18.',
+    at: midnightIn('America/New_York', 2026, 11, 19),
+  },
+];
+
+const faqs = [
+  {
+    q: 'What time does GTA 6 release?',
+    a: "Rockstar has confirmed the release date: November 19, 2026. It hasn't officially announced an exact unlock time. Reports based on PlayStation Store listings describe a staggered, region-by-region unlock on PS5, starting with New Zealand and reaching the US around midnight Eastern, but that schedule is unofficial and could change.",
+  },
+  {
+    q: 'Will GTA 6 unlock at the same time everywhere?',
+    a: "Reports say no. The PlayStation Store data analyzed by fans points to a rollout across roughly 15 windows over about 19 hours, with New Zealand first and Mexico and Central America last. Rockstar hasn't confirmed this, so treat it as a strong hint and not a promise.",
+  },
+  {
+    q: 'What time does GTA 6 unlock in the US?',
+    a: 'Reports say the US and Canada share one unlock time of midnight Eastern on November 19 (9pm Pacific on November 18). That comes from store listings, not an official Rockstar statement, so check your console store page close to launch.',
+  },
+  {
+    q: 'Is the unlock time different on Xbox?',
+    a: "The reports we've seen only cover the digital PS5 release. We haven't seen a reliable Xbox Series X|S schedule, so check back or watch our leaks page.",
+  },
+];
+---
+
+<Layout
+  title="GTA 6 Release Time & Unlock Schedule"
+  description="GTA 6 launches November 19, 2026. See what's confirmed about the unlock time, what's only reported, and what it means in your time zone."
+>
+  <PageHero
+    eyebrow="Launch Guide"
+    title="GTA 6 Release Time"
+    subtitle="Confirmed date, reported unlock times, and what they mean in your time zone."
+    accent="gold"
+  />
+
+  <div class="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
+    <div class="rounded-xl border border-border-default bg-bg-surface p-5">
+      <p class="text-label text-accent-secondary">The short answer</p>
+      <p class="text-body-md mt-2 text-text-secondary">
+        GTA 6 launches on <strong class="text-text-primary">November 19, 2026</strong>, and Rockstar has confirmed that date. It has <strong class="text-text-primary">not</strong> officially announced an exact unlock time. Reports based on PlayStation Store listings describe a staggered rollout, with New Zealand first and the US around midnight Eastern. Treat the times below as reported, not confirmed.
+      </p>
+    </div>
+
+    <h2 class="text-heading-md mt-12 text-text-primary">The reported unlock times, in your time zone</h2>
+    <p class="text-body-md mt-2 text-text-secondary">
+      Your time zone: <strong class="text-text-primary" data-your-zone>detecting...</strong>
+    </p>
+
+    <ul class="mt-4 flex flex-col gap-3">
+      {
+        anchors.map((a) => (
+          <li data-instant={a.at.toISOString()} class="rounded-xl border border-border-default bg-bg-surface p-5">
+            <p class="text-heading-sm text-text-primary">{a.label}</p>
+            <p class="text-body-sm mt-1 text-text-muted">{a.note}</p>
+            <p class="text-body-md mt-3 text-text-secondary">
+              In your time zone: <strong class="text-text-primary" data-local>{a.at.toUTCString().replace('GMT', 'UTC')}</strong>
+            </p>
+            <p class="text-caption mt-1 text-text-muted" data-relative></p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2 class="text-heading-md mt-12 text-text-primary">What's confirmed and what isn't</h2>
+    <div class="mt-4 overflow-x-auto rounded-xl border border-border-default">
+      <table class="w-full min-w-[28rem] border-collapse text-left">
+        <caption class="sr-only">GTA 6 launch details and their confirmation status</caption>
+        <thead class="bg-bg-surface">
+          <tr class="text-label text-text-muted">
+            <th scope="col" class="px-4 py-3">Detail</th>
+            <th scope="col" class="px-4 py-3">Status</th>
+          </tr>
+        </thead>
+        <tbody class="text-body-sm">
+          <tr class="border-t border-border-default"><th scope="row" class="px-4 py-3 font-semibold text-text-primary">Release date: November 19, 2026</th><td class="px-4 py-3 text-verified">Confirmed by Rockstar</td></tr>
+          <tr class="border-t border-border-default"><th scope="row" class="px-4 py-3 font-semibold text-text-primary">Platforms: PS5 and Xbox Series X|S</th><td class="px-4 py-3 text-verified">Confirmed by Rockstar</td></tr>
+          <tr class="border-t border-border-default"><th scope="row" class="px-4 py-3 font-semibold text-text-primary">Exact unlock time</th><td class="px-4 py-3 text-text-muted">Not announced</td></tr>
+          <tr class="border-t border-border-default"><th scope="row" class="px-4 py-3 font-semibold text-text-primary">Staggered regional unlock on PS5</th><td class="px-4 py-3 text-rumored">Reported (from store listings), unofficial</td></tr>
+          <tr class="border-t border-border-default"><th scope="row" class="px-4 py-3 font-semibold text-text-primary">Xbox unlock schedule</th><td class="px-4 py-3 text-text-muted">No reliable report yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="text-heading-md mt-12 text-text-primary">GTA 6 release time: common questions</h2>
+    <div class="mt-4 flex flex-col gap-3">
+      {
+        faqs.map((item) => (
+          <details class="group rounded-xl border border-border-default bg-bg-surface p-5 open:border-accent-secondary/40">
+            <summary class="text-heading-sm flex cursor-pointer list-none items-center justify-between gap-4 text-text-primary marker:content-none">
+              {item.q}
+              <svg class="h-4 w-4 shrink-0 text-text-muted transition-transform duration-200 group-open:rotate-45" viewBox="0 0 16 16" fill="none">
+                <path d="M8 2V14M2 8H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              </svg>
+            </summary>
+            <p class="text-body-md mt-3 text-text-secondary">{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+
+    <div class="mt-12 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border-default p-8 text-center">
+      <p class="text-label text-text-muted">Get an email when the official time is announced</p>
+      <NotifySignup />
+      <p class="text-body-sm text-text-secondary">
+        Or follow the latest in <a href="/leaks/" class="text-accent-secondary hover:underline">leaks and updates</a>, and see the <a href="/cheats/" class="text-accent-secondary hover:underline">PS5 cheat codes</a> we're tracking for launch.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const zoneEl = document.querySelector('[data-your-zone]');
+    if (zoneEl) zoneEl.textContent = zone;
+
+    const fmt = new Intl.DateTimeFormat(undefined, {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    });
+
+    function relative(ms: number) {
+      const diff = ms - Date.now();
+      if (diff <= 0) return 'This time has passed.';
+      const mins = Math.floor(diff / 60000);
+      const d = Math.floor(mins / 1440);
+      const h = Math.floor((mins % 1440) / 60);
+      const m = mins % 60;
+      return `That's in ${d > 0 ? `${d}d ` : ''}${h}h ${m}m.`;
+    }
+
+    function update() {
+      document.querySelectorAll<HTMLElement>('[data-instant]').forEach((li) => {
+        const at = new Date(li.dataset.instant ?? '');
+        const local = li.querySelector('[data-local]');
+        const rel = li.querySelector('[data-relative]');
+        if (local) local.textContent = fmt.format(at);
+        if (rel) rel.textContent = relative(at.getTime());
+      });
+    }
+    update();
+    setInterval(update, 30000);
+  </script>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cheatcodegtavi.com/' },
+          { '@type': 'ListItem', position: 2, name: 'GTA 6 Release Time', item: 'https://cheatcodegtavi.com/gta-6-release-time/' },
+        ],
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((item) => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: { '@type': 'Answer', text: item.a },
+        })),
+      },
+    ],
+  })} />
+</Layout>
