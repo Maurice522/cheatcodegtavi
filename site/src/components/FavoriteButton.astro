@@ -36,6 +36,9 @@ const { slug, title, category, url = '', class: className = '' } = Astro.props;
       const button = this.querySelector<HTMLButtonElement>('[data-favorite-toggle]');
       const icon = this.querySelector<SVGPathElement>('[data-favorite-icon] path');
       if (!button || !icon) return;
+      // connectedCallback fires again if the element is moved in the DOM.
+      if (this.dataset.ready) return;
+      this.dataset.ready = 'true';
 
       const slug = this.dataset.slug ?? '';
       const title = this.dataset.title ?? '';

@@ -1,10 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
+import CheatEntry from '../components/CheatEntry.astro';
+import { allCheats } from '../lib/gta5-cheats';
 ---
 
 <Layout title="Favorites" description="Your saved GTA6 cheat codes." noindex>
-  <PageHero eyebrow="Your List" title="Favorites" subtitle="Cheats you've saved, kept on this device — nothing sent anywhere." accent="gold" />
+  <PageHero eyebrow="Your List" title="Favorites" subtitle="Your saved cheats and their codes, kept on this device. Tap a star to remove one." accent="gold" />
 
   <div class="mx-auto max-w-3xl px-5 py-14 sm:px-8 sm:py-20">
     <favorites-page>
@@ -36,7 +38,15 @@ import PageHero from '../components/PageHero.astro';
           </div>
         </div>
 
-        <div data-list class="flex flex-col gap-3"></div>
+        <div data-list class="flex flex-col gap-3">
+          {
+            allCheats.map((cheat) => (
+              <div data-fav-card={cheat.slug} hidden>
+                <CheatEntry cheat={cheat} />
+              </div>
+            ))
+          }
+        </div>
       </div>
     </favorites-page>
   </div>
@@ -70,13 +80,28 @@ import PageHero from '../components/PageHero.astro';
       filled.hidden = false;
       count.textContent = String(entries.length);
 
-      list.innerHTML = '';
-      for (const entry of entries) {
+      // Show the saved cheats' full cards, newest first; hide the rest.
+      const cards = new Map(
+        [...list.querySelectorAll<HTMLElement>('[data-fav-card]')].map((el) => [el.dataset.favCard ?? '', el]),
+      );
+      for (const card of cards.values()) card.hidden = true;
+      list.querySelectorAll('[data-fav-fallback]').forEach((el) => el.remove());
+
+      for (const [position, entry] of entries.entries()) {
+        const card = cards.get(entry.slug);
+        if (card) {
+          card.hidden = false;
+          card.style.order = String(position);
+          continue;
+        }
+        // A saved item we no longer have a card for: keep it visible and removable.
         const row = document.createElement('div');
+        row.dataset.favFallback = '';
+        row.style.order = String(position);
         row.className =
           'flex items-center justify-between gap-3 rounded-xl border border-border-default bg-bg-surface p-4';
         row.innerHTML = `
-          <a href="${escapeHtml(entry.url ?? `/cheats/#${entry.slug}`)}" class="min-w-0 flex-1">
+          <a href="${escapeHtml(entry.url ?? '/cheats/')}" class="min-w-0 flex-1">
             <span class="text-label text-accent-secondary">${escapeHtml(entry.category)}</span>
             <p class="text-heading-sm truncate text-text-primary">${escapeHtml(entry.title)}</p>
           </a>
@@ -87,12 +112,9 @@ import PageHero from '../components/PageHero.astro';
             </svg>
           </button>
         `;
+        row.querySelector<HTMLButtonElement>('[data-remove]')?.addEventListener('click', () => removeFavorite(entry.slug));
         list.appendChild(row);
       }
-
-      list.querySelectorAll<HTMLButtonElement>('[data-remove]').forEach((btn) => {
-        btn.addEventListener('click', () => removeFavorite(btn.dataset.remove ?? ''));
-      });
     }
   }
 
