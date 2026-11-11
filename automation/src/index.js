@@ -7,7 +7,7 @@ import Parser from "rss-parser";
 import { connectDb, alreadyExists, recentTopicExists } from "./db.js";
 import { isGta6Related, isPromo } from "./filter.js";
 import { extractImage, downloadImageAsDataUri } from "./image.js";
-import { rewriteLeak } from "./llm.js";
+import { rewriteLeak, QuotaExhaustedError } from "./llm.js";
 import { slugify } from "./slugify.js";
 import { normalizeCredibility } from "./credibility.js";
 
@@ -74,6 +74,10 @@ async function main() {
         try {
           rewritten = await rewriteLeak(item, LLM_API_KEY);
         } catch (err) {
+          if (err instanceof QuotaExhaustedError) {
+            console.error(`${err.message}. Stopping this run; stories already saved still deploy.`);
+            break feedLoop;
+          }
           console.error(`LLM rewrite failed for "${item.title}": ${err.message}`);
           continue;
         }

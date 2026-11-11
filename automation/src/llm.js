@@ -18,6 +18,19 @@ Never state a rumored or leaked claim as settled fact — use "reportedly"/"alle
 // RetryInfo.retryDelay rather than a guessed backoff. 503 ("model
 // experiencing high demand") is separate — transient and carries no
 // RetryInfo, so it falls back to a flat delay.
+// When the free tier's daily quota is used up, Gemini replies 429 with a retry
+// delay measured in hours. Waiting that long just hangs the whole CI run, so
+// any delay past this cap means "out of quota": stop making LLM calls and let
+// the run finish and deploy with whatever it already saved.
+const MAX_RETRY_WAIT_SECONDS = 90;
+
+export class QuotaExhaustedError extends Error {
+  constructor(retrySeconds) {
+    super(`Gemini quota exhausted (asked us to wait ${Math.round(retrySeconds)}s)`);
+    this.name = "QuotaExhaustedError";
+  }
+}
+
 async function generateContent(apiKey, body, attempt = 1) {
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
@@ -37,6 +50,7 @@ async function generateContent(apiKey, body, attempt = 1) {
       (d) => d["@type"] === "type.googleapis.com/google.rpc.RetryInfo",
     );
     const retrySeconds = retryInfo ? parseFloat(retryInfo.retryDelay) : 10;
+    if (retrySeconds > MAX_RETRY_WAIT_SECONDS) throw new QuotaExhaustedError(retrySeconds);
     const waitMs = Math.ceil((retrySeconds || 10) * 1000) + 500;
     const reason = response.status === 429 ? "Rate limited" : "Model overloaded (503)";
     console.log(`${reason}, retrying in ${waitMs}ms (attempt ${attempt})...`);

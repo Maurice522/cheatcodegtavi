@@ -53,6 +53,7 @@ for (const { email, token } of subscribers) {
       from: FROM,
       to: [email],
       subject,
+      reply_to: "contact@cheatcodegtavi.com",
       html: `${body}<hr><p style="font-size:12px;color:#666">You asked to be told when GTA 6 cheat codes go live on CheatCodeGTAVI.com. <a href="${unsubscribeUrl}">Unsubscribe</a>.</p>`,
       headers: { "List-Unsubscribe": `<${unsubscribeUrl}>` },
     }),
