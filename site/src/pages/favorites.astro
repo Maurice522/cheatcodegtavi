@@ -41,7 +41,7 @@ import { allCheats } from '../lib/gta5-cheats';
         <div data-list class="flex flex-col gap-3">
           {
             allCheats.map((cheat) => (
-              <div data-fav-card={cheat.slug} hidden>
+              <div data-fav-card={cheat.slug} data-seq={cheat.ps5?.join(',') ?? ''} data-phone={cheat.phone} hidden>
                 <CheatEntry cheat={cheat} />
               </div>
             ))
@@ -157,10 +157,97 @@ import { allCheats } from '../lib/gta5-cheats';
     link.click();
   });
 
+  const MAX_SHEET_ENTRIES = 12;
+  const CHIP = 46;
+  const CHIP_GAP = 8;
+  const FACE_COLORS: Record<string, string> = { Triangle: '#3ddc97', Circle: '#ff6b7a', X: '#7fb0ff', Square: '#ff9ad5' };
+
+  function roundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(x, y, w, h, r);
+    else ctx.rect(x, y, w, h);
+  }
+
+  // Buttons are drawn as shapes, not font glyphs, so they look the same on every device.
+  function drawButton(ctx: CanvasRenderingContext2D, button: string, x: number, y: number) {
+    const face = FACE_COLORS[button];
+    roundedRect(ctx, x, y, CHIP, CHIP, 9);
+    ctx.fillStyle = '#12141f';
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = face ?? '#343a55';
+    ctx.stroke();
+
+    const cx = x + CHIP / 2;
+    const cy = y + CHIP / 2;
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = face ?? '#f1f2f8';
+
+    if (button === 'Triangle') {
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - 11);
+      ctx.lineTo(cx + 12, cy + 9);
+      ctx.lineTo(cx - 12, cy + 9);
+      ctx.closePath();
+      ctx.stroke();
+    } else if (button === 'Circle') {
+      ctx.beginPath();
+      ctx.arc(cx, cy, 11, 0, Math.PI * 2);
+      ctx.stroke();
+    } else if (button === 'X') {
+      ctx.beginPath();
+      ctx.moveTo(cx - 9, cy - 9);
+      ctx.lineTo(cx + 9, cy + 9);
+      ctx.moveTo(cx + 9, cy - 9);
+      ctx.lineTo(cx - 9, cy + 9);
+      ctx.stroke();
+    } else if (button === 'Square') {
+      ctx.strokeRect(cx - 10, cy - 10, 20, 20);
+    } else if (button === 'Left' || button === 'Right' || button === 'Up' || button === 'Down') {
+      const angle = { Right: 0, Down: Math.PI / 2, Left: Math.PI, Up: -Math.PI / 2 }[button];
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(angle);
+      ctx.beginPath();
+      ctx.moveTo(-11, 0);
+      ctx.lineTo(11, 0);
+      ctx.moveTo(4, -7);
+      ctx.lineTo(11, 0);
+      ctx.lineTo(4, 7);
+      ctx.stroke();
+      ctx.restore();
+    } else {
+      ctx.fillStyle = '#f1f2f8';
+      ctx.font = '700 19px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(button, cx, cy + 1);
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'alphabetic';
+    }
+  }
+
   function renderCheatSheet(canvas: HTMLCanvasElement, entries: FavoriteEntry[]): string {
+    // Inputs come from the cards already on this page.
+    const inputs = new Map<string, { seq: string[]; phone: string }>();
+    document.querySelectorAll<HTMLElement>('[data-fav-card]').forEach((el) => {
+      inputs.set(el.dataset.favCard ?? '', {
+        seq: (el.dataset.seq ?? '').split(',').filter(Boolean),
+        phone: el.dataset.phone ?? '',
+      });
+    });
+
+    const shown = entries.slice(0, MAX_SHEET_ENTRIES);
+    const HEADER = 200;
+    const ROW = 150;
+    const FOOTER = 130 + (entries.length > shown.length ? 40 : 0);
+    const W = 1080;
+    const H = Math.max(1080, HEADER + shown.length * ROW + FOOTER);
+    canvas.width = W;
+    canvas.height = H;
     const ctx = canvas.getContext('2d')!;
-    const W = canvas.width;
-    const H = canvas.height;
 
     // Background — Vice-noir gradient, matches the site's ink/neon palette.
     const bg = ctx.createLinearGradient(0, 0, W, H);
@@ -170,7 +257,6 @@ import { allCheats } from '../lib/gta5-cheats';
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, W, H);
 
-    // Glow blobs
     const glow = (x: number, y: number, r: number, color: string) => {
       const g = ctx.createRadialGradient(x, y, 0, x, y, r);
       g.addColorStop(0, color);
@@ -182,42 +268,53 @@ import { allCheats } from '../lib/gta5-cheats';
     glow(W - 120, H - 200, 550, 'rgba(33,230,230,0.18)');
 
     // Header
+    ctx.textBaseline = 'alphabetic';
     ctx.fillStyle = '#ffffff';
     ctx.font = '700 34px Arial';
     ctx.fillText('CHEATCODE', 64, 100);
     ctx.fillStyle = '#ff2e9e';
-    ctx.font = '700 34px Arial';
     const w1 = ctx.measureText('CHEATCODE').width;
     ctx.fillText('GTAVI', 64 + w1, 100);
 
     ctx.fillStyle = '#a8adc4';
     ctx.font = '400 22px Arial';
-    ctx.fillText('MY CHEAT SHEET', 64, 140);
+    ctx.fillText('MY PS5 CHEAT SHEET', 64, 140);
 
-    // List
-    let y = 220;
-    ctx.font = '700 40px Arial';
-    for (const entry of entries.slice(0, 10)) {
+    // Entries: title, then the PS5 input (or the phone number for phone-only cheats)
+    let y = HEADER;
+    for (const entry of shown) {
       ctx.fillStyle = '#ffffff';
-      ctx.fillText(entry.title, 64, y);
-      ctx.fillStyle = '#21e6e6';
-      ctx.font = '600 20px Arial';
-      ctx.fillText(entry.category.toUpperCase(), 64, y + 32);
-      ctx.font = '700 40px Arial';
-      y += 96;
-      if (y > H - 140) break;
+      ctx.font = '700 36px Arial';
+      ctx.fillText(entry.title, 64, y + 30);
+
+      const input = inputs.get(entry.slug);
+      if (input && input.seq.length > 0) {
+        input.seq.forEach((button, i) => drawButton(ctx, button, 64 + i * (CHIP + CHIP_GAP), y + 52));
+      } else if (input?.phone) {
+        ctx.fillStyle = '#21e6e6';
+        ctx.font = '600 26px Arial';
+        ctx.fillText(`Phone: ${input.phone}`, 64, y + 86);
+      } else {
+        ctx.fillStyle = '#21e6e6';
+        ctx.font = '600 20px Arial';
+        ctx.fillText(entry.category.toUpperCase(), 64, y + 80);
+      }
+      y += ROW;
     }
 
-    if (entries.length > 10) {
-      ctx.fillStyle = '#565d7a';
+    if (entries.length > shown.length) {
+      ctx.fillStyle = '#a8adc4';
       ctx.font = '400 22px Arial';
-      ctx.fillText(`+ ${entries.length - 10} more`, 64, y);
+      ctx.fillText(`+ ${entries.length - shown.length} more on cheatcodegtavi.com`, 64, y + 10);
     }
 
     // Footer
-    ctx.fillStyle = '#565d7a';
-    ctx.font = '400 22px Arial';
-    ctx.fillText('cheatcodegtavi.com', 64, H - 64);
+    ctx.fillStyle = '#a8adc4';
+    ctx.font = '400 20px Arial';
+    ctx.fillText('GTA V codes, unconfirmed for GTA 6', 64, H - 96);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '600 24px Arial';
+    ctx.fillText('cheatcodegtavi.com', 64, H - 60);
 
     return canvas.toDataURL('image/png');
   }
