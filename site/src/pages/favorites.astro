@@ -26,7 +26,7 @@ import { allCheats } from '../lib/gta5-cheats';
               data-share
               class="press text-label shadow-glow-pink rounded-full bg-accent-primary px-5 py-2.5 text-text-on-accent transition-transform duration-150 hover:scale-105"
             >
-              Share My Cheat Sheet
+              <span data-share-label>Share My List</span>
             </button>
             <button
               type="button"
@@ -51,11 +51,10 @@ import { allCheats } from '../lib/gta5-cheats';
     </favorites-page>
   </div>
 
-  <canvas data-share-canvas width="1080" height="1080" class="hidden"></canvas>
 </Layout>
 
 <script>
-  import { readFavorites, removeFavorite, type FavoriteEntry } from '../lib/favorites-client';
+  import { readFavorites, removeFavorite } from '../lib/favorites-client';
 
   class FavoritesPage extends HTMLElement {
     connectedCallback() {
@@ -124,198 +123,45 @@ import { allCheats } from '../lib/gta5-cheats';
 
   customElements.define('favorites-page', FavoritesPage);
 
-  // --- Shareable cheat-sheet image — pure client-side canvas render, no backend.
+  // --- Share the list as a link: the saved cheat names ride in the URL, so anyone
+  // who opens it sees the same codes on /shared/. No server involved.
   const shareBtn = document.querySelector<HTMLButtonElement>('[data-share]');
+  const shareLabel = document.querySelector<HTMLElement>('[data-share-label]');
   const clearBtn = document.querySelector<HTMLButtonElement>('[data-clear]');
-  const canvas = document.querySelector<HTMLCanvasElement>('[data-share-canvas]');
 
   clearBtn?.addEventListener('click', () => {
     if (!confirm('Remove all saved cheats?')) return;
     for (const entry of readFavorites()) removeFavorite(entry.slug);
   });
 
+  function buildShareUrl(): string {
+    const slugs = readFavorites().map((e) => e.slug);
+    return `${location.origin}/shared/?c=${slugs.map(encodeURIComponent).join(',')}`;
+  }
+
   shareBtn?.addEventListener('click', async () => {
-    const entries = readFavorites();
-    if (!canvas || entries.length === 0) return;
-    const dataUrl = renderCheatSheet(canvas, entries);
+    if (readFavorites().length === 0) return;
+    const url = buildShareUrl();
 
-    const blob = await (await fetch(dataUrl)).blob();
-    const file = new File([blob], 'my-gta6-cheat-sheet.png', { type: 'image/png' });
-
-    if (navigator.canShare?.({ files: [file] })) {
+    if (navigator.share) {
       try {
-        await navigator.share({ files: [file], title: 'My GTA6 Cheat Sheet' });
+        await navigator.share({ title: 'My GTA 6 cheat list', text: 'My saved PS5 cheat codes:', url });
         return;
       } catch {
-        // user cancelled the share sheet — fall through to download
+        // dismissed the share sheet, or sharing failed: fall back to copying the link
       }
     }
 
-    const link = document.createElement('a');
-    link.href = dataUrl;
-    link.download = 'my-gta6-cheat-sheet.png';
-    link.click();
+    try {
+      await navigator.clipboard.writeText(url);
+      if (shareLabel) shareLabel.textContent = 'Link copied';
+    } catch {
+      // Clipboard blocked: show the link so it can be copied by hand.
+      window.prompt('Copy this link to share your list:', url);
+      return;
+    }
+    setTimeout(() => {
+      if (shareLabel) shareLabel.textContent = 'Share My List';
+    }, 2000);
   });
-
-  const MAX_SHEET_ENTRIES = 12;
-  const CHIP = 46;
-  const CHIP_GAP = 8;
-  const FACE_COLORS: Record<string, string> = { Triangle: '#3ddc97', Circle: '#ff6b7a', X: '#7fb0ff', Square: '#ff9ad5' };
-
-  function roundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
-    ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(x, y, w, h, r);
-    else ctx.rect(x, y, w, h);
-  }
-
-  // Buttons are drawn as shapes, not font glyphs, so they look the same on every device.
-  function drawButton(ctx: CanvasRenderingContext2D, button: string, x: number, y: number) {
-    const face = FACE_COLORS[button];
-    roundedRect(ctx, x, y, CHIP, CHIP, 9);
-    ctx.fillStyle = '#12141f';
-    ctx.fill();
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = face ?? '#343a55';
-    ctx.stroke();
-
-    const cx = x + CHIP / 2;
-    const cy = y + CHIP / 2;
-    ctx.lineWidth = 3;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = face ?? '#f1f2f8';
-
-    if (button === 'Triangle') {
-      ctx.beginPath();
-      ctx.moveTo(cx, cy - 11);
-      ctx.lineTo(cx + 12, cy + 9);
-      ctx.lineTo(cx - 12, cy + 9);
-      ctx.closePath();
-      ctx.stroke();
-    } else if (button === 'Circle') {
-      ctx.beginPath();
-      ctx.arc(cx, cy, 11, 0, Math.PI * 2);
-      ctx.stroke();
-    } else if (button === 'X') {
-      ctx.beginPath();
-      ctx.moveTo(cx - 9, cy - 9);
-      ctx.lineTo(cx + 9, cy + 9);
-      ctx.moveTo(cx + 9, cy - 9);
-      ctx.lineTo(cx - 9, cy + 9);
-      ctx.stroke();
-    } else if (button === 'Square') {
-      ctx.strokeRect(cx - 10, cy - 10, 20, 20);
-    } else if (button === 'Left' || button === 'Right' || button === 'Up' || button === 'Down') {
-      const angle = { Right: 0, Down: Math.PI / 2, Left: Math.PI, Up: -Math.PI / 2 }[button];
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(angle);
-      ctx.beginPath();
-      ctx.moveTo(-11, 0);
-      ctx.lineTo(11, 0);
-      ctx.moveTo(4, -7);
-      ctx.lineTo(11, 0);
-      ctx.lineTo(4, 7);
-      ctx.stroke();
-      ctx.restore();
-    } else {
-      ctx.fillStyle = '#f1f2f8';
-      ctx.font = '700 19px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(button, cx, cy + 1);
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'alphabetic';
-    }
-  }
-
-  function renderCheatSheet(canvas: HTMLCanvasElement, entries: FavoriteEntry[]): string {
-    // Inputs come from the cards already on this page.
-    const inputs = new Map<string, { seq: string[]; phone: string }>();
-    document.querySelectorAll<HTMLElement>('[data-fav-card]').forEach((el) => {
-      inputs.set(el.dataset.favCard ?? '', {
-        seq: (el.dataset.seq ?? '').split(',').filter(Boolean),
-        phone: el.dataset.phone ?? '',
-      });
-    });
-
-    const shown = entries.slice(0, MAX_SHEET_ENTRIES);
-    const HEADER = 200;
-    const ROW = 150;
-    const FOOTER = 130 + (entries.length > shown.length ? 40 : 0);
-    const W = 1080;
-    const H = Math.max(1080, HEADER + shown.length * ROW + FOOTER);
-    canvas.width = W;
-    canvas.height = H;
-    const ctx = canvas.getContext('2d')!;
-
-    // Background — Vice-noir gradient, matches the site's ink/neon palette.
-    const bg = ctx.createLinearGradient(0, 0, W, H);
-    bg.addColorStop(0, '#1b0f26');
-    bg.addColorStop(0.5, '#05060a');
-    bg.addColorStop(1, '#07131a');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, W, H);
-
-    const glow = (x: number, y: number, r: number, color: string) => {
-      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-      g.addColorStop(0, color);
-      g.addColorStop(1, 'transparent');
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, W, H);
-    };
-    glow(120, 120, 500, 'rgba(255,46,158,0.22)');
-    glow(W - 120, H - 200, 550, 'rgba(33,230,230,0.18)');
-
-    // Header
-    ctx.textBaseline = 'alphabetic';
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '700 34px Arial';
-    ctx.fillText('CHEATCODE', 64, 100);
-    ctx.fillStyle = '#ff2e9e';
-    const w1 = ctx.measureText('CHEATCODE').width;
-    ctx.fillText('GTAVI', 64 + w1, 100);
-
-    ctx.fillStyle = '#a8adc4';
-    ctx.font = '400 22px Arial';
-    ctx.fillText('MY PS5 CHEAT SHEET', 64, 140);
-
-    // Entries: title, then the PS5 input (or the phone number for phone-only cheats)
-    let y = HEADER;
-    for (const entry of shown) {
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '700 36px Arial';
-      ctx.fillText(entry.title, 64, y + 30);
-
-      const input = inputs.get(entry.slug);
-      if (input && input.seq.length > 0) {
-        input.seq.forEach((button, i) => drawButton(ctx, button, 64 + i * (CHIP + CHIP_GAP), y + 52));
-      } else if (input?.phone) {
-        ctx.fillStyle = '#21e6e6';
-        ctx.font = '600 26px Arial';
-        ctx.fillText(`Phone: ${input.phone}`, 64, y + 86);
-      } else {
-        ctx.fillStyle = '#21e6e6';
-        ctx.font = '600 20px Arial';
-        ctx.fillText(entry.category.toUpperCase(), 64, y + 80);
-      }
-      y += ROW;
-    }
-
-    if (entries.length > shown.length) {
-      ctx.fillStyle = '#a8adc4';
-      ctx.font = '400 22px Arial';
-      ctx.fillText(`+ ${entries.length - shown.length} more on cheatcodegtavi.com`, 64, y + 10);
-    }
-
-    // Footer
-    ctx.fillStyle = '#a8adc4';
-    ctx.font = '400 20px Arial';
-    ctx.fillText('GTA V codes, unconfirmed for GTA 6', 64, H - 96);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '600 24px Arial';
-    ctx.fillText('cheatcodegtavi.com', 64, H - 60);
-
-    return canvas.toDataURL('image/png');
-  }
 </script>

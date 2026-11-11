@@ -17,7 +17,7 @@ export default defineConfig({
       filter: (page) => {
         const { pathname } = new URL(page);
         // personal-state, tool, or noindexed pages
-        if (['/favorites/', '/search/', '/missions/', '/cheats/cheat-sheet/', '/unsubscribe/'].includes(pathname)) return false;
+        if (['/favorites/', '/search/', '/missions/', '/cheats/cheat-sheet/', '/unsubscribe/', '/shared/'].includes(pathname)) return false;
         // individual leak articles and paginated leak lists are noindexed
         if (/^\/leaks\/.+\/$/.test(pathname)) return false;
         return true;

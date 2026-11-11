@@ -1,0 +1,117 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import CheatEntry from '../components/CheatEntry.astro';
+import { allCheats, getGroup, groupPath } from '../lib/gta5-cheats';
+
+// Every cheat card is rendered (hidden); the script shows only the ones named
+// in the link's ?c= list, so a shared link needs no server.
+const cards = allCheats.map((cheat) => ({
+  cheat,
+  category: getGroup(cheat.group)?.name ?? 'Cheat',
+  url: `${groupPath(cheat.group)}#${cheat.slug}`,
+}));
+---
+
+<Layout title="Shared Cheat List" description="A list of GTA V cheat codes (PS5) shared from CheatCodeGTAVI.com. Unconfirmed for GTA 6." noindex>
+  <PageHero eyebrow="Shared With You" title="Shared Cheat List" subtitle="Someone shared these PS5 cheat codes with you." accent="gold" />
+
+  <div class="mx-auto max-w-3xl px-5 py-14 sm:px-8 sm:py-20">
+    <shared-list>
+      <div data-shared-content hidden class="flex flex-col gap-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <p class="text-body-sm text-text-muted"><span data-shared-count>0</span> cheats shared</p>
+          <button
+            type="button"
+            data-save-all
+            class="press text-label shadow-glow-pink rounded-full bg-accent-primary px-5 py-2.5 text-text-on-accent transition-transform duration-150 hover:scale-105 disabled:opacity-60"
+          >
+            Save all to my favorites
+          </button>
+        </div>
+        <p class="text-body-sm text-text-muted">
+          These are GTA V codes, unconfirmed for GTA 6. Rockstar hasn't published any GTA 6 cheat codes yet.
+        </p>
+
+        <div data-shared-list class="flex flex-col gap-3">
+          {
+            cards.map(({ cheat, category, url }) => (
+              <div data-shared-card={cheat.slug} data-title={cheat.title} data-category={category} data-url={url} hidden>
+                <CheatEntry cheat={cheat} />
+              </div>
+            ))
+          }
+        </div>
+
+        <a href="/cheats/" class="text-label text-accent-secondary hover:text-accent-secondary/80">Browse all 35 PS5 cheat codes</a>
+      </div>
+
+      <div data-shared-empty hidden class="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border-default p-10 text-center">
+        <p class="text-body-lg text-text-secondary">This link doesn't have any cheats in it.</p>
+        <a href="/cheats/" class="text-body-sm text-accent-secondary hover:underline">Browse the PS5 cheat codes</a>
+      </div>
+    </shared-list>
+  </div>
+
+  <script>
+    import { readFavorites, toggleFavorite } from '../lib/favorites-client';
+
+    class SharedList extends HTMLElement {
+      connectedCallback() {
+        const content = this.querySelector<HTMLElement>('[data-shared-content]');
+        const empty = this.querySelector<HTMLElement>('[data-shared-empty]');
+        const list = this.querySelector<HTMLElement>('[data-shared-list]');
+        const count = this.querySelector<HTMLElement>('[data-shared-count]');
+        const saveAll = this.querySelector<HTMLButtonElement>('[data-save-all]');
+        if (!content || !empty || !list || !count || !saveAll) return;
+
+        const cards = new Map(
+          [...list.querySelectorAll<HTMLElement>('[data-shared-card]')].map((el) => [el.dataset.sharedCard ?? '', el]),
+        );
+
+        // Only known cheat names are used, in the order they appear in the link.
+        const requested = (new URLSearchParams(location.search).get('c') ?? '')
+          .split(',')
+          .map((s) => s.trim())
+          .filter((s, i, all) => cards.has(s) && all.indexOf(s) === i);
+
+        if (requested.length === 0) {
+          empty.hidden = false;
+          return;
+        }
+
+        requested.forEach((slug, position) => {
+          const card = cards.get(slug)!;
+          card.hidden = false;
+          card.style.order = String(position);
+        });
+        count.textContent = String(requested.length);
+        content.hidden = false;
+
+        const syncButton = () => {
+          const saved = new Set(readFavorites().map((f) => f.slug));
+          const missing = requested.filter((s) => !saved.has(s));
+          saveAll.disabled = missing.length === 0;
+          saveAll.textContent = missing.length === 0 ? 'All saved to your favorites' : 'Save all to my favorites';
+        };
+        syncButton();
+        window.addEventListener('favorites:change', syncButton);
+
+        saveAll.addEventListener('click', () => {
+          const saved = new Set(readFavorites().map((f) => f.slug));
+          for (const slug of [...requested].reverse()) {
+            if (saved.has(slug)) continue;
+            const card = cards.get(slug)!;
+            toggleFavorite({
+              slug,
+              title: card.dataset.title ?? slug,
+              category: card.dataset.category ?? 'Cheat',
+              url: card.dataset.url,
+            });
+          }
+        });
+      }
+    }
+    customElements.define('shared-list', SharedList);
+  </script>
+</Layout>
