@@ -1,4 +1,5 @@
 ---
+import { generalCheatFaq } from '../../lib/cheat-faq';
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
 import CheatEntry from '../../components/CheatEntry.astro';
@@ -11,7 +12,8 @@ const launched = hasLaunched();
 const testedCount = allCheats.filter((c) => statusOf(c) !== 'unconfirmed').length;
 const recentUpdates = [...changelog].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
 
-const faqs = [
+const extraFaqs = generalCheatFaq.filter((g) => ['Is GTA VI the same as GTA 6?','Does GTA 6 (GTA VI) have cheat codes?','When does GTA 6 release?','Are GTA 6 cheat codes for Xbox and PC listed?'].includes(g.q));
+const baseFaqs = [
   {
     q: 'Are these real GTA 6 cheat codes?',
     a: "No. Rockstar hasn't published any GTA 6 cheat codes. Every code on this page is a GTA V cheat, listed because it is the most likely to return. Each one is marked unconfirmed, and we'll only mark a code as confirmed after testing it in the released game.",
@@ -33,11 +35,12 @@ const faqs = [
     a: "We list PS5 inputs first. GTA 6 launches on PS5 and Xbox Series X|S, and there is no PC release date yet, so Xbox and PC inputs aren't listed here.",
   },
 ];
+const faqs = [...extraFaqs, ...baseFaqs];
 ---
 
 <Layout
-  title="GTA 6 Cheat Codes (PS5)"
-  description="35 GTA V cheat codes most likely to return in GTA 6, with PS5 inputs. Every code is marked unconfirmed until we test it after launch on Nov 19, 2026."
+  title="GTA 6 / GTA VI Cheat Codes (PS5)"
+  description="GTA 6 (GTA VI) cheat codes: 35 GTA V cheats most likely to return, with PS5 inputs. Every code is marked unconfirmed until we test it after launch on Nov 19, 2026."
 >
   <PageHero
     eyebrow="PS5 · 35 codes · Unconfirmed for GTA 6"

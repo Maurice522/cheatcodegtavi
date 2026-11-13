@@ -1,8 +1,10 @@
 ---
+import { generalCheatFaq } from '../lib/cheat-faq';
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 
-const faqs = [
+const extraFaqs = generalCheatFaq.filter((g) => ['Is GTA VI the same as GTA 6?','Does GTA 6 (GTA VI) have cheat codes?','When does GTA 6 release?','Are GTA 6 cheat codes for Xbox and PC listed?'].includes(g.q));
+const baseFaqs = [
   {
     q: 'Are the cheat codes on this site confirmed for GTA6?',
     a: "No. Rockstar hasn't published any GTA6 cheat codes. The 35 codes on our cheat codes page are GTA V cheats with PS5 inputs, listed because they're the most likely to return. Every one is labeled unconfirmed, and we only change that after testing it in the released game.",
@@ -40,6 +42,7 @@ const faqs = [
     a: "The cheat codes listed on our cheat codes page are GTA V cheats, which are public and have been in the game for years. We list them because they're the most likely to return in GTA6, and we label each one unconfirmed. Our news section is separate: it links every story back to its source. Nothing is labeled \"Verified\" for GTA6 until it has been tested in the released game or confirmed directly by Rockstar.",
   },
 ];
+const faqs = [...extraFaqs, ...baseFaqs];
 ---
 
 <Layout

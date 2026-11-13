@@ -1,0 +1,218 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import CheatEntry from '../../../components/CheatEntry.astro';
+import NotifySignup from '../../../components/NotifySignup.astro';
+import { generalCheatFaq } from '../../../lib/cheat-faq';
+import { STATUS_LABELS, allCheats, cheatsInGroup, formatTestedDate, getGroup, groupPath, statusOf } from '../../../lib/gta5-cheats';
+
+export function getStaticPaths() {
+  return allCheats.map((cheat) => ({ params: { slug: cheat.slug }, props: { cheat } }));
+}
+
+const { cheat } = Astro.props;
+const group = getGroup(cheat.group)!;
+const status = statusOf(cheat);
+const related = cheatsInGroup(cheat.group)
+  .filter((c) => c.slug !== cheat.slug)
+  .slice(0, 4);
+const url = `https://cheatcodegtavi.com/cheats/code/${cheat.slug}/`;
+const buttons = cheat.ps5?.join(', ');
+
+const statusLine =
+  status === 'works'
+    ? 'We tested this code in the released GTA 6 on PS5 and it works.'
+    : status === 'broken'
+      ? "We tested this code in the released GTA 6 on PS5 and it doesn't work."
+      : "Rockstar hasn't published any GTA 6 cheat codes, so this is the GTA V code, unconfirmed for GTA 6 until we test it after launch.";
+
+const stepsText = buttons ? `Press ${cheat.ps5!.join(', then ')} in that order` : '';
+const statusShort = status === 'unconfirmed' ? 'unconfirmed for GTA 6' : status === 'works' ? 'tested and working in GTA 6' : "tested and not working in GTA 6";
+const faq = [
+  {
+    q: `What is the ${cheat.title} cheat code in GTA 6 (GTA VI)?`,
+    a: `${statusLine} ${buttons ? `In GTA V on PS5 the input is ${buttons}. ` : ''}On the in-game phone you dial ${cheat.phone}.`,
+  },
+  ...(buttons
+    ? [
+        {
+          q: `How do I enter the ${cheat.title} cheat on PS5?`,
+          a: `${stepsText}, during normal gameplay with no menu open. A confirmation message appears when it works. You can also open the in-game phone and dial ${cheat.phone}. These are the GTA V inputs; GTA 6 hasn't confirmed its own.`,
+        },
+      ]
+    : []),
+  {
+    q: `What is the ${cheat.title} phone number cheat?`,
+    a: `Dial ${cheat.phone} on the in-game phone. ${cheat.note ?? ''}`.trim(),
+  },
+  {
+    q: `What does the ${cheat.title} cheat do?`,
+    a: cheat.effect,
+  },
+  {
+    q: `Does the ${cheat.title} cheat work in GTA 6 on PS5?`,
+    a:
+      status === 'unconfirmed'
+        ? `It works in GTA V on PS5, and is ${statusShort}. We'll test it after launch on November 19, 2026 and update this page.`
+        : statusLine,
+  },
+];
+
+const title = `GTA 6 / GTA VI ${cheat.title} Cheat Code (PS5)`;
+const description = `GTA 6 ${cheat.title} cheat (GTA VI): ${buttons ? `PS5 input ${buttons}, ` : ''}phone ${cheat.phone}. ${status === 'unconfirmed' ? 'GTA V code, unconfirmed for GTA 6.' : statusLine}`;
+---
+
+<Layout title={title} description={description}>
+  <PageHero
+    eyebrow={`${group.name} · PS5 · ${status === 'unconfirmed' ? 'Unconfirmed for GTA 6' : 'Tested in GTA 6'}`}
+    title={title}
+    subtitle={cheat.effect}
+    accent="pink"
+  />
+
+  <div class="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
+    <nav aria-label="Breadcrumb" class="text-caption mb-6 text-text-muted">
+      <a href="/" class="hover:text-text-primary">Home</a>
+      <span class="mx-2">/</span>
+      <a href="/cheats/" class="hover:text-text-primary">Cheat Codes</a>
+      <span class="mx-2">/</span>
+      <a href={groupPath(cheat.group)} class="hover:text-text-primary">{group.name}</a>
+      <span class="mx-2">/</span>
+      <span class="text-text-secondary">{cheat.title}</span>
+    </nav>
+
+    <CheatEntry cheat={cheat} headingLevel="h2" />
+
+    <p class="text-body-md mt-6 text-text-secondary">{faq[0].a}</p>
+
+    <section class="mt-10">
+      <h2 class="text-heading-md text-text-primary">{cheat.title} cheat details</h2>
+      <dl class="text-body-sm mt-4 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-border-default bg-border-default sm:grid-cols-[10rem_1fr]">
+        {
+          [
+            ['Cheat', cheat.title],
+            ['Game', 'GTA 6 / GTA VI (GTA V code)'],
+            ['Platform', 'PS5'],
+            ['Category', group.name],
+            ['Effect', cheat.effect],
+            ['PS5 input', buttons ?? 'Phone only'],
+            ['Phone number', cheat.phone],
+            ['Status', STATUS_LABELS[status]],
+            ...(cheat.testedAt ? [['Last tested', formatTestedDate(cheat.testedAt)]] : []),
+          ].map(([k, v]) => (
+            <>
+              <dt class="bg-bg-surface px-4 py-3 font-semibold text-text-primary">{k}</dt>
+              <dd class="bg-bg-surface px-4 py-3 text-text-secondary">{v}</dd>
+            </>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="text-heading-md text-text-primary">How to enter the {cheat.title} cheat on PS5</h2>
+      <ol class="text-body-md mt-4 flex list-decimal flex-col gap-2 pl-6 text-text-secondary">
+        {
+          buttons ? (
+            <>
+              <li>Start playing and make sure no menu is open.</li>
+              <li>Enter {buttons} on your DualSense controller.</li>
+              <li>Wait for the on-screen confirmation message.</li>
+              <li>Or open the in-game phone and dial {cheat.phone}.</li>
+            </>
+          ) : (
+            <>
+              <li>Start playing and open the in-game phone.</li>
+              <li>Dial {cheat.phone}.</li>
+              <li>Wait for the on-screen confirmation message.</li>
+            </>
+          )
+        }
+      </ol>
+      <p class="text-caption mt-3 text-text-muted">These are GTA V inputs. GTA 6 hasn't confirmed how its cheats are entered.</p>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="text-heading-md text-text-primary">{cheat.title} cheat: quick answers</h2>
+      <div class="mt-4 flex flex-col gap-3">
+        {
+          faq.map((item) => (
+            <details class="group rounded-xl border border-border-default bg-bg-surface p-5 open:border-accent-secondary/40">
+              <summary class="text-heading-sm flex cursor-pointer list-none items-center justify-between gap-4 text-text-primary marker:content-none">
+                {item.q}
+              </summary>
+              <p class="text-body-md mt-3 text-text-secondary">{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="text-heading-md text-text-primary">GTA 6 cheat codes: common questions</h2>
+      <div class="mt-4 flex flex-col gap-3">
+        {
+          generalCheatFaq.map((item) => (
+            <details class="group rounded-xl border border-border-default bg-bg-surface p-5 open:border-accent-secondary/40">
+              <summary class="text-heading-sm flex cursor-pointer list-none items-center justify-between gap-4 text-text-primary marker:content-none">
+                {item.q}
+              </summary>
+              <p class="text-body-md mt-3 text-text-secondary">{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      related.length > 0 && (
+        <section class="mt-12">
+          <h2 class="text-heading-md text-text-primary">More {group.name.toLowerCase()}</h2>
+          <ul class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {related.map((c) => (
+              <li>
+                <a
+                  href={`/cheats/code/${c.slug}/`}
+                  class="press block rounded-xl border border-border-default bg-bg-surface p-4 text-text-primary transition-colors duration-150 hover:border-accent-secondary/60"
+                >
+                  {c.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p class="text-body-sm mt-6 text-text-secondary">
+            See all <a href={groupPath(cheat.group)} class="text-accent-secondary hover:underline">{group.name.toLowerCase()}</a>, every <a href="/cheats/" class="text-accent-secondary hover:underline">GTA 6 cheat code (PS5)</a>, or compare with <a href="/cheats/gta5-vs-gta6/" class="text-accent-secondary hover:underline">GTA 5 vs GTA 6 cheats</a>.
+          </p>
+        </section>
+      )
+    }
+
+    <div class="mt-14 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border-default p-8 text-center">
+      <p class="text-label text-text-muted">Get told when GTA 6 codes are confirmed</p>
+      <NotifySignup />
+    </div>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cheatcodegtavi.com/' },
+          { '@type': 'ListItem', position: 2, name: 'GTA 6 Cheat Codes (PS5)', item: 'https://cheatcodegtavi.com/cheats/' },
+          { '@type': 'ListItem', position: 3, name: group.name, item: `https://cheatcodegtavi.com${groupPath(cheat.group)}` },
+          { '@type': 'ListItem', position: 4, name: cheat.title, item: url },
+        ],
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: [...faq, ...generalCheatFaq].map((item) => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: { '@type': 'Answer', text: item.a },
+        })),
+      },
+    ],
+  })} />
+</Layout>
