@@ -42,6 +42,10 @@ jobs:
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # Shared with the cheat watcher so two deploys never race.
+    concurrency:
+      group: site-deploy
+      cancel-in-progress: false
     defaults:
       run:
         working-directory: site

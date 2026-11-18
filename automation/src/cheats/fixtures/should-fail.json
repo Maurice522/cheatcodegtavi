@@ -1,0 +1,14 @@
+[
+  { "url": "https://www.ign.com/articles/gta-6-cheats-test", "title": "GTA 6 cheats test", "publishedAt": "2026-11-18T14:00:00Z",
+    "text": "GTA 6 cheat codes: for invincibility press Right, X, Right, Left, Right, R1 on PS5.",
+    "proposed": [
+      { "name": "Invincibility", "effect": "Test.", "phone": "", "ps5": ["Right", "X", "Right", "Left", "Right", "R1"] },
+      { "name": "Hallucinated Money", "effect": "Not in page.", "phone": "1-999-555-0000", "ps5": [] }
+    ] },
+  { "url": "https://gta6cheatcodes.com/invincibility", "title": "GTA 6 cheats", "publishedAt": "2026-11-18T15:00:00Z",
+    "text": "GTA 6 cheat: Right, X, Right, Left, Right, R1.",
+    "proposed": [{ "name": "Invincibility", "effect": "Test.", "phone": "", "ps5": ["Right", "X", "Right", "Left", "Right", "R1"] }] },
+  { "url": "https://www.gamespot.com/articles/gta-6-cheats-old", "title": "GTA 6 cheats predicted", "publishedAt": "2026-11-10T15:00:00Z",
+    "text": "GTA 6 cheat guess: Right, X, Right, Left, Right, R1.",
+    "proposed": [{ "name": "Invincibility", "effect": "Test.", "phone": "", "ps5": ["Right", "X", "Right", "Left", "Right", "R1"] }] }
+]

@@ -30,7 +30,7 @@ const uri = import.meta.env.MONGODB_URI ?? process.env.MONGODB_URI;
 let client: MongoClient | null = null;
 let db: Db | null = null;
 
-async function getDb(): Promise<Db> {
+export async function getDb(): Promise<Db> {
   if (db) return db;
   if (!uri) throw new Error('MONGODB_URI is not set');
   client = new MongoClient(uri);

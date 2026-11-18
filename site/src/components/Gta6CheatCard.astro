@@ -1,0 +1,44 @@
+---
+import ButtonSequence from './ButtonSequence.astro';
+import { gta6CheatPath, reportedBy, type Gta6Cheat } from '../lib/gta6-cheats';
+
+interface Props {
+  cheat: Gta6Cheat;
+  headingLevel?: 'h2' | 'h3';
+  link?: boolean;
+}
+
+const { cheat, headingLevel = 'h3', link = true } = Astro.props;
+const Heading = headingLevel;
+---
+
+<div id={cheat.slug} class="scroll-mt-40 rounded-xl border border-verified/40 bg-bg-surface p-5">
+  <div class="flex flex-wrap items-start justify-between gap-2">
+    <Heading class="text-heading-sm text-text-primary">
+      {link ? <a href={gta6CheatPath(cheat.slug)} class="hover:text-accent-secondary hover:underline">{cheat.title}</a> : cheat.title}
+    </Heading>
+    <span class="text-label inline-flex items-center gap-1.5 rounded-full border border-verified/50 px-2.5 py-1 text-verified">
+      <span class="h-1.5 w-1.5 rounded-full bg-verified" aria-hidden="true"></span>
+      Reported working in GTA 6
+    </span>
+  </div>
+  {cheat.effect && <p class="text-body-sm mt-2 text-text-secondary">{cheat.effect}</p>}
+  {
+    cheat.ps5?.length ? (
+      <div class="mt-3">
+        <p class="text-caption mb-1.5 text-text-muted">PS5 input (GTA 6)</p>
+        <ButtonSequence buttons={cheat.ps5} />
+      </div>
+    ) : null
+  }
+  {
+    cheat.phone && (
+      <p class="text-caption mt-3 text-text-muted">
+        Phone number: <span class="font-semibold text-text-secondary">{cheat.phone}</span>
+      </p>
+    )
+  }
+  <p class="text-caption mt-3 border-t border-border-subtle pt-3 text-text-muted">
+    Reported by {reportedBy(cheat)}. We haven't tested it ourselves yet.
+  </p>
+</div>

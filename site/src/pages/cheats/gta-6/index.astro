@@ -1,0 +1,75 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Gta6CheatCard from '../../../components/Gta6CheatCard.astro';
+import NotifySignup from '../../../components/NotifySignup.astro';
+import { getReportedGta6Cheats, gta6CheatPath } from '../../../lib/gta6-cheats';
+
+const cheats = await getReportedGta6Cheats();
+const count = cheats.length;
+---
+
+<Layout
+  title={count ? `${count} Confirmed GTA 6 Cheat Code${count === 1 ? '' : 's'} (GTA VI)` : 'Confirmed GTA 6 Cheat Codes (GTA VI)'}
+  description={count
+    ? `${count} GTA 6 / GTA VI cheat code${count === 1 ? '' : 's'} reported working by Rockstar or at least two major outlets, with PS5 inputs and phone numbers.`
+    : 'No GTA 6 / GTA VI cheat codes are confirmed yet. We check official and major gaming sources every hour and list codes here as soon as they are reported.'}
+>
+  <PageHero
+    eyebrow={count ? `${count} reported · Checked hourly` : 'Checked hourly'}
+    title="Confirmed GTA 6 Cheat Codes"
+    subtitle="Cheats reported working in the released game by Rockstar or by at least two major gaming outlets."
+    accent="gold"
+  />
+
+  <div class="mx-auto max-w-4xl px-5 py-12 sm:px-8 sm:py-16">
+    <nav aria-label="Breadcrumb" class="text-caption mb-6 text-text-muted">
+      <a href="/" class="hover:text-text-primary">Home</a>
+      <span class="mx-2">/</span>
+      <a href="/cheats/" class="hover:text-text-primary">Cheat Codes</a>
+      <span class="mx-2">/</span>
+      <span class="text-text-secondary">Confirmed GTA 6</span>
+    </nav>
+
+    <div class="rounded-xl border border-dashed border-border-default bg-bg-surface p-5">
+      <p class="text-body-sm text-text-secondary">
+        <strong class="text-text-primary">How a code gets here:</strong> every hour we check Rockstar and major gaming outlets. A code is listed only when its exact input appears on an official Rockstar page, or in articles from at least two different outlets published after GTA 6 came out. We link every source. "Reported" means we haven't tested it on our own PS5 yet.
+      </p>
+    </div>
+
+    {
+      count ? (
+        <div class="mt-8 grid grid-cols-1 gap-3 md:grid-cols-2">
+          {cheats.map((cheat) => <Gta6CheatCard cheat={cheat} />)}
+        </div>
+      ) : (
+        <div class="mt-8 flex flex-col items-center gap-3 rounded-xl border border-dashed border-border-default p-10 text-center">
+          <p class="text-body-lg text-text-secondary">No GTA 6 cheat codes are confirmed yet.</p>
+          <p class="text-body-sm text-text-muted">Until then, see the <a href="/cheats/" class="text-accent-secondary hover:underline">35 GTA V cheats most likely to return</a>.</p>
+        </div>
+      )
+    }
+
+    <div class="mt-14 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border-default p-8 text-center">
+      <p class="text-label text-text-muted">Get an email when new GTA 6 codes are confirmed</p>
+      <NotifySignup />
+    </div>
+  </div>
+
+  {
+    count > 0 && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: 'Confirmed GTA 6 cheat codes',
+        numberOfItems: count,
+        itemListElement: cheats.map((c, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: c.title,
+          url: `https://cheatcodegtavi.com${gta6CheatPath(c.slug)}`,
+        })),
+      })} />
+    )
+  }
+</Layout>

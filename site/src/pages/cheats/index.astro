@@ -1,4 +1,6 @@
 ---
+import Gta6CheatCard from '../../components/Gta6CheatCard.astro';
+import { getReportedGta6Cheats } from '../../lib/gta6-cheats';
 import { generalCheatFaq } from '../../lib/cheat-faq';
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
@@ -9,6 +11,7 @@ import { hasLaunched } from '../../lib/launch';
 import changelog from '../../data/cheat-changelog.json';
 
 const launched = hasLaunched();
+const reported = await getReportedGta6Cheats();
 const testedCount = allCheats.filter((c) => statusOf(c) !== 'unconfirmed').length;
 const recentUpdates = [...changelog].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
 
@@ -48,6 +51,26 @@ const faqs = [...extraFaqs, ...baseFaqs];
     subtitle={launched ? "GTA 6 is out. We're testing each of these GTA V cheats on PS5 and updating their status as we go." : "Rockstar hasn't published any GTA 6 cheat codes yet. Here are the 35 GTA V cheats most likely to return, with PS5 inputs."}
     accent="pink"
   />
+
+  <section class="mx-auto max-w-6xl px-5 pt-10 sm:px-8">
+    {
+      reported.length > 0 ? (
+        <div>
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 class="text-heading-md text-text-primary">Confirmed GTA 6 cheats ({reported.length})</h2>
+            <a href="/cheats/gta-6/" class="text-label text-accent-secondary hover:underline">See all confirmed GTA 6 cheats</a>
+          </div>
+          <div class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+            {reported.slice(0, 4).map((cheat) => <Gta6CheatCard cheat={cheat} />)}
+          </div>
+        </div>
+      ) : (
+        <p class="text-body-sm rounded-xl border border-dashed border-border-default bg-bg-surface p-4 text-text-secondary">
+          <strong class="text-text-primary">Confirmed GTA 6 cheats:</strong> none yet. We check Rockstar and major outlets every hour, and confirmed codes appear on the <a href="/cheats/gta-6/" class="text-accent-secondary hover:underline">confirmed GTA 6 cheats page</a>.
+        </p>
+      )
+    }
+  </section>
 
   <div class="sticky top-[72px] z-30 border-b border-border-subtle bg-bg-primary/90 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-3 sm:px-8 lg:flex-row lg:items-center lg:gap-4">

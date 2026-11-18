@@ -1,0 +1,118 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Gta6CheatCard from '../../../components/Gta6CheatCard.astro';
+import { getReportedGta6Cheats, gta6CheatPath, outletName, reportedBy, type Gta6Cheat } from '../../../lib/gta6-cheats';
+import { allCheats } from '../../../lib/gta5-cheats';
+
+export async function getStaticPaths() {
+  const cheats = await getReportedGta6Cheats();
+  return cheats.map((cheat) => ({ params: { slug: cheat.slug }, props: { cheat } }));
+}
+
+const { cheat } = Astro.props as { cheat: Gta6Cheat };
+const gta5 = cheat.gta5Slug ? allCheats.find((c) => c.slug === cheat.gta5Slug) : undefined;
+const others = (await getReportedGta6Cheats()).filter((c) => c.slug !== cheat.slug).slice(0, 6);
+const input = [cheat.ps5?.length ? `PS5 input ${cheat.ps5.join(', ')}` : null, cheat.phone ? `phone ${cheat.phone}` : null]
+  .filter(Boolean)
+  .join(', ');
+const url = `https://cheatcodegtavi.com${gta6CheatPath(cheat.slug)}`;
+const by = reportedBy(cheat);
+const faq = [
+  {
+    q: `What is the ${cheat.title} cheat in GTA 6 (GTA VI)?`,
+    a: `${cheat.effect ? `${cheat.effect} ` : ''}The code is ${input}. It was reported working in GTA 6 by ${by}.`,
+  },
+  {
+    q: `Is the GTA 6 ${cheat.title} cheat confirmed?`,
+    a: `It is reported working by ${by}${cheat.sources.length > 1 ? ', independently' : ''}. We haven't tested it on our own PS5 yet, and will update this page when we do.`,
+  },
+];
+---
+
+<Layout
+  title={`GTA 6 ${cheat.title} Cheat Code (GTA VI)`}
+  description={`GTA 6 ${cheat.title} cheat: ${input}. Reported working in GTA VI by ${by}.`}
+  ogType="article"
+>
+  <PageHero eyebrow={`Reported by ${by}`} title={`GTA 6 ${cheat.title} Cheat`} subtitle={cheat.effect || 'Reported working in GTA 6.'} accent="gold" />
+
+  <div class="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
+    <nav aria-label="Breadcrumb" class="text-caption mb-6 text-text-muted">
+      <a href="/" class="hover:text-text-primary">Home</a>
+      <span class="mx-2">/</span>
+      <a href="/cheats/gta-6/" class="hover:text-text-primary">Confirmed GTA 6 Cheats</a>
+      <span class="mx-2">/</span>
+      <span class="text-text-secondary">{cheat.title}</span>
+    </nav>
+
+    <Gta6CheatCard cheat={cheat} headingLevel="h2" link={false} />
+
+    <section class="mt-10">
+      <h2 class="text-heading-md text-text-primary">Sources</h2>
+      <ul class="text-body-sm mt-3 flex flex-col gap-2 text-text-secondary">
+        {
+          cheat.sources.map((s) => (
+            <li>
+              <a href={s.url} rel="nofollow noopener" target="_blank" class="text-accent-secondary hover:underline">{outletName(s.outlet)}: {s.title}</a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="text-caption mt-3 text-text-muted">Listed because the exact code appears in each source above. See our <a href="/editorial-policy/" class="text-accent-secondary hover:underline">editorial policy</a>.</p>
+    </section>
+
+    {
+      gta5 && (
+        <p class="text-body-sm mt-8 rounded-xl border border-border-default bg-bg-surface p-4 text-text-secondary">
+          This is the same code as GTA V's <a href={`/cheats/code/${gta5.slug}/`} class="text-accent-secondary hover:underline">{gta5.title}</a> cheat.
+        </p>
+      )
+    }
+
+    <section class="mt-10">
+      <h2 class="text-heading-md text-text-primary">Questions</h2>
+      <div class="mt-4 flex flex-col gap-3">
+        {
+          faq.map((item) => (
+            <details class="rounded-xl border border-border-default bg-bg-surface p-5" open>
+              <summary class="text-heading-sm cursor-pointer list-none text-text-primary marker:content-none">{item.q}</summary>
+              <p class="text-body-md mt-3 text-text-secondary">{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      others.length > 0 && (
+        <section class="mt-10">
+          <h2 class="text-heading-md text-text-primary">More confirmed GTA 6 cheats</h2>
+          <ul class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {others.map((c) => (
+              <li><a href={gta6CheatPath(c.slug)} class="press block rounded-xl border border-border-default bg-bg-surface p-4 text-text-primary hover:border-accent-secondary/60">{c.title}</a></li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cheatcodegtavi.com/' },
+          { '@type': 'ListItem', position: 2, name: 'Confirmed GTA 6 Cheats', item: 'https://cheatcodegtavi.com/cheats/gta-6/' },
+          { '@type': 'ListItem', position: 3, name: cheat.title, item: url },
+        ],
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+      },
+    ],
+  })} />
+</Layout>

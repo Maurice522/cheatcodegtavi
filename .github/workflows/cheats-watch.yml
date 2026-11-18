@@ -1,0 +1,96 @@
+name: GTA 6 cheat watcher
+
+# Every hour: look for GTA 6 cheat codes reported by Rockstar or major outlets,
+# verify them (automation/src/cheats/verify.js), and if any newly pass,
+# rebuild + deploy the site, then notify (GitHub issue + optional email).
+# Nothing is deployed on runs that find nothing new.
+on:
+  schedule:
+    - cron: "20 * * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: cheats-watch
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      published: ${{ steps.research.outputs.published }}
+    defaults:
+      run:
+        working-directory: automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: node --test src/cheats/verify.test.js
+      - id: research
+        run: node src/cheats/research.js
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          # Repo variable. "true" publishes verified cheats automatically;
+          # anything else only notifies.
+          AUTO_PUBLISH: ${{ vars.AUTO_PUBLISH }}
+
+  deploy:
+    needs: research
+    if: ${{ needs.research.outputs.published != '' && needs.research.outputs.published != '0' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Shared with the leaks pipeline so two deploys never race.
+    concurrency:
+      group: site-deploy
+      cancel-in-progress: false
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm run build
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      - name: Check asset sizes
+        run: |
+          if [ -n "$(find dist -type f -size +20M)" ]; then echo "::error::Asset over 20 MB"; exit 1; fi
+      - run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 6b82597059a6e435d5311e2471598d57
+
+  notify:
+    needs: [research, deploy]
+    # Runs after a deploy, and also on runs with nothing to deploy so held
+    # (AUTO_PUBLISH off) cheats and earlier failed notifications still go out.
+    if: ${{ !cancelled() && needs.research.result == 'success' && needs.deploy.result != 'failure' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: node src/cheats/notify.js
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}

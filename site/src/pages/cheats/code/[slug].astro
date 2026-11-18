@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import PageHero from '../../../components/PageHero.astro';
 import CheatEntry from '../../../components/CheatEntry.astro';
 import NotifySignup from '../../../components/NotifySignup.astro';
+import { getReportedGta6Cheats, gta6CheatPath, reportedBy } from '../../../lib/gta6-cheats';
 import { generalCheatFaq } from '../../../lib/cheat-faq';
 import { STATUS_LABELS, allCheats, cheatsInGroup, formatTestedDate, getGroup, groupPath, statusOf } from '../../../lib/gta5-cheats';
 
@@ -11,6 +12,7 @@ export function getStaticPaths() {
 }
 
 const { cheat } = Astro.props;
+const reportedMatch = (await getReportedGta6Cheats()).find((r) => r.gta5Slug === cheat.slug);
 const group = getGroup(cheat.group)!;
 const status = statusOf(cheat);
 const related = cheatsInGroup(cheat.group)
@@ -81,6 +83,13 @@ const description = `GTA 6 ${cheat.title} cheat (GTA VI): ${buttons ? `PS5 input
       <span class="text-text-secondary">{cheat.title}</span>
     </nav>
 
+    {
+      reportedMatch && (
+        <p class="text-body-sm mb-4 rounded-xl border border-verified/50 bg-bg-surface p-4 text-text-secondary">
+          <strong class="text-verified">Reported working in GTA 6</strong> by {reportedBy(reportedMatch)}. <a href={gta6CheatPath(reportedMatch.slug)} class="text-accent-secondary hover:underline">See the GTA 6 {reportedMatch.title} cheat</a>.
+        </p>
+      )
+    }
     <CheatEntry cheat={cheat} headingLevel="h2" />
 
     <p class="text-body-md mt-6 text-text-secondary">{faq[0].a}</p>
