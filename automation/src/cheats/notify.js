@@ -54,7 +54,7 @@ async function githubIssue({ subject, body }) {
   const r = await fetch(`https://api.github.com/repos/${GITHUB_REPOSITORY}/issues`, {
     method: "POST",
     headers: { authorization: `Bearer ${GITHUB_TOKEN}`, accept: "application/vnd.github+json", "content-type": "application/json" },
-    body: JSON.stringify({ title: subject, body, labels: ["gta6-cheat"] }),
+    body: JSON.stringify({ title: subject, body }),
   });
   if (!r.ok) console.log(`GitHub issue failed: ${r.status} ${await r.text()}`);
   return r.ok;
