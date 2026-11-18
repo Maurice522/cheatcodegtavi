@@ -146,3 +146,24 @@ export function decide(sources, now = Date.now()) {
   }
   return { pass: false, qualifying: [...byOutlet.values()], reason: `${byOutlet.size} of ${MIN_TRUSTED_SOURCES} outlets needed` };
 }
+
+// --- Does the article actually say it works in GTA 6? -----------------------
+// "Do GTA 5 cheats work in GTA 6?" round-ups contain every GTA V code
+// literally, so a text match alone proves nothing. The LLM must quote the
+// sentence that says the cheat works in GTA 6, and that quote must be in the
+// page verbatim and read as a plain positive statement about GTA 6.
+const HEDGES = /\b(not|no|never|doesn'?t|don'?t|isn'?t|aren'?t|won'?t|can'?t|cannot|unconfirmed|unverified|may|might|could|would|should|expected|expect|likely|possibly|probably|rumou?red|rumou?r|predicted|prediction|speculat\w*|leak(ed)?|fake|hoax|hopefully|if)\b/i;
+const OTHER_GAME = /\b(gta\s?(5|v|iv|4|san andreas|vice city stories)|grand theft auto (5|v|iv)|gta online)\b/i;
+const GTA6_RE = /\b(gta\s?(6|vi)|grand theft auto (6|vi))\b/i;
+
+const squash = (s) => s.toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, " ").trim();
+
+export function evidenceOk(evidence, text) {
+  if (typeof evidence !== "string") return false;
+  const ev = squash(evidence);
+  if (ev.length < 20 || ev.length > 400) return false;
+  if (!squash(text).includes(ev)) return false;
+  if (!GTA6_RE.test(ev)) return false;
+  if (HEDGES.test(ev) || OTHER_GAME.test(ev)) return false;
+  return true;
+}

@@ -79,3 +79,12 @@ test("an official Rockstar page passes alone", () => {
   const r = decide([{ url: "https://www.rockstargames.com/newswire/article/x", publishedAt: before, textMatched: true }], now);
   assert.equal(r.pass, true);
 });
+
+import { evidenceOk } from "./verify.js";
+test("evidence must be a verbatim, unhedged GTA 6 statement", () => {
+  const page = "We tested it: the invincibility cheat works in GTA 6 on PS5. GTA 5's invincibility code may also work in GTA 6, but it's unconfirmed.";
+  assert.ok(evidenceOk("the invincibility cheat works in GTA 6 on PS5", page));
+  assert.ok(!evidenceOk("the invincibility cheat definitely works in GTA 6", page), "not verbatim");
+  assert.ok(!evidenceOk("GTA 5's invincibility code may also work in GTA 6, but it's unconfirmed", page), "hedged / other game");
+  assert.ok(!evidenceOk("works on PS5", "works on PS5"), "too short / no GTA 6");
+});

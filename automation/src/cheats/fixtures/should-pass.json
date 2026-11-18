@@ -1,8 +1,46 @@
 [
-  { "url": "https://www.ign.com/articles/gta-6-cheats-test", "title": "GTA 6 cheats", "publishedAt": "2026-11-18T10:30:00Z",
-    "text": "GTA 6 cheat codes: for invincibility press Right, X, Right, Left, Right, R1 on PS5.",
-    "proposed": [{ "name": "Invincibility", "effect": "Test.", "phone": "", "ps5": ["Right", "X", "Right", "Left", "Right", "R1"] }] },
-  { "url": "https://www.gamespot.com/articles/gta-6-cheats-list", "title": "GTA 6 cheats list", "publishedAt": "2026-11-18T10:45:00Z",
-    "text": "Every GTA 6 cheat we've found. Invincibility: Right, X, Right, Left, Right, R1.",
-    "proposed": [{ "name": "Invincibility", "effect": "Test.", "phone": "", "ps5": ["Right", "X", "Right", "Left", "Right", "R1"] }] }
+  {
+    "url": "https://www.ign.com/articles/gta-6-cheats-test",
+    "title": "GTA 6 cheats",
+    "publishedAt": "2026-11-18T10:30:00Z",
+    "text": "GTA 6 cheat codes are here. The Invincibility cheat works in GTA 6 on PS5: press Right, X, Right, Left, Right, R1.",
+    "proposed": [
+      {
+        "name": "Invincibility",
+        "effect": "Test.",
+        "phone": "",
+        "ps5": [
+          "Right",
+          "X",
+          "Right",
+          "Left",
+          "Right",
+          "R1"
+        ],
+        "evidence": "The Invincibility cheat works in GTA 6 on PS5"
+      }
+    ]
+  },
+  {
+    "url": "https://www.gamespot.com/articles/gta-6-cheats-list",
+    "title": "GTA 6 cheats list",
+    "publishedAt": "2026-11-18T10:45:00Z",
+    "text": "Every GTA 6 cheat we have found so far. Invincibility in GTA 6 is active once you enter Right, X, Right, Left, Right, R1.",
+    "proposed": [
+      {
+        "name": "Invincibility",
+        "effect": "Test.",
+        "phone": "",
+        "ps5": [
+          "Right",
+          "X",
+          "Right",
+          "Left",
+          "Right",
+          "R1"
+        ],
+        "evidence": "Invincibility in GTA 6 is active once you enter Right, X, Right, Left, Right, R1"
+      }
+    ]
+  }
 ]

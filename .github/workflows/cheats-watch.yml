@@ -7,7 +7,12 @@ name: GTA 6 cheat watcher
 on:
   schedule:
     - cron: "20 * * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      test_notify:
+        description: Send a test notification instead of researching
+        type: boolean
+        default: false
 
 concurrency:
   group: cheats-watch
@@ -34,6 +39,7 @@ jobs:
       - run: npm install
       - run: node --test src/cheats/verify.test.js
       - id: research
+        if: ${{ !inputs.test_notify }}
         run: node src/cheats/research.js
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
@@ -70,6 +76,9 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: 6b82597059a6e435d5311e2471598d57
+      # Tell Bing/IndexNow engines the new cheat pages exist.
+      - run: node scripts/indexnow.mjs
+        continue-on-error: true
 
   notify:
     needs: [research, deploy]
@@ -89,6 +98,7 @@ jobs:
       - run: npm install
       - run: node src/cheats/notify.js
         env:
+          TEST_NOTIFY: ${{ inputs.test_notify }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}

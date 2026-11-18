@@ -75,6 +75,15 @@ async function email({ subject, body }) {
   return r.ok;
 }
 
+if (process.env.TEST_NOTIFY === "true") {
+  const msg = {
+    subject: "Test: GTA 6 cheat watcher notifications work",
+    body: `This is a test from the hourly GTA 6 cheat watcher. When a new GTA 6 cheat passes verification you will get a message like this with a link to its page on ${SITE}/cheats/gta-6/\n\nYou can close this issue.`,
+  };
+  console.log(`Test notification: issue ${await githubIssue(msg)}, email ${await email(msg)}`);
+  process.exit(0);
+}
+
 const client = new MongoClient(MONGODB_URI);
 await client.connect();
 try {
