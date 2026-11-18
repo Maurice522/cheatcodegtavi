@@ -23,6 +23,10 @@ import {
   codeAppearsIn,
   codeKey,
   decide,
+  htmlToText,
+  pageDisclaims,
+  splitSentences,
+  extractRegex,
   evidenceOk,
   isOfficial,
   isTrusted,
@@ -36,11 +40,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const LLM_API_KEY = process.env.LLM_API_KEY;
-const AUTO_PUBLISH = process.env.AUTO_PUBLISH === "true";
+const AUTO_PUBLISH = process.env.AUTO_PUBLISH === "true" && process.env.CHEAT_DRY_RUN !== "true";
 const MAX_LLM_CALLS = Number(process.env.MAX_CHEAT_LLM_CALLS ?? 6);
 // For dry runs against a fixture: a JSON file of [{url,title,publishedAt,text}].
 const FIXTURE = process.env.CHEAT_FIXTURE;
-if (!MONGODB_URI && !FIXTURE) throw new Error("MONGODB_URI is not set");
+// Live leads, in-memory store, never publishes: for checking real articles.
+const DRY_RUN = process.env.CHEAT_DRY_RUN === "true";
+if (!MONGODB_URI && !FIXTURE && !DRY_RUN) throw new Error("MONGODB_URI is not set");
 
 const { feeds } = JSON.parse(readFileSync(join(__dirname, "..", "..", "sources.json"), "utf-8"));
 const SEARCHES = ["GTA 6 cheat codes", "GTA 6 cheats", "GTA VI cheat codes", "GTA 6 cheats PS5", "Rockstar GTA 6 cheats"];
@@ -96,16 +102,6 @@ async function uniqueSlug(cheats, name, key) {
   return taken ? `${base}-${key.replace(/[^a-z0-9]/gi, "").slice(-6).toLowerCase()}` : base;
 }
 
-function htmlToText(html) {
-  return html
-    .replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<noscript[\s\S]*?<\/noscript>/gi, " ")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&#?\w+;/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
 
 async function fetchPage(url) {
   const res = await fetch(url, {
@@ -157,35 +153,11 @@ async function extractCodes(text) {
 // Rule-based fallback for when Gemini is out of quota or overloaded. Finds
 // button sequences and 1-999 phone numbers, and uses the sentence containing
 // each as its evidence, so it is held to the same evidenceOk() check.
-const BTN = "(?:Up|Down|Left|Right|Triangle|Circle|Square|Cross|X|L1|L2|R1|R2)";
-const SEQ_RE = new RegExp(String.raw`\b${BTN}(?:\s*[,>\-–]\s*${BTN}){3,}\b`, "g");
-const PHONE_RE = /\b1[-\s]?999[-\s\d]{4,16}\d\b/g;
-const NAME_STOP = new Set(["The", "A", "An", "In", "On", "To", "For", "And", "Or", "Press", "Enter", "Dial", "You", "We", "It", "This", "That"]);
-
-export function extractRegex(text) {
-  const out = [];
-  for (const sentence of text.split(/(?<=[.!?])\s+/)) {
-    const seqs = sentence.match(SEQ_RE) ?? [];
-    const phones = sentence.match(PHONE_RE) ?? [];
-    if (!seqs.length && !phones.length) continue;
-    const words = sentence.match(/^(?:(?:The|A|An)\s+)?((?:[A-Z][\w'’-]+\s+){0,3}[A-Z][\w'’-]+)\s*(?:cheat|works|is|code|:)/);
-    const name = words?.[1]?.split(/\s+/).filter((w) => !NAME_STOP.has(w)).join(" ");
-    if (!name || /\b(GTA|Grand)\b/.test(name)) continue;
-    out.push({
-      name,
-      effect: "",
-      ps5: seqs[0] ? seqs[0].split(/\s*[,>\-–]\s*/) : [],
-      phone: phones[0] ?? "",
-      evidence: sentence.replace(/[.!?]$/, ""),
-    });
-  }
-  return out;
-}
 
 async function main() {
   let client = null;
   let articles, candidates, cheats;
-  if (FIXTURE) {
+  if (FIXTURE || DRY_RUN) {
     const mem = { a: new Map(), c: new Map(), g: new Map() };
     const coll = (m, keyField) => ({
       findOne: async (q) => m.get(q[keyField]) ?? null,
@@ -275,6 +247,11 @@ async function main() {
         proposed = extractRegex(text);
       }
 
+      if (pageDisclaims(text)) {
+        console.log(`Skipped ${lead.url}: the page says its codes are unconfirmed or untested.`);
+        await articles.updateOne({ url: lead.url }, { $set: { processedAt: new Date().toISOString(), codes: 0, textHash, note: "disclaimer" } }, { upsert: true });
+        continue;
+      }
       let kept = 0;
       for (const p of proposed) {
         const code = { phone: normalizePhone(p.phone), ps5: p.ps5?.length ? normalizeButtons(p.ps5) : null };
@@ -287,7 +264,7 @@ async function main() {
           continue;
         }
         // The context check: the page must plainly say it works in GTA 6.
-        if (!evidenceOk(p.evidence, text)) {
+        if (!evidenceOk(p.evidence, text, code)) {
           console.log(`Dropped "${p.name}" from ${outletOf(lead.url)}: no verbatim, unhedged GTA 6 statement (${JSON.stringify(String(p.evidence ?? "").slice(0, 120))}).`);
           continue;
         }

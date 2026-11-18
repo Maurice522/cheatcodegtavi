@@ -88,3 +88,46 @@ test("evidence must be a verbatim, unhedged GTA 6 statement", () => {
   assert.ok(!evidenceOk("GTA 5's invincibility code may also work in GTA 6, but it's unconfirmed", page), "hedged / other game");
   assert.ok(!evidenceOk("works on PS5", "works on PS5"), "too short / no GTA 6");
 });
+
+import { extractRegex, htmlToText, pageDisclaims } from "./verify.js";
+
+const accepted = (html) => {
+  const text = htmlToText(html);
+  if (pageDisclaims(text)) return [];
+  return extractRegex(text).filter((p) => {
+    const code = { ps5: normalizeButtons(p.ps5), phone: normalizePhone(p.phone) };
+    return codeAppearsIn(code, text) && evidenceOk(p.evidence, text, code);
+  });
+};
+
+test("a heading never fuses with the code line under it", () => {
+  const html = "<h2>Invincibility cheat in GTA 6</h2><p>Right, X, Right, Left, Right, R1</p><h2>Super Jump cheat in GTA 6</h2><p>Left, Left, Triangle, Triangle, Right, Right</p>";
+  assert.equal(accepted(html).length, 0);
+});
+
+test("'might work' roundups are rejected wholesale", () => {
+  const html = "<p>These GTA 5 cheats might work in GTA 6.</p><p>The Invincibility cheat works in GTA 6 with Right, X, Right, Left, Right, R1.</p>";
+  assert.equal(accepted(html).length, 0);
+});
+
+test("questions never count as evidence", () => {
+  const page = "Do GTA 5 cheats work in GTA 6? Invincibility is Right, X, Right, Left, Right, R1.";
+  assert.ok(!evidenceOk("Do GTA 5 cheats work in GTA 6", page));
+});
+
+test("a GTA 5 code that plainly carries over counts", () => {
+  const page = "Good news: the GTA 5 invincibility cheat still works in GTA 6. Enter Right, X, Right, Left, Right, R1 on PS5.";
+  assert.ok(evidenceOk("the GTA 5 invincibility cheat still works in GTA 6", page, { ps5: ["Right", "X", "Right", "Left", "Right", "R1"] }));
+  assert.ok(!evidenceOk("the GTA 5 invincibility cheat is in GTA 6", "the GTA 5 invincibility cheat is in GTA 6 Right, X"));
+});
+
+test("evidence far from the code doesn't count", () => {
+  const filler = " Lorem ipsum dolor sit amet.".repeat(40);
+  const page = `All GTA 6 cheat codes for PS5 are listed below.${filler} Invincibility: Right, X, Right, Left, Right, R1.`;
+  assert.ok(!evidenceOk("All GTA 6 cheat codes for PS5 are listed below", page, { ps5: ["Right", "X", "Right", "Left", "Right", "R1"] }));
+});
+
+test("a plain positive sentence with the code is accepted", () => {
+  const html = "<p>The Explosive Punch cheat works in GTA 6: on PS5 press Left, Left, Square, Circle, R2, L2, Up, Up.</p>";
+  assert.equal(accepted(html).length, 1);
+});
