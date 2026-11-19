@@ -18,6 +18,8 @@ export interface Gta6Cheat {
   slug: string;
   title: string;
   effect: string;
+  /** In-game requirement that unlocks the cheat, as reported by the sources. */
+  unlock?: string | null;
   phone: string | null;
   ps5: Button[] | null;
   status: 'reported';

@@ -201,21 +201,23 @@ function codeIndex(code, flat) {
   return -1;
 }
 
-export function evidenceOk(evidence, text, code = null) {
+export function evidenceOk(evidence, text, code = null, maxGap = MAX_EVIDENCE_GAP) {
   if (typeof evidence !== "string") return false;
   const ev = squash(evidence).replace(/[.!:]$/, "");
   if (ev.length < 20 || ev.length > 400) return false;
   const flat = squash(text);
-  const at = flat.indexOf(ev);
-  if (at < 0) return false;
-  if (ev.endsWith("?") || flat[at + ev.length] === "?" || QUESTION_START.test(ev)) return false;
+  // Every place the quote appears (a heading is often repeated in a jump-links menu).
+  const hits = [];
+  for (let i = flat.indexOf(ev); i >= 0; i = flat.indexOf(ev, i + 1)) hits.push(i);
+  if (hits.length === 0) return false;
+  if (ev.endsWith("?") || hits.some((i) => flat[i + ev.length] === "?") || QUESTION_START.test(ev)) return false;
   if (!GTA6_RE.test(ev) || HEDGES.test(ev)) return false;
   if (OTHER_GAME.test(ev) && !CARRIES_OVER.test(ev)) return false;
   if (code) {
     const ci = codeIndex(code, flat);
     if (ci < 0) return false;
-    const gap = ci < at ? at - ci : ci - (at + ev.length);
-    if (gap > MAX_EVIDENCE_GAP) return false;
+    const gap = Math.min(...hits.map((at) => (ci < at ? at - ci : ci - (at + ev.length))));
+    if (gap > maxGap) return false;
   }
   return true;
 }
@@ -243,6 +245,50 @@ export function extractRegex(text) {
       phone: phones[0] ?? "",
       evidence: sentence.replace(/[.!?]$/, ""),
     });
+  }
+  return out;
+}
+
+// --- Table extraction ---------------------------------------------------------
+// Guides list cheats as table rows (name | effect | unlock | code). A row only
+// becomes a proposal when one cell is purely a button sequence; its evidence is
+// the nearest heading/line above the table that names GTA 6 cheats plainly.
+const cellText = (html) => htmlToText(html).replace(/\s+/g, " ").trim();
+const BUTTON_WORD = /^(up|down|left|right|triangle|circle|square|cross|x|l1|l2|r1|r2)$/i;
+
+function asButtons(cell) {
+  const parts = cell.split(/[\s,>\-–]+/).filter(Boolean);
+  if (parts.length < 4 || !parts.every((p) => BUTTON_WORD.test(p))) return null;
+  return normalizeButtons(parts);
+}
+
+export const TABLE_EVIDENCE_GAP = 6000;
+
+export function extractTableRows(html) {
+  const out = [];
+  const tableRe = /<table[\s\S]*?<\/table>/gi;
+  for (let m; (m = tableRe.exec(html)); ) {
+    const before = splitSentences(htmlToText(html.slice(Math.max(0, m.index - 4000), m.index))).slice(-12).reverse();
+    const evidence = before.find(
+      (l) => l.length <= 300 && GTA6_RE.test(l) && /\bcheats?\b/i.test(l) && !HEDGES.test(l) && !l.endsWith("?") && !QUESTION_START.test(l) && !OTHER_GAME.test(l),
+    );
+    if (!evidence) continue;
+    const header = (m[0].match(/<tr[\s\S]*?<\/tr>/i)?.[0].match(/<t[hd][\s\S]*?<\/t[hd]>/gi) ?? []).map(cellText).map((c) => c.toLowerCase());
+    const unlockCol = header.findIndex((h) => /unlock/.test(h));
+    for (const row of m[0].match(/<tr[\s\S]*?<\/tr>/gi) ?? []) {
+      const cells = (row.match(/<t[hd][\s\S]*?<\/t[hd]>/gi) ?? []).map(cellText);
+      const codeCell = cells.findIndex((c) => asButtons(c));
+      if (codeCell <= 0 || !cells[0]) continue;
+      out.push({
+        name: cells[0].slice(0, 80),
+        effect: codeCell > 1 ? cells[1].slice(0, 300) : "",
+        unlock: unlockCol > 0 && unlockCol !== codeCell && cells[unlockCol] && !/^tb[ad]$/i.test(cells[unlockCol]) ? cells[unlockCol].slice(0, 200) : "",
+        ps5: asButtons(cells[codeCell]),
+        phone: "",
+        evidence,
+        fromTable: true,
+      });
+    }
   }
   return out;
 }

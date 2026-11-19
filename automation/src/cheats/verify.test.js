@@ -131,3 +131,15 @@ test("a plain positive sentence with the code is accepted", () => {
   const html = "<p>The Explosive Punch cheat works in GTA 6: on PS5 press Left, Left, Square, Circle, R2, L2, Up, Up.</p>";
   assert.equal(accepted(html).length, 1);
 });
+
+import { extractTableRows, TABLE_EVIDENCE_GAP } from "./verify.js";
+test("cheat tables under a plain GTA 6 heading are read; TBA and hedged tables are not", () => {
+  const good = "<h2>All Player cheats in GTA 6</h2><table><tr><th>Cheat</th><th>Effect</th><th>Unlock Condition</th><th>Code</th></tr><tr><td>$250,000</td><td>Gives $250,000</td><td>Fence $250,000 of goods</td><td>Up, Right, Down, Left, Up, Left, Down, Right</td></tr><tr><td>Raise Wanted Level</td><td>Raises wanted level</td><td>Lose 3 stars 50 times</td><td>TBD</td></tr></table>";
+  const rows = extractTableRows(good);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].unlock, "Fence $250,000 of goods");
+  const text = htmlToText(good);
+  assert.ok(evidenceOk(rows[0].evidence, text, { ps5: rows[0].ps5 }, TABLE_EVIDENCE_GAP));
+  const hedged = "<h2>GTA 5 cheats that might work in GTA 6</h2><table><tr><td>Invincibility</td><td>Right, X, Right, Left, Right, R1</td></tr></table>";
+  assert.equal(extractTableRows(hedged).length, 0);
+});

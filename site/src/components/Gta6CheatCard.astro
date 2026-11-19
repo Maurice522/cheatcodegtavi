@@ -38,6 +38,13 @@ const Heading = headingLevel;
       </p>
     )
   }
+  {
+    cheat.unlock && (
+      <p class="text-caption mt-3 text-text-muted">
+        Unlock: <span class="text-text-secondary">{cheat.unlock}</span>
+      </p>
+    )
+  }
   <p class="text-caption mt-3 border-t border-border-subtle pt-3 text-text-muted">
     Reported by {reportedBy(cheat)}. We haven't tested it ourselves yet.
   </p>

@@ -29,24 +29,23 @@ async function isLive(url) {
 const codeLine = (c) =>
   [c.ps5?.length ? `PS5: ${c.ps5.join(", ")}` : null, c.phone ? `Phone: ${c.phone}` : null].filter(Boolean).join(" · ");
 
-function message(c, url) {
-  const sources = c.sources.map((s) => `- ${s.outlet}: ${s.url}`).join("\n");
-  const head = c.published
-    ? `New GTA 6 cheat verified and published: ${c.title}`
-    : `GTA 6 cheat passed verification (not published, AUTO_PUBLISH is off): ${c.title}`;
+// One message per run, however many cheats it covers.
+function message(list) {
+  const published = list.filter((c) => c.published);
+  const held = list.filter((c) => !c.published);
+  const names = list.map((c) => c.title);
+  const subject = published.length
+    ? `New GTA 6 cheat verified and published: ${names.slice(0, 3).join(", ")}${names.length > 3 ? ` +${names.length - 3} more` : ""}`
+    : `GTA 6 cheat passed verification (not published, AUTO_PUBLISH is off): ${names.slice(0, 3).join(", ")}${names.length > 3 ? ` +${names.length - 3} more` : ""}`;
+  const line = (c) => `- ${c.title}: ${codeLine(c)} (${c.reason}: ${[...new Set(c.sources.map((s) => s.outlet))].join(", ")})${c.published ? ` ${SITE}/cheats/gta-6/${c.slug}/` : ""}`;
   const body = [
-    head,
+    subject,
     "",
-    `${c.effect}`,
-    codeLine(c),
-    "",
-    `Verified by: ${c.reason}`,
-    sources,
-    "",
-    c.published ? `Live on the site: ${url}` : "Turn on the AUTO_PUBLISH repo variable to publish verified cheats automatically.",
-    `All GTA 6 cheats: ${SITE}/cheats/gta-6/`,
-  ].join("\n");
-  return { subject: head, body };
+    ...(published.length ? ["Published:", ...published.map(line), ""] : []),
+    ...(held.length ? ["Held (turn on the AUTO_PUBLISH repo variable to publish):", ...held.map(line), ""] : []),
+    `Live on the site: ${SITE}/cheats/gta-6/`,
+  ].join(String.fromCharCode(10));
+  return { subject, body };
 }
 
 async function githubIssue({ subject, body }) {
@@ -90,20 +89,23 @@ try {
   const cheats = client.db("cheatcodegtavi").collection("gta6_cheats");
   const pending = await cheats.find({ notified: false }).toArray();
   console.log(`${pending.length} cheat(s) to notify about.`);
+  const ready = [];
   for (const c of pending) {
-    const url = `${SITE}/cheats/gta-6/${c.slug}/`;
-    if (c.published && !(await isLive(url))) {
-      console.log(`${url} is not live yet; will notify after the next deploy.`);
+    if (c.published && !(await isLive(`${SITE}/cheats/gta-6/${c.slug}/`))) {
+      console.log(`${c.slug} is not live yet; will notify after the next deploy.`);
       process.exitCode = 1;
       continue;
     }
-    const msg = message(c, url);
+    ready.push(c);
+  }
+  if (ready.length) {
+    const msg = message(ready);
     const sent = [await githubIssue(msg), await email(msg)];
     if (sent.some(Boolean)) {
-      await cheats.updateOne({ key: c.key }, { $set: { notified: true, notifiedAt: new Date().toISOString() } });
-      console.log(`Notified: ${c.title} (issue: ${sent[0]}, email: ${sent[1]})`);
+      await cheats.updateMany({ key: { $in: ready.map((c) => c.key) } }, { $set: { notified: true, notifiedAt: new Date().toISOString() } });
+      console.log(`Notified about ${ready.length} cheat(s) (issue: ${sent[0]}, email: ${sent[1]})`);
     } else {
-      console.log(`No notification channel worked for ${c.title}; retrying next run.`);
+      console.log("No notification channel worked; retrying next run.");
       process.exitCode = 1;
     }
   }

@@ -27,6 +27,8 @@ import {
   pageDisclaims,
   splitSentences,
   extractRegex,
+  extractTableRows,
+  TABLE_EVIDENCE_GAP,
   evidenceOk,
   isOfficial,
   isTrusted,
@@ -79,11 +81,12 @@ async function collectLeads() {
       for (const item of feed.items ?? []) {
         const url = unwrap(item.link ?? "");
         const text = `${item.title ?? ""} ${item.contentSnippet ?? ""}`;
-        const feedText = htmlToText(item["content:encoded"] ?? item.content ?? "");
+        const feedHtml = item["content:encoded"] ?? item.content ?? "";
+        const feedText = htmlToText(feedHtml);
         if (!url || !CHEAT.test(text) || !GTA6.test(text)) continue;
         if (!isOfficial(url) && !isTrusted(url)) continue;
         const publishedAt = new Date(item.isoDate ?? item.pubDate ?? Date.now()).toISOString();
-        leads.set(url, { url, title: item.title ?? url, publishedAt, feedText });
+        leads.set(url, { url, title: item.title ?? url, publishedAt, feedText, feedHtml });
       }
     } catch (err) {
       console.log(`Feed failed (${src}): ${err.message}`);
@@ -120,12 +123,14 @@ async function fetchPage(url) {
   const modified =
     html.match(/property=["']article:modified_time["'][^>]*content=["']([^"']+)/i)?.[1] ??
     html.match(/content=["']([^"']+)["'][^>]*property=["']article:modified_time/i)?.[1] ??
-    html.match(/"dateModified"s*:s*"([^"]+)"/)?.[1] ??
+    html.match(/"dateModified"\s*:\s*"([^"]+)"/)?.[1] ??
     null;
-  return { text: htmlToText(html).slice(0, 80000), modified };
+  return { html, text: htmlToText(html).slice(0, 80000), modified };
 }
 
 const REFETCH_AFTER_MS = 6 * 60 * 60 * 1000;
+// Bump when extraction changes, so pages already seen are read again.
+const EXTRACTOR_VERSION = 2;
 const hashOf = (t) => createHash("sha256").update(t).digest("hex");
 
 const PROMPT = `You read a web article and list cheat codes it states for GTA 6 (Grand Theft Auto VI).
@@ -195,20 +200,23 @@ async function main() {
 
     for (const lead of leads) {
       const seen = await articles.findOne({ url: lead.url });
-      if (seen && Date.now() - Date.parse(seen.processedAt) < REFETCH_AFTER_MS) continue;
+      const sameVersion = seen?.version === EXTRACTOR_VERSION;
+      if (seen && sameVersion && Date.now() - Date.parse(seen.processedAt) < REFETCH_AFTER_MS) continue;
       if (llmCalls >= MAX_LLM_CALLS) {
         console.log("LLM call budget used; remaining leads wait for the next run.");
         break;
       }
       let text = lead.text;
+      let html = lead.html ?? "";
       let modified = lead.modified ?? null;
       if (!text) {
         try {
-          ({ text, modified } = await fetchPage(lead.url));
+          ({ html, text, modified } = await fetchPage(lead.url));
         } catch (err) {
           // Some outlets block datacenter IPs; the feed often carries the full article.
           if (lead.feedText?.length > 500) {
             text = lead.feedText;
+            html = lead.feedHtml ?? "";
             console.log(`Fetch failed ${lead.url} (${err.message}); using feed text.`);
           } else {
             console.log(`Fetch failed ${lead.url}: ${err.message}`);
@@ -220,22 +228,25 @@ async function main() {
       const effectiveAt = [lead.publishedAt, modified].filter((d) => d && !Number.isNaN(Date.parse(d)))
         .map((d) => new Date(d).toISOString()).sort().at(-1) ?? lead.publishedAt;
       if (!isOfficial(lead.url) && Date.parse(effectiveAt) < EARLIEST_UNLOCK_MS) {
-        await articles.updateOne({ url: lead.url }, { $set: { processedAt: new Date().toISOString(), codes: 0, note: "before launch" } }, { upsert: true });
+        await articles.updateOne({ url: lead.url }, { $set: { processedAt: new Date().toISOString(), codes: 0, note: "before launch", version: EXTRACTOR_VERSION } }, { upsert: true });
         continue;
       }
       const textHash = hashOf(text);
-      if (seen?.textHash === textHash) {
+      if (sameVersion && seen?.textHash === textHash) {
         await articles.updateOne({ url: lead.url }, { $set: { processedAt: new Date().toISOString() } }, { upsert: true });
         continue;
       }
       if (!CHEAT.test(text) || !GTA6.test(text)) {
-        await articles.updateOne({ url: lead.url }, { $set: { processedAt: new Date().toISOString(), codes: 0, textHash } }, { upsert: true });
+        await articles.updateOne({ url: lead.url }, { $set: { processedAt: new Date().toISOString(), codes: 0, textHash, version: EXTRACTOR_VERSION } }, { upsert: true });
         continue;
       }
 
       let proposed;
+      // Cheat tables are read deterministically; Gemini is only needed for prose.
+      const tableRows = extractTableRows(html);
       try {
         if (lead.proposed) proposed = lead.proposed;
+        else if (tableRows.length) proposed = [...tableRows, ...extractRegex(text)];
         else if (llmDown || !LLM_API_KEY || process.env.CHEAT_NO_LLM === "true") proposed = extractRegex(text);
         else {
           llmCalls++;
@@ -249,7 +260,7 @@ async function main() {
 
       if (pageDisclaims(text)) {
         console.log(`Skipped ${lead.url}: the page says its codes are unconfirmed or untested.`);
-        await articles.updateOne({ url: lead.url }, { $set: { processedAt: new Date().toISOString(), codes: 0, textHash, note: "disclaimer" } }, { upsert: true });
+        await articles.updateOne({ url: lead.url }, { $set: { processedAt: new Date().toISOString(), codes: 0, textHash, note: "disclaimer", version: EXTRACTOR_VERSION } }, { upsert: true });
         continue;
       }
       let kept = 0;
@@ -264,7 +275,7 @@ async function main() {
           continue;
         }
         // The context check: the page must plainly say it works in GTA 6.
-        if (!evidenceOk(p.evidence, text, code)) {
+        if (!evidenceOk(p.evidence, text, code, p.fromTable ? TABLE_EVIDENCE_GAP : undefined)) {
           console.log(`Dropped "${p.name}" from ${outletOf(lead.url)}: no verbatim, unhedged GTA 6 statement (${JSON.stringify(String(p.evidence ?? "").slice(0, 120))}).`);
           continue;
         }
@@ -274,13 +285,13 @@ async function main() {
         await candidates.updateOne(
           { key },
           {
-            $setOnInsert: { key, name: String(p.name ?? "").slice(0, 80), effect: String(p.effect ?? "").slice(0, 300), ...code, firstSeenAt: new Date().toISOString() },
+            $setOnInsert: { key, name: String(p.name ?? "").slice(0, 80), effect: String(p.effect ?? "").slice(0, 300), unlock: String(p.unlock ?? "").slice(0, 200), ...code, firstSeenAt: new Date().toISOString() },
             $push: { sources: { url: lead.url, outlet: outletOf(lead.url), title: lead.title, publishedAt: effectiveAt, evidence: String(p.evidence).slice(0, 400), textMatched: true } },
           },
           { upsert: true },
         );
       }
-      await articles.updateOne({ url: lead.url }, { $set: { processedAt: new Date().toISOString(), codes: kept, textHash } }, { upsert: true });
+      await articles.updateOne({ url: lead.url }, { $set: { processedAt: new Date().toISOString(), codes: kept, textHash, version: EXTRACTOR_VERSION } }, { upsert: true });
       console.log(`${outletOf(lead.url)}: ${proposed.length} proposed, ${kept} matched page text. ${lead.url}`);
     }
 
@@ -298,6 +309,7 @@ async function main() {
         slug: existing?.slug ?? (await uniqueSlug(cheats, name, cand.key)),
         title: name,
         effect: cand.effect,
+        unlock: cand.unlock || null,
         phone: cand.phone ?? null,
         ps5: cand.ps5 ?? null,
         status: "reported",
