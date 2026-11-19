@@ -8,10 +8,15 @@ import CheatEntry from '../components/CheatEntry.astro';
 import { getLatestLeaks } from '../lib/leaks';
 import { allCheats, cheatGroups, getFeatured, groupPath } from '../lib/gta5-cheats';
 import { hasLaunched } from '../lib/launch';
+import Gta6CheatCard from '../components/Gta6CheatCard.astro';
+import { getReportedGta6Cheats, reportedBy } from '../lib/gta6-cheats';
 
 const launched = hasLaunched();
 
 const featuredCheats = getFeatured();
+// GTA 6 cheats confirmed by the hourly watcher (official source or 2+ outlets).
+const reported = await getReportedGta6Cheats();
+const outlets = [...new Set(reported.flatMap((c) => reportedBy(c).split(/, | and /)))];
 
 const latestLeaksResult = await getLatestLeaks(3);
 // Defensive: getLatestLeaks can only reject to [] on a Mongo error today, but a
@@ -34,35 +39,37 @@ const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
       data-hero-timeline
       class="relative mx-auto flex max-w-6xl flex-col items-center gap-8 px-5 pb-24 pt-20 text-center sm:px-8 sm:pb-32 sm:pt-28"
     >
-      <span data-hero-item class="text-label text-accent-secondary">{launched ? 'GTA 6 is out: we are testing the cheat codes now' : 'GTA6 launches November 19, 2026'}</span>
+      <span data-hero-item class="text-label text-accent-secondary">{reported.length ? `GTA 6 is out: ${reported.length} cheats confirmed so far` : launched ? 'GTA 6 is out: we check for confirmed cheats every hour' : 'GTA6 launches November 19, 2026'}</span>
       <h1 class="text-display-xl text-4xl text-text-primary sm:text-7xl">
-        GTA 6 <span class="text-accent-primary">CHEAT CODES</span><br />BEFORE THE GAME DROPS
+        GTA 6 <span class="text-accent-primary">CHEAT CODES</span><br />{reported.length ? 'CONFIRMED ON PS5' : launched ? 'THE GAME IS OUT' : 'BEFORE THE GAME DROPS'}
       </h1>
       <p data-hero-item class="text-body-lg max-w-xl text-text-secondary">
-        {launched
-          ? `${allCheats.length} PS5 cheat codes are listed. We're testing each one in GTA 6 and updating its status as we go.`
+        {reported.length
+          ? `${reported.length} GTA 6 cheats reported working by ${outlets.slice(0, 3).join(', ')}, with their D-pad codes and unlock conditions. New ones are added as major outlets confirm them.`
+          : launched
+          ? `GTA 6 is out. We check Rockstar and major gaming outlets every hour and list GTA 6 cheats as soon as they're confirmed. Until then, here are the ${allCheats.length} GTA V codes.`
           : `${allCheats.length} PS5 cheat codes are listed now: GTA V codes most likely to return, marked unconfirmed for GTA 6. Plus every leak and update before launch.`}
       </p>
       <a
         data-hero-item
-        href="/cheats/"
+        href={reported.length ? '/cheats/gta-6/' : '/cheats/'}
         class="press text-label inline-flex items-center gap-2.5 rounded-full border border-accent-primary/50 bg-accent-primary/10 px-5 py-2.5 text-accent-primary transition-colors duration-150 hover:bg-accent-primary/20"
       >
         <span class="relative flex h-2 w-2" aria-hidden="true">
           <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-primary opacity-60"></span>
           <span class="relative inline-flex h-2 w-2 rounded-full bg-accent-primary"></span>
         </span>
-        {allCheats.length} cheat codes available · PS5
+        {reported.length ? `${reported.length} confirmed GTA 6 cheats · PS5` : `${allCheats.length} cheat codes available · PS5`}
       </a>
       <div data-hero-item>
         <Countdown />
       </div>
       <div class="flex flex-wrap justify-center gap-3 pt-2">
         <a
-          href="/cheats/"
+          href={reported.length ? '/cheats/gta-6/' : '/cheats/'}
           class="press shadow-glow-pink text-label rounded-full bg-accent-primary px-6 py-3 text-text-on-accent transition-transform duration-150 hover:scale-105"
         >
-          Browse PS5 Cheat Codes
+          {reported.length ? 'See GTA 6 Cheats' : 'Browse PS5 Cheat Codes'}
         </a>
         <a
           href="/leaks/"
@@ -74,13 +81,30 @@ const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
     </div>
   </section>
 
+  {
+    reported.length > 0 && (
+      <section class="mx-auto max-w-6xl px-5 pt-16 sm:px-8">
+        <div class="mb-3 flex flex-wrap items-end justify-between gap-3">
+          <h2 class="text-heading-lg text-text-primary">Confirmed GTA 6 Cheats</h2>
+          <a href="/cheats/gta-6/" class="text-label text-accent-secondary hover:text-accent-secondary/80">View all {reported.length}</a>
+        </div>
+        <p class="text-body-md mb-8 max-w-2xl text-text-secondary">Reported working in GTA 6 by Rockstar or at least two major outlets. Cheats unlock after the main story, and each has its own unlock requirement.</p>
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {reported.slice(0, 6).map((cheat) => <Gta6CheatCard cheat={cheat} />)}
+        </div>
+      </section>
+    )
+  }
+
   <section class="mx-auto max-w-6xl px-5 py-16 sm:px-8" data-reveal-group>
     <div class="mb-3 flex flex-wrap items-end justify-between gap-3" data-reveal>
-      <h2 class="text-heading-lg text-text-primary">PS5 Cheat Codes</h2>
+      <h2 class="text-heading-lg text-text-primary">{launched ? 'GTA V Cheat Codes (PS5)' : 'PS5 Cheat Codes'}</h2>
       <a href="/cheats/" class="text-label text-accent-secondary hover:text-accent-secondary/80">View all {allCheats.length} codes</a>
     </div>
     <p data-reveal class="text-body-md mb-8 max-w-2xl text-text-secondary">
-      GTA 6 cheat codes aren't confirmed yet. These {allCheats.length} GTA V cheats are the most likely to return, shown with PS5 inputs. Each is marked unconfirmed until we can test it after launch.
+      {launched
+        ? `These are GTA V's ${allCheats.length} cheats with PS5 inputs. GTA 6 has its own cheat list and entry method, and we haven't tested whether any GTA V code carries over.`
+        : `GTA 6 cheat codes aren't confirmed yet. These ${allCheats.length} GTA V cheats are the most likely to return, shown with PS5 inputs. Each is marked unconfirmed until we can test it after launch.`}
     </p>
     <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
       {featuredCheats.map((cheat) => (
