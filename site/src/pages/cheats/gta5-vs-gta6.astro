@@ -8,12 +8,12 @@ const rows = allCheats.map((cheat) => ({ ...cheat, group: getGroup(cheat.group)!
 
 <Layout
   title="GTA 5 vs GTA 6 Cheat Codes — Full List"
-  description="All 35 GTA 5 cheat codes with PS5 inputs, and whether each is confirmed to return in GTA 6. None are confirmed yet; GTA 6 launches Nov 19, 2026."
+  description="GTA 5 vs GTA 6 cheat codes: all 35 GTA 5 cheats with PS5 inputs, how GTA 6 cheats differ, and where to find the confirmed GTA 6 codes."
 >
   <PageHero
     eyebrow="GTA V vs GTA 6"
     title="GTA 5 vs GTA 6 Cheat Codes"
-    subtitle="GTA 6's own cheat codes haven't been confirmed. Here is every GTA V cheat we list, and where each one stands for GTA 6."
+    subtitle="GTA 6 has its own cheats, unlocked after the story and entered on the phone. Here is every GTA V cheat, and how GTA 6 compares."
     accent="gold"
   />
 
@@ -35,7 +35,7 @@ const rows = allCheats.map((cheat) => ({ ...cheat, group: getGroup(cheat.group)!
       </p>
       <p class="text-body-md">
         That history is why we list both a PS5 button input and a phone number for the GTA V codes. GTA 6's trailers lean heavily on
-        phones, so a dial-in system is a reasonable expectation, but Rockstar hasn't said how, or whether, GTA 6 cheats will be entered.
+        phones, and it does use the phone: according to Polygon, you hold L1 and R1 on the phone's home screen and enter a D-pad code. Each cheat also has to be unlocked first, after you finish the story. See the <a href="/cheats/gta-6/" class="text-accent-secondary hover:underline">confirmed GTA 6 cheats</a>.
       </p>
     </div>
 
@@ -60,7 +60,7 @@ const rows = allCheats.map((cheat) => ({ ...cheat, group: getGroup(cheat.group)!
                 <td class="text-body-sm px-4 py-3 text-text-secondary">
                   <a href={groupPath(row.group.slug)} class="hover:text-accent-secondary">{row.group.name}</a>
                 </td>
-                <td class="text-body-sm px-4 py-3 text-text-muted">Not confirmed yet</td>
+                <td class="text-body-sm px-4 py-3 text-text-muted">Untested (GTA 6 uses its own codes)</td>
               </tr>
             ))
           }

@@ -15,38 +15,29 @@ const reported = await getReportedGta6Cheats();
 const testedCount = allCheats.filter((c) => statusOf(c) !== 'unconfirmed').length;
 const recentUpdates = [...changelog].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
 
-const extraFaqs = generalCheatFaq.filter((g) => ['Is GTA VI the same as GTA 6?','Does GTA 6 (GTA VI) have cheat codes?','When does GTA 6 release?','Are GTA 6 cheat codes for Xbox and PC listed?'].includes(g.q));
 const baseFaqs = [
   {
-    q: 'Are these real GTA 6 cheat codes?',
-    a: "No. Rockstar hasn't published any GTA 6 cheat codes. Every code on this page is a GTA V cheat, listed because it is the most likely to return. Each one is marked unconfirmed, and we'll only mark a code as confirmed after testing it in the released game.",
+    q: 'Which cheats on this page are GTA 6 cheats?',
+    a: "The Confirmed GTA 6 Cheats section at the top lists GTA 6 codes reported by Rockstar or at least two major outlets, with each source linked. The 35 codes below it are GTA V cheats with PS5 inputs, kept for players coming from GTA 5. We haven't tested whether any GTA V code carries over.",
   },
   {
-    q: 'How do I enter cheat codes on PS5?',
-    a: "In GTA V on PS5 you enter a button sequence during normal gameplay (no pause menu) or dial the matching number on the in-game phone, then a short message confirms the cheat. GTA 6 hasn't confirmed how its cheats are entered; a phone-based system is the most likely carryover.",
+    q: 'How do you confirm a GTA 6 cheat?',
+    a: 'Every hour we check Rockstar and major gaming outlets. A code is listed only when its exact input appears on an official Rockstar page, or in articles from at least two different outlets published after launch that plainly say it works in GTA 6. "Reported" means we haven\'t tested it on our own PS5 yet.',
   },
   {
-    q: 'Will these cheat codes work in GTA 6 on PS5?',
-    a: "That's unknown until the game launches on November 19, 2026. Some GTA V inputs may carry over unchanged and some, especially vehicle spawns, can't, because GTA 6 has a different roster. We'll test and update this page.",
-  },
-  {
-    q: 'Do cheat codes disable trophies?',
-    a: 'In GTA V, activating a cheat disables trophy unlocks for that play session. We expect GTA 6 to follow the same rule, but it has not been confirmed.',
-  },
-  {
-    q: 'Why only PS5?',
-    a: "We list PS5 inputs first. GTA 6 launches on PS5 and Xbox Series X|S, and there is no PC release date yet, so Xbox and PC inputs aren't listed here.",
+    q: 'Why are some GTA 6 cheats missing?',
+    a: "Some codes hadn't been found yet when outlets published, and some have only one source so far. A cheat appears here automatically once a second major outlet reports the same code.",
   },
 ];
-const faqs = [...extraFaqs, ...baseFaqs];
+const faqs = [...generalCheatFaq, ...baseFaqs];
 ---
 
 <Layout
   title="GTA 6 / GTA VI Cheat Codes (PS5)"
-  description="GTA 6 (GTA VI) cheat codes: 35 GTA V cheats most likely to return, with PS5 inputs. Every code is marked unconfirmed until we test it after launch on Nov 19, 2026."
+  description={reported.length ? `GTA 6 (GTA VI) cheat codes for PS5: ${reported.length} confirmed GTA 6 cheats with codes and unlock conditions, plus all 35 GTA 5 cheats.` : 'GTA 6 (GTA VI) cheat codes for PS5: confirmed GTA 6 cheats as major outlets report them, plus all 35 GTA 5 cheats with PS5 inputs.'}
 >
   <PageHero
-    eyebrow="PS5 · 35 codes · Unconfirmed for GTA 6"
+    eyebrow={reported.length ? `PS5 · ${reported.length} GTA 6 cheats confirmed · 35 GTA V codes` : 'PS5 · 35 GTA V codes · Checked hourly for GTA 6'}
     title="GTA 6 Cheat Codes (PS5)"
     subtitle={launched ? "GTA 6 is out and has its own cheats, listed above the GTA V codes as major outlets confirm them. Below are GTA V's 35 cheats with PS5 inputs." : "Rockstar hasn't published any GTA 6 cheat codes yet. Here are the 35 GTA V cheats most likely to return, with PS5 inputs."}
     accent="pink"
@@ -106,13 +97,13 @@ const faqs = [...extraFaqs, ...baseFaqs];
   <div class="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-12">
     <div class="max-w-3xl text-text-secondary">
       <p class="text-body-md">
-        GTA 6 cheat codes aren't available yet, because the game hasn't launched. Until it does, this page lists the GTA V codes most likely to carry over, laid out the way you'd enter them on a PS5 controller. Every entry is labeled <strong class="text-text-primary">Unconfirmed in GTA 6</strong> until we've tested it in the new game.
+        GTA 6 has its own cheats: they unlock after the main story, and you enter them on the phone by holding L1 and R1 and pressing a D-pad code. Confirmed GTA 6 codes are at the top of this page and on the <a href="/cheats/gta-6/" class="text-accent-secondary hover:underline">confirmed GTA 6 cheats page</a>. The codes below are GTA V's, laid out the way you'd enter them on a PS5 controller, and labeled <strong class="text-text-primary">GTA V code, untested in GTA 6</strong>.
       </p>
       <ul class="mt-4 flex flex-wrap gap-2" aria-label="Status summary">
-        <li class="text-caption rounded-full border border-border-default bg-bg-surface px-3 py-1.5">GTA 6 codes confirmed by Rockstar: <strong class="text-text-primary">0</strong></li>
+        <li class="text-caption rounded-full border border-border-default bg-bg-surface px-3 py-1.5">GTA 6 cheats confirmed: <strong class="text-text-primary">{reported.length}</strong></li>
         <li class="text-caption rounded-full border border-border-default bg-bg-surface px-3 py-1.5">Listed here: <strong class="text-text-primary">{allCheats.length} from GTA V</strong></li>
         <li class="text-caption rounded-full border border-border-default bg-bg-surface px-3 py-1.5">Tested in GTA 6: <strong class="text-text-primary">{testedCount}</strong></li>
-        <li class="text-caption rounded-full border border-border-default bg-bg-surface px-3 py-1.5">Launch: <strong class="text-text-primary">Nov 19, 2026</strong></li>
+        <li class="text-caption rounded-full border border-border-default bg-bg-surface px-3 py-1.5">Released: <strong class="text-text-primary">Nov 19, 2026</strong></li>
         <li class="text-caption rounded-full border border-border-default bg-bg-surface px-3 py-1.5">Platform: <strong class="text-text-primary">PS5 only</strong></li>
       </ul>
       <p class="text-caption mt-3 text-text-muted">
@@ -223,7 +214,7 @@ const faqs = [...extraFaqs, ...baseFaqs];
       },
       {
         '@type': 'ItemList',
-        name: 'GTA V cheat codes likely to return in GTA 6 (PS5)',
+        name: 'GTA V cheat codes (PS5)',
         numberOfItems: allCheats.length,
         itemListElement: allCheats.map((cheat, i) => ({
           '@type': 'ListItem',

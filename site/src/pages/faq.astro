@@ -3,53 +3,36 @@ import { generalCheatFaq } from '../lib/cheat-faq';
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 
-const extraFaqs = generalCheatFaq.filter((g) => ['Is GTA VI the same as GTA 6?','Does GTA 6 (GTA VI) have cheat codes?','When does GTA 6 release?','Are GTA 6 cheat codes for Xbox and PC listed?'].includes(g.q));
 const baseFaqs = [
   {
-    q: 'Are the cheat codes on this site confirmed for GTA6?',
-    a: "No. Rockstar hasn't published any GTA6 cheat codes. The 35 codes on our cheat codes page are GTA V cheats with PS5 inputs, listed because they're the most likely to return. Every one is labeled unconfirmed, and we only change that after testing it in the released game.",
+    q: 'Are the GTA 6 cheat codes on this site confirmed?',
+    a: "The codes on our Confirmed GTA 6 Cheats page are reported working in GTA 6 by Rockstar or by at least two major outlets, and each source is linked. We haven't tested them on our own PS5 yet, so they're labeled \"reported\". The 35 codes on our cheat codes page are GTA V cheats.",
   },
   {
-    q: 'How do cheat codes work in GTA6?',
-    a: "Rockstar hasn't confirmed the exact mechanism yet. In GTA5, cheats were entered by pulling out your phone and dialing a specific number — no menu, no pause screen. GTA6's marketing has leaned even harder into phone-based interaction, so a similar dial-in system is the most likely carryover, but until Rockstar or a verified source confirms it, treat it as an expectation rather than a fact.",
-  },
-  {
-    q: 'Do cheat codes disable trophies and achievements?',
-    a: 'In every mainline GTA title going back to GTA5, activating a cheat code disabled trophy/achievement unlocks for the rest of that play session — saving and reloading cleared the flag. We expect GTA6 to follow the same rule, but it has not been officially confirmed.',
-  },
-  {
-    q: 'Can I use cheat codes in GTA6 Online or multiplayer?',
-    a: "Historically, no — GTA Online has never allowed cheat codes, and GTA5's single-player cheats were hard-blocked from online sessions entirely. Rockstar hasn't announced GTA6's online mode yet (see our Leaks & Updates page for the latest on that), so this page will update once multiplayer details — and its cheat policy — are confirmed.",
-  },
-  {
-    q: 'Will cheat codes work on PC?',
-    a: "There's nothing to confirm yet — GTA6 is launching November 19, 2026 on PS5 and Xbox Series X|S only, with no announced PC release date. Every cheat page on this site marks PC as \"Coming Soon\" for exactly this reason, and we'll add PC-specific codes the moment a PC version ships and cheats are verified for it.",
+    q: 'How do you confirm a GTA 6 cheat?',
+    a: 'Every hour we check Rockstar and major gaming outlets. A code is listed only when its exact input appears on an official Rockstar page, or in articles from at least two different outlets published after launch that plainly say it works in GTA 6. Sites that only repost lists, and articles that call codes rumored or untested, never count.',
   },
   {
     q: 'Do cheat codes cost money or require DLC?',
-    a: "No. Cheat codes have always been a free, built-in feature of every mainline GTA game — there's no purchase, subscription, or DLC required to use them, and we'd be surprised if that changed for GTA6.",
+    a: "No. Cheat codes have always been a free, built-in feature of mainline GTA games, and GTA 6's cheats are unlocked by playing, not by buying anything.",
   },
   {
     q: 'Can I turn a cheat off after turning it on?',
-    a: "Most GTA cheats toggle — entering the same code again switches the effect back off. A handful are one-shot triggers (like spawning a vehicle) rather than an on/off state. Each cheat page on this site spells out which kind it is once real GTA6 codes are verified and published.",
+    a: "Most GTA cheats toggle: entering the same code again switches the effect off. A few, like spawning a vehicle or getting money, are one-shot. In GTA 6, cheats also disable saving for the session, so reloading your save is the surest way back to normal.",
   },
   {
-    q: 'What does "Verified" vs "Rumored" mean on this site?',
-    a: 'Verified means a cheat has been confirmed by two or more independent sources, or directly by Rockstar. Rumored means it has only surfaced from a single source and hasn\'t been cross-referenced yet. We show the badge on every cheat and leak so you always know how much to trust it — see our Leaks & Updates page for the same system applied to news and rumors.',
-  },
-  {
-    q: 'Where do your cheat codes come from?',
-    a: "The cheat codes listed on our cheat codes page are GTA V cheats, which are public and have been in the game for years. We list them because they're the most likely to return in GTA6, and we label each one unconfirmed. Our news section is separate: it links every story back to its source. Nothing is labeled \"Verified\" for GTA6 until it has been tested in the released game or confirmed directly by Rockstar.",
+    q: 'What do "Verified" and "Rumored" mean on the news page?',
+    a: 'On Leaks & Updates, Verified means a story has been confirmed by two or more independent sources, or directly by Rockstar. Rumored means it comes from a single source and hasn\'t been cross-referenced yet.',
   },
 ];
-const faqs = [...extraFaqs, ...baseFaqs];
+const faqs = [...generalCheatFaq, ...baseFaqs];
 ---
 
 <Layout
-  title="GTA 6 Cheat Codes FAQ"
-  description="Frequently asked questions about GTA 6 cheat codes — how they work, achievements, online play, PC support, and how we verify them."
+  title="GTA 6 (GTA VI) Cheat Codes FAQ"
+  description="GTA 6 cheat codes FAQ: how to unlock and enter cheats on PS5, trophies and saving, GTA 5 codes in GTA 6, online play, and how we confirm codes."
 >
-  <PageHero eyebrow="Good to Know" title="Frequently Asked Questions" subtitle="Everything about how GTA6 cheat codes work, before a single one has shipped." accent="cyan" />
+  <PageHero eyebrow="Good to Know" title="Frequently Asked Questions" subtitle="How GTA 6 cheats unlock, how to enter them, and how we confirm each code." accent="cyan" />
 
   <div class="mx-auto max-w-3xl px-5 py-14 sm:px-8 sm:py-20" data-reveal-group>
     <div class="flex flex-col gap-4">

@@ -26,20 +26,19 @@ const statusLine =
     ? 'We tested this code in the released GTA 6 on PS5 and it works.'
     : status === 'broken'
       ? "We tested this code in the released GTA 6 on PS5 and it doesn't work."
-      : "Rockstar hasn't published any GTA 6 cheat codes, so this is the GTA V code, unconfirmed for GTA 6 until we test it after launch.";
+      : "This is the GTA V code. GTA 6 has its own cheat list and entry method, and we haven't tested whether this one carries over.";
 
 const stepsText = buttons ? `Press ${cheat.ps5!.join(', then ')} in that order` : '';
-const statusShort = status === 'unconfirmed' ? 'unconfirmed for GTA 6' : status === 'works' ? 'tested and working in GTA 6' : "tested and not working in GTA 6";
 const faq = [
   {
-    q: `What is the ${cheat.title} cheat code in GTA 6 (GTA VI)?`,
-    a: `${statusLine} ${buttons ? `In GTA V on PS5 the input is ${buttons}. ` : ''}On the in-game phone you dial ${cheat.phone}.`,
+    q: `What is the ${cheat.title} cheat code in GTA 5 on PS5?`,
+    a: `${buttons ? `In GTA V on PS5 the input is ${buttons}. ` : ''}On the in-game phone you dial ${cheat.phone}. ${statusLine}`,
   },
   ...(buttons
     ? [
         {
           q: `How do I enter the ${cheat.title} cheat on PS5?`,
-          a: `${stepsText}, during normal gameplay with no menu open. A confirmation message appears when it works. You can also open the in-game phone and dial ${cheat.phone}. These are the GTA V inputs; GTA 6 hasn't confirmed its own.`,
+          a: `${stepsText}, during normal gameplay with no menu open. A confirmation message appears when it works. You can also open the in-game phone and dial ${cheat.phone}. This is how it works in GTA V; GTA 6 cheats are entered differently.`,
         },
       ]
     : []),
@@ -55,18 +54,18 @@ const faq = [
     q: `Does the ${cheat.title} cheat work in GTA 6 on PS5?`,
     a:
       status === 'unconfirmed'
-        ? `It works in GTA V on PS5, and is ${statusShort}. We'll test it after launch on November 19, 2026 and update this page.`
+        ? `It works in GTA V on PS5. GTA 6 has its own cheats, which unlock after the main story and are entered through the phone with L1 + R1 and a D-pad code (as reported by Polygon and Eurogamer). We haven't tested this GTA V code in GTA 6.`
         : statusLine,
   },
 ];
 
-const title = `GTA 6 / GTA VI ${cheat.title} Cheat Code (PS5)`;
-const description = `GTA 6 ${cheat.title} cheat (GTA VI): ${buttons ? `PS5 input ${buttons}, ` : ''}phone ${cheat.phone}. ${status === 'unconfirmed' ? 'GTA V code, unconfirmed for GTA 6.' : statusLine}`;
+const title = `GTA 5 ${cheat.title} Cheat (PS5) and GTA 6`;
+const description = `GTA 5 ${cheat.title} cheat on PS5: ${buttons ? `${buttons}, or ` : ''}phone ${cheat.phone}. Plus whether it works in GTA 6 (GTA VI) and the confirmed GTA 6 cheats.`;
 ---
 
 <Layout title={title} description={description}>
   <PageHero
-    eyebrow={`${group.name} · PS5 · ${status === 'unconfirmed' ? 'Unconfirmed for GTA 6' : 'Tested in GTA 6'}`}
+    eyebrow={`${group.name} · PS5 · ${status === 'unconfirmed' ? 'GTA V code · Untested in GTA 6' : 'Tested in GTA 6'}`}
     title={title}
     subtitle={cheat.effect}
     accent="pink"
@@ -100,7 +99,7 @@ const description = `GTA 6 ${cheat.title} cheat (GTA VI): ${buttons ? `PS5 input
         {
           [
             ['Cheat', cheat.title],
-            ['Game', 'GTA 6 / GTA VI (GTA V code)'],
+            ['Game', 'GTA V (untested in GTA 6)'],
             ['Platform', 'PS5'],
             ['Category', group.name],
             ['Effect', cheat.effect],
@@ -138,7 +137,7 @@ const description = `GTA 6 ${cheat.title} cheat (GTA VI): ${buttons ? `PS5 input
           )
         }
       </ol>
-      <p class="text-caption mt-3 text-text-muted">These are GTA V inputs. GTA 6 hasn't confirmed how its cheats are entered.</p>
+      <p class="text-caption mt-3 text-text-muted">These are GTA V inputs. In GTA 6 you open the phone, hold L1 and R1, then enter a D-pad code; see the <a href="/cheats/gta-6/" class="text-accent-secondary hover:underline">confirmed GTA 6 cheats</a>.</p>
     </section>
 
     <section class="mt-12">
@@ -197,7 +196,7 @@ const description = `GTA 6 ${cheat.title} cheat (GTA VI): ${buttons ? `PS5 input
     }
 
     <div class="mt-14 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border-default p-8 text-center">
-      <p class="text-label text-text-muted">Get told when GTA 6 codes are confirmed</p>
+      <p class="text-label text-text-muted">Get told when new GTA 6 codes are confirmed</p>
       <NotifySignup />
     </div>
   </div>

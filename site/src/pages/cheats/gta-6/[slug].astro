@@ -24,6 +24,16 @@ const faq = [
     a: `${cheat.effect ? `${cheat.effect} ` : ''}The code is ${input}. It was reported working in GTA 6 by ${by}.`,
   },
   {
+    q: `How do I unlock the ${cheat.title} cheat in GTA 6?`,
+    a: cheat.unlock
+      ? `Finish the main story first; cheats stay locked until then. The ${cheat.title} cheat then unlocks when you meet its requirement: ${cheat.unlock}.`
+      : `Finish the main story first; cheats stay locked until then. The ${cheat.title} cheat's own unlock requirement hadn't been reported when we listed it.`,
+  },
+  {
+    q: `How do I enter the ${cheat.title} cheat on PS5?`,
+    a: `Take out your phone with Up on the D-pad, hold L1 and R1 on the home screen, then press ${cheat.ps5?.join(', ') ?? 'the code'}. Save first: using a cheat disables saving and trophies for that session.`,
+  },
+  {
     q: `Is the GTA 6 ${cheat.title} cheat confirmed?`,
     a: `It is reported working by ${by}${cheat.sources.length > 1 ? ', independently' : ''}. We haven't tested it on our own PS5 yet, and will update this page when we do.`,
   },
@@ -47,6 +57,17 @@ const faq = [
     </nav>
 
     <Gta6CheatCard cheat={cheat} headingLevel="h2" link={false} />
+
+    <section class="mt-10">
+      <h2 class="text-heading-md text-text-primary">How to use the {cheat.title} cheat in GTA 6</h2>
+      <ol class="text-body-md mt-4 flex list-decimal flex-col gap-2 pl-6 text-text-secondary">
+        <li>Finish the main story. Cheats stay locked until the credits roll, then a Cheats tab appears.</li>
+        <li>{cheat.unlock ? `Unlock this cheat: ${cheat.unlock}.` : "Meet this cheat's unlock requirement (not reported yet)."} Progress from before the ending counts.</li>
+        <li>Save your game. Using a cheat disables saving and trophies for the rest of that session.</li>
+        <li>Take out your phone (Up on the D-pad), hold L1 and R1 on the home screen, and enter {cheat.ps5?.length ? cheat.ps5.join(', ') : 'the code'}.</li>
+      </ol>
+      <p class="text-caption mt-3 text-text-muted">Steps as reported by {by}. We haven't tested them on our own PS5 yet.</p>
+    </section>
 
     <section class="mt-10">
       <h2 class="text-heading-md text-text-primary">Sources</h2>
