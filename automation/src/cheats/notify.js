@@ -112,3 +112,5 @@ try {
 } finally {
   await client.close();
 }
+
+process.exit(process.exitCode ?? 0);

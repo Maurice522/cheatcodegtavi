@@ -324,16 +324,29 @@ async function main() {
       console.log(`VERIFIED (${verdict.reason}): ${name} ${cand.key} -> ${AUTO_PUBLISH ? "published" : "held (AUTO_PUBLISH off)"}`);
       if (AUTO_PUBLISH) published++;
     }
+
+    // Published cheats nobody has been told about yet are either not deployed
+    // or not announced (e.g. a run that died after saving them). Keep asking
+    // for a deploy until notify.js marks them done.
+    if (!FIXTURE && !DRY_RUN) {
+      const waiting = await cheats.countDocuments({ published: true, notified: false });
+      if (waiting > published) console.log(`${waiting - published} earlier published cheat(s) still awaiting deploy/notification.`);
+      published = Math.max(published, waiting);
+    }
   } finally {
     await client?.close();
   }
 
-  console.log(`Done. ${published} newly published cheat(s).`);
+  console.log(`Done. ${published} cheat(s) to deploy.`);
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `published=${published}\n`);
   if (FIXTURE) console.log(`FIXTURE_RESULT published=${published}`);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exitCode = 1;
-});
+// Exit explicitly: an idle keep-alive socket once held the process open until
+// the job's 20-minute timeout, which cancelled the deploy.
+main()
+  .then(() => process.exit(process.exitCode ?? 0))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
