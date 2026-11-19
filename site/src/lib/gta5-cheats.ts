@@ -159,7 +159,7 @@ export const cheatGroups: CheatGroup[] = [
   {
     slug: 'weather-and-physics',
     name: 'Weather & Physics Cheats',
-    seoTitle: 'GTA 5 Weather & Physics Cheats (PS5) and GTA 6',
+    seoTitle: 'GTA 5 Weather Cheats (PS5) and GTA 6',
     seoDescription:
       'GTA 5 weather and physics cheats for PS5: change weather, slippery cars, slow motion and drunk mode. GTA 6 has its own environment cheats.',
     intro: [
