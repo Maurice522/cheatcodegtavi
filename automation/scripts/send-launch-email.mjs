@@ -28,12 +28,25 @@ const FROM = process.env.MAIL_FROM;
 const subject = value("subject");
 const bodyFile = value("body");
 const send = flag("send");
+// --test you@example.com sends one copy to that address only, with a sample unsubscribe link.
+const testTo = value("test");
 
 if (!ADMIN_TOKEN) throw new Error("SITE_ADMIN_TOKEN is not set");
 if (!subject || !bodyFile) throw new Error('Usage: --subject "..." --body path/to/body.html [--send]');
-if (send && (!RESEND_API_KEY || !FROM)) throw new Error("RESEND_API_KEY and MAIL_FROM are required with --send");
+if ((send || testTo) && (!RESEND_API_KEY || !FROM)) throw new Error("RESEND_API_KEY and MAIL_FROM are required with --send");
 
 const body = readFileSync(bodyFile, "utf-8");
+const footer = (url) => `<hr><p style="font-size:12px;color:#666">You asked to be told when GTA 6 cheat codes go live on CheatCodeGTAVI.com. <a href="${url}">Unsubscribe</a>.</p>`;
+
+if (testTo) {
+  const r = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { authorization: `Bearer ${RESEND_API_KEY}`, "content-type": "application/json" },
+    body: JSON.stringify({ from: FROM, to: [testTo], subject: `[TEST] ${subject}`, reply_to: "contact@cheatcodegtavi.com", html: body + footer(`${SITE}/unsubscribe/`) }),
+  });
+  console.log(`Test send to ${testTo}: ${r.status} ${r.ok ? "sent" : await r.text()}`);
+  process.exit(r.ok ? 0 : 1);
+}
 const res = await fetch(`${SITE}/api/admin/subscribers`, { headers: { authorization: `Bearer ${ADMIN_TOKEN}` } });
 if (!res.ok) throw new Error(`Could not load subscribers (${res.status})`);
 const subscribers = await res.json();
