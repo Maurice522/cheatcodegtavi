@@ -76,7 +76,7 @@ const date = new Date(leak.publishedAt).toLocaleDateString('en-US', {
 
     {leak.image && (
       <div class="mt-6 aspect-video w-full overflow-hidden rounded-xl bg-bg-elevated">
-        <img src={leak.image} alt="" class="h-full w-full object-cover" />
+        <img src={leak.image} alt={leak.title} class="h-full w-full object-cover" />
       </div>
     )}
 

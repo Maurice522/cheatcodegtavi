@@ -1,0 +1,188 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import ButtonSequence from '../../../components/ButtonSequence.astro';
+import { getReportedGta6Cheats, gta6CheatPath, reportedBy } from '../../../lib/gta6-cheats';
+
+// Unlock checklist: every confirmed GTA 6 cheat with its unlock requirement and
+// a tick box. Ticks are saved in this browser only (localStorage).
+const cheats = await getReportedGta6Cheats();
+const count = cheats.length;
+const faq = [
+  {
+    q: 'How do I unlock cheats in GTA 6?',
+    a: 'Finish the main story first; a Cheats tab then appears. Each cheat unlocks when you meet its own requirement, and progress from before the ending counts. This checklist shows each confirmed cheat with its requirement so you can tick them off.',
+  },
+  {
+    q: 'Is my checklist saved?',
+    a: "Yes, in this browser on this device. Nothing is sent to us, so it won't follow you to another device, and clearing your browser data clears it.",
+  },
+];
+---
+
+<Layout
+  title="GTA 6 Cheat Unlock Tracker (Checklist)"
+  description={`Track which GTA 6 / GTA VI cheats you've unlocked: a checklist of ${count || 'every'} confirmed cheat${count === 1 ? '' : 's'} with D-pad codes and unlock requirements, saved in your browser.`}
+>
+  <PageHero
+    eyebrow="Checklist · Saved in your browser"
+    title="GTA 6 Cheat Unlock Tracker"
+    subtitle="Tick off each GTA 6 cheat as you unlock it. Requirements and codes for every confirmed cheat, in one list."
+    accent="gold"
+  />
+
+  <div class="mx-auto max-w-4xl px-5 py-12 sm:px-8 sm:py-16">
+    <nav aria-label="Breadcrumb" class="text-caption mb-6 text-text-muted">
+      <a href="/" class="hover:text-text-primary">Home</a>
+      <span class="mx-2">/</span>
+      <a href="/cheats/gta-6/" class="hover:text-text-primary">Confirmed GTA 6 Cheats</a>
+      <span class="mx-2">/</span>
+      <span class="text-text-secondary">Unlock Tracker</span>
+    </nav>
+
+    <p class="text-body-md text-text-secondary">
+      GTA 6 cheats only unlock after you finish the main story, and each one has its own requirement. This tracker lists the {count} cheats confirmed so far (GTA 6 has about 61); more are added automatically as major outlets confirm their codes.
+    </p>
+
+    <cheat-tracker class="mt-8 block">
+      <div class="sticky top-[72px] z-20 -mx-5 border-b border-border-subtle bg-bg-primary/90 px-5 py-3 backdrop-blur-md sm:mx-0 sm:rounded-xl sm:border">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <p class="text-label text-text-primary"><span data-done>0</span> of {count} unlocked</p>
+          <div class="flex gap-2">
+            <button type="button" data-hide-done class="press text-caption rounded-full border border-border-default px-3 py-1.5 text-text-secondary hover:border-accent-secondary/60" aria-pressed="false">Hide unlocked</button>
+            <button type="button" data-reset class="press text-caption rounded-full border border-border-default px-3 py-1.5 text-text-secondary hover:border-error/60">Reset</button>
+          </div>
+        </div>
+        <div class="mt-2 h-2 overflow-hidden rounded-full bg-bg-elevated" role="progressbar" aria-label="Cheats unlocked" aria-valuemin="0" aria-valuemax={count} aria-valuenow="0" data-bar>
+          <div class="h-full w-0 rounded-full bg-verified transition-[width] duration-300" data-fill></div>
+        </div>
+      </div>
+
+      <ul class="mt-4 flex flex-col gap-3">
+        {
+          cheats.map((cheat) => (
+            <li data-row={cheat.slug} class="rounded-xl border border-border-default bg-bg-surface p-4 transition-opacity duration-150 data-[done=true]:opacity-60">
+              <label class="flex cursor-pointer items-start gap-3">
+                <input type="checkbox" data-check={cheat.slug} class="mt-1 h-5 w-5 shrink-0 accent-[var(--color-verified,#22c55e)]" />
+                <span class="flex min-w-0 flex-1 flex-col gap-2">
+                  <span class="text-heading-sm text-text-primary">{cheat.title}</span>
+                  <span class="text-body-sm text-text-secondary">
+                    <strong class="text-text-primary">Unlock:</strong> {cheat.unlock || 'Requirement not reported yet'}
+                  </span>
+                  {cheat.ps5?.length ? <ButtonSequence buttons={cheat.ps5} size="sm" /> : null}
+                </span>
+              </label>
+              <p class="text-caption mt-2 pl-8 text-text-muted">
+                Reported by {reportedBy(cheat)} · <a href={gta6CheatPath(cheat.slug)} class="text-accent-secondary hover:underline">Details</a>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </cheat-tracker>
+
+    <section class="mt-12">
+      <h2 class="text-heading-md text-text-primary">How to enter a cheat once it's unlocked</h2>
+      <p class="text-body-md mt-3 text-text-secondary">
+        Save first, because a cheat disables saving and trophies for that session. Then take out your phone (Up on the D-pad), hold L1 and R1 on the home screen, and enter the D-pad code shown above. Steps as reported by Polygon and Eurogamer.
+      </p>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="text-heading-md text-text-primary">Questions</h2>
+      <div class="mt-4 flex flex-col gap-3">
+        {
+          faq.map((item) => (
+            <details class="rounded-xl border border-border-default bg-bg-surface p-5" open>
+              <summary class="text-heading-sm cursor-pointer list-none text-text-primary marker:content-none">{item.q}</summary>
+              <p class="text-body-md mt-3 text-text-secondary">{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cheatcodegtavi.com/' },
+          { '@type': 'ListItem', position: 2, name: 'Confirmed GTA 6 Cheats', item: 'https://cheatcodegtavi.com/cheats/gta-6/' },
+          { '@type': 'ListItem', position: 3, name: 'Unlock Tracker', item: 'https://cheatcodegtavi.com/cheats/gta-6/tracker/' },
+        ],
+      },
+      { '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+    ],
+  })} />
+
+  <script>
+    const KEY = 'gta6-cheat-tracker';
+    class CheatTracker extends HTMLElement {
+      connectedCallback() {
+        const read = (): Set<string> => {
+          try {
+            return new Set(JSON.parse(localStorage.getItem(KEY) ?? '[]'));
+          } catch {
+            return new Set();
+          }
+        };
+        const write = (s: Set<string>) => {
+          try {
+            localStorage.setItem(KEY, JSON.stringify([...s]));
+          } catch {
+            // storage blocked: the list still works for this visit
+          }
+        };
+        let done = read();
+        let hideDone = false;
+        const boxes = [...this.querySelectorAll<HTMLInputElement>('[data-check]')];
+        const doneEl = this.querySelector<HTMLElement>('[data-done]');
+        const fill = this.querySelector<HTMLElement>('[data-fill]');
+        const bar = this.querySelector<HTMLElement>('[data-bar]');
+        const hideBtn = this.querySelector<HTMLButtonElement>('[data-hide-done]');
+
+        const render = () => {
+          for (const box of boxes) {
+            const slug = box.dataset.check!;
+            const row = this.querySelector<HTMLElement>(`[data-row="${slug}"]`);
+            box.checked = done.has(slug);
+            if (row) {
+              row.dataset.done = String(box.checked);
+              row.hidden = hideDone && box.checked;
+            }
+          }
+          const n = boxes.filter((b) => b.checked).length;
+          if (doneEl) doneEl.textContent = String(n);
+          if (fill) fill.style.width = boxes.length ? `${(n / boxes.length) * 100}%` : '0';
+          bar?.setAttribute('aria-valuenow', String(n));
+        };
+
+        for (const box of boxes) {
+          box.addEventListener('change', () => {
+            if (box.checked) done.add(box.dataset.check!);
+            else done.delete(box.dataset.check!);
+            write(done);
+            render();
+          });
+        }
+        hideBtn?.addEventListener('click', () => {
+          hideDone = !hideDone;
+          hideBtn.setAttribute('aria-pressed', String(hideDone));
+          hideBtn.textContent = hideDone ? 'Show unlocked' : 'Hide unlocked';
+          render();
+        });
+        this.querySelector('[data-reset]')?.addEventListener('click', () => {
+          if (!confirm('Clear your unlock checklist?')) return;
+          done = new Set();
+          write(done);
+          render();
+        });
+        render();
+      }
+    }
+    customElements.define('cheat-tracker', CheatTracker);
+  </script>
+</Layout>

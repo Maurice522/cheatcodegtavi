@@ -56,7 +56,13 @@ const faq = [
       <span class="text-text-secondary">{cheat.title}</span>
     </nav>
 
+    <p class="text-body-lg mb-6 text-text-secondary" data-answer>
+      The GTA 6 {cheat.title} cheat code on PS5 is <strong class="text-text-primary">{cheat.ps5?.join(', ') ?? 'not reported yet'}</strong>. {cheat.effect ? `It ${cheat.effect.charAt(0).toLowerCase()}${cheat.effect.slice(1).replace(/.?$/, '.')} ` : ''}Finish the main story{cheat.unlock ? `, then unlock it (${cheat.unlock.replace(/.$/, '')})` : ''}, and enter it on the phone while holding L1 and R1. Reported by {by}.
+    </p>
+
     <Gta6CheatCard cheat={cheat} headingLevel="h2" link={false} />
+
+    <p class="text-body-sm mt-4"><a href="/cheats/gta-6/tracker/" class="text-accent-secondary hover:underline">Track which GTA 6 cheats you've unlocked</a></p>
 
     <section class="mt-10">
       <h2 class="text-heading-md text-text-primary">How to use the {cheat.title} cheat in GTA 6</h2>
@@ -122,6 +128,16 @@ const faq = [
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
     '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': url,
+        url,
+        name: `GTA 6 ${cheat.title} Cheat Code`,
+        datePublished: cheat.verifiedAt,
+        dateModified: cheat.verifiedAt,
+        about: { '@type': 'VideoGame', name: 'Grand Theft Auto VI', alternateName: ['GTA 6', 'GTA VI'] },
+        citation: cheat.sources.map((s) => s.url),
+      },
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
