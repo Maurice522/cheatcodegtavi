@@ -28,6 +28,7 @@ import {
   splitSentences,
   extractRegex,
   extractTableRows,
+  extractListLines,
   TABLE_EVIDENCE_GAP,
   evidenceOk,
   isOfficial,
@@ -51,7 +52,21 @@ const DRY_RUN = process.env.CHEAT_DRY_RUN === "true";
 if (!MONGODB_URI && !FIXTURE && !DRY_RUN) throw new Error("MONGODB_URI is not set");
 
 const { feeds } = JSON.parse(readFileSync(join(__dirname, "..", "..", "sources.json"), "utf-8"));
-const SEARCHES = ["GTA 6 cheat codes", "GTA 6 cheats", "GTA VI cheat codes", "GTA 6 cheats PS5", "Rockstar GTA 6 cheats"];
+const SEARCHES = [
+  "GTA 6 cheat codes", "GTA 6 cheats", "GTA VI cheat codes", "GTA 6 cheats PS5", "Rockstar GTA 6 cheats",
+  "GTA 6 all 61 cheats", "GTA 6 cheat codes list unlock", "how to unlock cheats GTA 6", "GTA 6 cheats how to enter",
+];
+// Evergreen cheat guides that outlets update in place. News feeds drop them
+// after a day or two, so they're re-checked every run (subject to the 6-hour
+// re-fetch and unchanged-text checks).
+const SEED_GUIDES = [
+  "https://www.polygon.com/gta-6-cheat-codes-list-unlock/",
+  "https://www.eurogamer.net/all-gta-6-cheats",
+  "https://www.radiotimes.com/technology/gaming/gta-6-cheats-cheat-codes/",
+  "https://www.redbull.com/gb-en/gta-6-cheat-codes",
+  "https://www.rockpapershotgun.com/gta-6-cheats-list",
+  "https://www.gamespot.com/articles/all-gta-6-cheats-and-how-to-unlock-them/",
+];
 const GTA6 = /\b(gta\s?(6|vi)|grand theft auto (6|vi))\b/i;
 const CHEAT = /\bcheat/i;
 
@@ -92,6 +107,9 @@ async function collectLeads() {
       console.log(`Feed failed (${src}): ${err.message}`);
     }
   }
+  for (const url of SEED_GUIDES) {
+    if (!leads.has(url)) leads.set(url, { url, title: url, publishedAt: new Date(EARLIEST_UNLOCK_MS).toISOString() });
+  }
   return [...leads.values()];
 }
 
@@ -130,7 +148,7 @@ async function fetchPage(url) {
 
 const REFETCH_AFTER_MS = 6 * 60 * 60 * 1000;
 // Bump when extraction changes, so pages already seen are read again.
-const EXTRACTOR_VERSION = 2;
+const EXTRACTOR_VERSION = 3;
 const hashOf = (t) => createHash("sha256").update(t).digest("hex");
 
 const PROMPT = `You read a web article and list cheat codes it states for GTA 6 (Grand Theft Auto VI).
@@ -243,7 +261,7 @@ async function main() {
 
       let proposed;
       // Cheat tables are read deterministically; Gemini is only needed for prose.
-      const tableRows = extractTableRows(html);
+      const tableRows = [...extractTableRows(html), ...extractListLines(text)];
       try {
         if (lead.proposed) proposed = lead.proposed;
         else if (tableRows.length) proposed = [...tableRows, ...extractRegex(text)];

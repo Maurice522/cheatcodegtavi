@@ -30,6 +30,8 @@ export const TRUSTED_DOMAINS = [
   "purexbox.com",
   "theverge.com",
   "forbes.com",
+  "radiotimes.com",
+  "redbull.com",
 ];
 
 export const MIN_TRUSTED_SOURCES = 2;
@@ -289,6 +291,31 @@ export function extractTableRows(html) {
         fromTable: true,
       });
     }
+  }
+  return out;
+}
+
+// --- List extraction ----------------------------------------------------------
+// Guides that use lists instead of tables, one cheat per line:
+//   "$250,000: UP, RIGHT, DOWN, LEFT, UP, LEFT, DOWN, RIGHT To unlock: Make $250,000 from fenced goods."
+// Same rule as tables: the nearest heading above must name GTA 6 cheats plainly.
+const LIST_LINE = /^([^:]{2,60}?)\s*[:–—]\s*((?:up|down|left|right|triangle|circle|square|cross|x|l1|l2|r1|r2)(?:[\s,>\-–]+(?:up|down|left|right|triangle|circle|square|cross|x|l1|l2|r1|r2)){3,})\s*(?:\.|$|to unlock:\s*(.+?)\.?$)/i;
+
+const isEvidenceLine = (l) =>
+  l.length <= 300 && GTA6_RE.test(l) && /\bcheats?\b/i.test(l) && !HEDGES.test(l) && !l.endsWith("?") && !QUESTION_START.test(l) && !OTHER_GAME.test(l);
+
+export function extractListLines(text) {
+  const lines = text.split("\n").map((l) => l.trim());
+  const out = [];
+  for (let i = 0; i < lines.length; i++) {
+    const m = LIST_LINE.exec(lines[i]);
+    if (!m) continue;
+    const ps5 = normalizeButtons(m[2].split(/[\s,>\-–]+/).filter(Boolean));
+    if (!ps5) continue;
+    let evidence = null;
+    for (let j = i - 1; j >= Math.max(0, i - 80) && !evidence; j--) if (isEvidenceLine(lines[j])) evidence = lines[j];
+    if (!evidence) continue;
+    out.push({ name: m[1].trim().slice(0, 80), effect: "", unlock: (m[3] ?? "").trim().slice(0, 200), ps5, phone: "", evidence, fromTable: true });
   }
   return out;
 }

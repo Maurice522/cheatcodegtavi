@@ -143,3 +143,13 @@ test("cheat tables under a plain GTA 6 heading are read; TBA and hedged tables a
   const hedged = "<h2>GTA 5 cheats that might work in GTA 6</h2><table><tr><td>Invincibility</td><td>Right, X, Right, Left, Right, R1</td></tr></table>";
   assert.equal(extractTableRows(hedged).length, 0);
 });
+
+import { extractListLines } from "./verify.js";
+test("one-cheat-per-line lists under a plain GTA 6 heading are read", () => {
+  const text = "Full list of GTA 6 cheat codes and how to unlock them all\nPlayer\n$250,000: UP, RIGHT, DOWN, LEFT, UP, LEFT, DOWN, RIGHT To unlock: Make $250,000 from fenced goods.\nNo Fall Damage: Code TBC To unlock: Survive a freefall.";
+  const rows = extractListLines(text);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].unlock, "Make $250,000 from fenced goods");
+  assert.ok(evidenceOk(rows[0].evidence, text, { ps5: rows[0].ps5 }, TABLE_EVIDENCE_GAP));
+  assert.equal(extractListLines("GTA 5 cheats that might return in GTA 6\nInvincibility: RIGHT, X, RIGHT, LEFT, RIGHT, R1").length, 0);
+});

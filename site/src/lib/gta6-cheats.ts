@@ -73,6 +73,8 @@ const OUTLET_NAMES: Record<string, string> = {
   'purexbox.com': 'Pure Xbox',
   'theverge.com': 'The Verge',
   'forbes.com': 'Forbes',
+  'radiotimes.com': 'Radio Times',
+  'redbull.com': 'Red Bull Gaming',
 };
 
 export const outletName = (outlet: string) => OUTLET_NAMES[outlet] ?? outlet;
