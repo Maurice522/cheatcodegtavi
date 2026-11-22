@@ -7,13 +7,23 @@ import characters from '../../data/characters.json';
 const leads = characters.filter((c) => c.role === 'Protagonist');
 const supporting = characters.filter((c) => c.role === 'Supporting');
 const mentioned = characters.filter((c) => c.role === 'Mentioned');
+const cast = characters.filter((c) => 'actor' in c && c.actor) as (typeof characters[number] & { actor: string })[];
+const SITE = 'https://cheatcodegtavi.com';
+const faq = [
+  { q: 'Who are the main characters in GTA 6?', a: 'Jason Duval and Lucia Caminos are the two playable protagonists. Jason is played by Dylan Rourke and Lucia by Manni L. Perez, according to IGN.' },
+  { q: 'Who plays Mandy in GTA 6?', a: 'Lexie Shoaibi. Insider Gaming says she is credited as Mandy in the official cast list, and SVG reports she confirmed doing both the voice and motion capture.' },
+  { q: 'Who does Bobby Moynihan play in GTA 6?', a: "Cal Hampton, Jason's conspiracy-loving friend who works with him in the Keys (IGN)." },
+  { q: 'Is Niko Bellic in GTA 6?', a: "Rockstar hasn't confirmed a Niko Bellic appearance, and he isn't in IGN's GTA 6 cast list. Pre-release cameo claims came from unverified leakers." },
+  { q: 'Who is Donnie in GTA 6?', a: "A pilot who flies drug runs for Brian Heder. Jason rescues him in the first mission, Gone Fishing (GTABase)." },
+  { q: 'Who is Vicki in GTA 6?', a: 'Vicki Wallis, a dancer and bartender at Delights Cabaret in Port Gellhorn, played by Taryn Manning (IGN).' },
+];
 ---
 
 <Layout
-  title="GTA 6 Characters"
-  description="Every known GTA 6 character — Jason, Lucia, and the full supporting cast of Leonida, with bios kept current as new details leak."
+  title="GTA 6 Characters and Voice Actors: Full Cast List"
+  description="Every GTA 6 character and who plays them: Jason (Dylan Rourke), Lucia (Manni L. Perez), Mandy (Lexie Shoaibi), Cal (Bobby Moynihan), Brian, Vicki and more."
 >
-  <PageHero eyebrow="Who's Who" title="GTA 6 Characters" subtitle="The cast of Leonida." accent="purple" />
+  <PageHero eyebrow="Who's Who" title="GTA 6 Characters" subtitle="Who's who in Leonida, and who plays them." accent="purple" />
   <div class="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
     <h2 class="text-heading-md mb-5 text-text-primary" data-reveal-solo>Protagonists</h2>
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2" data-reveal-group>
@@ -74,5 +84,50 @@ const mentioned = characters.filter((c) => c.role === 'Mentioned');
         </div>
       </>
     )}
+
+    <section class="mt-14">
+      <h2 class="text-heading-md text-text-primary">GTA 6 voice actors and cast</h2>
+      <div class="mt-4 overflow-x-auto rounded-xl border border-border-default">
+        <table class="text-body-sm w-full text-left">
+          <thead class="bg-bg-surface text-text-primary">
+            <tr><th scope="col" class="px-4 py-3">Character</th><th scope="col" class="px-4 py-3">Played by</th></tr>
+          </thead>
+          <tbody>
+            {cast.map((c) => (
+              <tr class="border-t border-border-default">
+                <th scope="row" class="px-4 py-3 font-semibold"><a href={`/characters/${c.slug}/`} class="text-accent-secondary hover:underline">{c.name}</a></th>
+                <td class="px-4 py-3 text-text-secondary">{c.actor}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="text-caption mt-3 text-text-muted">Cast as reported by <a href="https://www.ign.com/wikis/gta-6/GTA_6_Characters" rel="nofollow noopener" target="_blank" class="text-accent-secondary hover:underline">IGN</a>; Mandy per <a href="https://insider-gaming.com/who-plays-mandy-in-gta-6/" rel="nofollow noopener" target="_blank" class="text-accent-secondary hover:underline">Insider Gaming</a>.</p>
+    </section>
+
+    <section class="mt-14">
+      <h2 class="text-heading-md text-text-primary">GTA 6 character questions</h2>
+      <div class="mt-4 flex flex-col gap-3">
+        {faq.map((item) => (
+          <details class="rounded-xl border border-border-default bg-bg-surface p-5" open>
+            <summary class="text-heading-sm cursor-pointer list-none text-text-primary marker:content-none">{item.q}</summary>
+            <p class="text-body-md mt-3 text-text-secondary">{item.a}</p>
+          </details>
+        ))}
+      </div>
+      <p class="text-body-sm mt-6 text-text-secondary">Can Jason and Lucia date anyone else? <a href="/guides/can-jason-and-lucia-cheat-on-each-other/" class="text-accent-secondary hover:underline">Read our guide</a>.</p>
+    </section>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      { '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+      {
+        '@type': 'ItemList',
+        name: 'GTA 6 characters',
+        itemListElement: characters.filter((c) => !('noindex' in c && c.noindex)).map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: `${SITE}/characters/${c.slug}/` })),
+      },
+    ],
+  })} />
 </Layout>

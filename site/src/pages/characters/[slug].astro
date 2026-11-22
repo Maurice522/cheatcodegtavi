@@ -3,13 +3,24 @@ import Layout from '../../layouts/Layout.astro';
 import CharacterAvatar from '../../components/CharacterAvatar.astro';
 import characters from '../../data/characters.json';
 
+type Character = (typeof characters)[number] & {
+  actor?: string;
+  debut?: string;
+  noindex?: boolean;
+  faq?: { q: string; a: string }[];
+  sources?: { name: string; url: string }[];
+};
+
 export function getStaticPaths() {
   return characters.map((c) => ({ params: { slug: c.slug } }));
 }
 
 const { slug } = Astro.params;
 const index = characters.findIndex((c) => c.slug === slug);
-const character = characters[index];
+const character = characters[index] as Character;
+const SITE = 'https://cheatcodegtavi.com';
+const url = `${SITE}/characters/${character.slug}/`;
+const UPDATED = '2026-11-22';
 
 // Original artwork only: a per-character neon gradient, no game screenshots.
 const accents = ['--color-pink-500', '--color-cyan-500', '--color-purple-500', '--color-gold-500'];
@@ -19,21 +30,20 @@ const heroBg = `background: radial-gradient(circle at 18% 30%, color-mix(in srgb
 const connections = (character.connections ?? [])
   .map((connSlug) => characters.find((c) => c.slug === connSlug))
   .filter((c): c is NonNullable<typeof c> => Boolean(c));
+const faq = character.faq ?? [];
+const sources = character.sources ?? [];
+const first = character.name.split(' ')[0];
+const title = character.actor
+  ? `${character.name} in GTA 6: Who Plays ${first}, Role & Story`
+  : `Who Is ${character.name} in GTA 6?`;
 ---
 
-<Layout title={`${character.name} (GTA 6 Character)`} description={character.description}>
-  <script type="application/ld+json" set:html={JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cheatcodegtavi.com/' },
-      { '@type': 'ListItem', position: 2, name: 'GTA 6 Characters', item: 'https://cheatcodegtavi.com/characters/' },
-      { '@type': 'ListItem', position: 3, name: character.name, item: `https://cheatcodegtavi.com/characters/${character.slug}/` },
-    ],
-  })} />
+<Layout title={title} description={character.description} noindex={character.noindex ?? false} ogType="article">
   <div class="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
-    <nav class="text-caption mb-6 text-text-muted">
-      <a href="/characters/" class="hover:text-text-primary">Characters</a>
+    <nav aria-label="Breadcrumb" class="text-caption mb-6 text-text-muted">
+      <a href="/" class="hover:text-text-primary">Home</a>
+      <span class="mx-2">/</span>
+      <a href="/characters/" class="hover:text-text-primary">GTA 6 Characters</a>
       <span class="mx-2">/</span>
       <span class="text-text-secondary">{character.name}</span>
     </nav>
@@ -44,20 +54,58 @@ const connections = (character.connections ?? [])
         <div class="flex flex-wrap items-center gap-5">
           <CharacterAvatar name={character.name} index={index} size="lg" icon={character.icon} />
           <div>
-            <span class="text-label text-accent-secondary">{character.role}</span>
+            <span class="text-label text-accent-secondary">{character.role} · GTA 6</span>
             <h1 class="text-display-md text-3xl text-text-primary sm:text-5xl">{character.name}</h1>
           </div>
         </div>
       </div>
     </div>
 
-    <p class="text-body-lg mt-8 max-w-2xl whitespace-pre-line text-text-secondary">
-      {character.bio ?? character.description}
-    </p>
+    <p class="text-body-lg mt-8 text-text-secondary" data-answer>{character.description}</p>
+
+    {
+      (character.actor || character.debut) && (
+        <dl class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {character.actor && (
+            <div class="rounded-xl border border-border-default bg-bg-surface p-4">
+              <dt class="text-label text-accent-secondary">Played by</dt>
+              <dd class="text-body-md mt-1 text-text-primary">{character.actor}</dd>
+            </div>
+          )}
+          {character.debut && (
+            <div class="rounded-xl border border-border-default bg-bg-surface p-4">
+              <dt class="text-label text-accent-secondary">First appears</dt>
+              <dd class="text-body-md mt-1 text-text-primary">{character.debut}</dd>
+            </div>
+          )}
+        </dl>
+      )
+    }
+
+    <section class="mt-10">
+      <h2 class="text-heading-md text-text-primary">Who is {character.name}?</h2>
+      <p class="text-body-md mt-3 whitespace-pre-line text-text-secondary">{character.bio ?? character.description}</p>
+    </section>
+
+    {
+      faq.length > 0 && (
+        <section class="mt-10">
+          <h2 class="text-heading-md text-text-primary">Questions</h2>
+          <div class="mt-4 flex flex-col gap-3">
+            {faq.map((item) => (
+              <details class="rounded-xl border border-border-default bg-bg-surface p-5" open>
+                <summary class="text-heading-sm cursor-pointer list-none text-text-primary marker:content-none">{item.q}</summary>
+                <p class="text-body-md mt-3 text-text-secondary">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )
+    }
 
     {connections.length > 0 && (
       <div class="mt-10">
-        <h2 class="text-heading-sm mb-4 text-text-primary">Connected To</h2>
+        <h2 class="text-heading-sm mb-4 text-text-primary">Connected to</h2>
         <div class="flex flex-wrap gap-3">
           {connections.map((c) => (
             <a
@@ -71,8 +119,56 @@ const connections = (character.connections ?? [])
       </div>
     )}
 
-    <a href="/characters/" class="text-label mt-12 inline-block text-accent-secondary hover:text-accent-secondary/80">
-      &larr; Back to Characters
+    {
+      sources.length > 0 && (
+        <section class="mt-10">
+          <h2 class="text-heading-sm text-text-primary">Sources</h2>
+          <ul class="text-body-sm mt-3 flex flex-col gap-2 text-text-secondary">
+            {sources.map((s) => <li><a href={s.url} rel="nofollow noopener" target="_blank" class="text-accent-secondary hover:underline">{s.name}</a></li>)}
+          </ul>
+          <p class="text-caption mt-3 text-text-muted">Written in our own words from the sources above. Last updated {UPDATED}.</p>
+        </section>
+      )
+    }
+
+    <p class="text-body-sm mt-10 text-text-secondary">
+      Looking for GTA 6 cheat codes? See the <a href="/cheats/gta-6/" class="text-accent-secondary hover:underline">confirmed GTA 6 cheats</a> and <a href="/cheats/gta-6/how-to-activate-cheats/" class="text-accent-secondary hover:underline">how to activate them</a>.
+    </p>
+
+    <a href="/characters/" class="text-label mt-8 inline-block text-accent-secondary hover:text-accent-secondary/80">
+      &larr; All GTA 6 characters
     </a>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Article',
+        '@id': `${url}#article`,
+        headline: title,
+        description: character.description,
+        url,
+        dateModified: UPDATED,
+        about: [
+          { '@type': 'Thing', name: `${character.name} (GTA 6 character)` },
+          { '@type': 'VideoGame', name: 'Grand Theft Auto VI', alternateName: ['GTA 6', 'GTA VI'] },
+          ...(character.actor ? [{ '@type': 'Person', name: character.actor }] : []),
+        ],
+        publisher: { '@type': 'Organization', name: 'CheatCodeGTAVI.com', url: SITE },
+        citation: sources.map((s) => s.url),
+      },
+      ...(faq.length
+        ? [{ '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }]
+        : []),
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 2, name: 'GTA 6 Characters', item: `${SITE}/characters/` },
+          { '@type': 'ListItem', position: 3, name: character.name, item: url },
+        ],
+      },
+    ],
+  })} />
 </Layout>

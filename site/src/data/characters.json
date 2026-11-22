@@ -4,89 +4,271 @@
     "name": "Jason Duval",
     "role": "Protagonist",
     "icon": "star",
-    "description": "One of the two playable leads. He has a background in small-scale criminal work around the Leonida Keys and previously spent time in the military before drifting back into that life.",
-    "bio": "Jason grew up on the margins of the Keys, in the kind of towns where a fast dinghy and a working knowledge of the local marinas mattered more than a diploma. Small jobs led to slightly bigger ones, the way they always do in that world, and by his late teens he was already known to the wrong people for the right reasons — reliable, quiet, good under pressure.\n\nA stint in the military interrupted that trajectory, and by most accounts it should have set him straight. Instead it sharpened him: better instincts, better nerves, and a résumé that made him more useful to the people he came back to rather than less. Leonida has a way of pulling people back into orbit, and Jason never really left it behind so much as postponed it.\n\nEverything changes when he crosses paths with Lucia. What starts as a shared problem becomes a shared plan, and the two of them fall into the kind of dynamic Rockstar has only hinted at once before in the series — two people who trust each other more than they trust anyone else left standing. It's the first time the mainline series has split its story evenly between two leads, and Jason is written as the calmer half of that pairing, the one who thinks two steps ahead while things are still on fire.\n\nHis ties reach further than just Lucia. Cal Hampton keeps him looped into Vice City business he'd rather not touch directly, and Brian Heder's boat yard in the Keys gives him a place to disappear to when Leonida gets too hot. None of these are people Jason fully trusts — they're just the ones he has left.",
-    "connections": ["lucia-caminos", "cal-hampton", "brian-heder"]
+    "actor": "Dylan Rourke",
+    "debut": "Gone Fishing (Chapter 1)",
+    "description": "Jason Duval is one of GTA 6's two playable leads, voiced by Dylan Rourke: an Army veteran from Ambrosia who flies, fights and fishes for drug runner Brian Heder in the Keys.",
+    "bio": "Jason grew up around grifters and crooks in Ambrosia and joined the Army to get away from that life. When GTA 6 opens he is back in the Leonida Keys, living rent-free in one of Brian Heder's properties in exchange for flying, fighting and collecting for Brian's smuggling business.\n\nMeeting Lucia changes his plans. The two share the story, and how close their relationship becomes depends on how you play their interactions.",
+    "connections": ["lucia-caminos", "cal-hampton", "brian-heder", "donnie"],
+    "faq": [
+      { "q": "Who voices Jason in GTA 6?", "a": "Dylan Rourke plays Jason Duval, according to IGN's GTA 6 character guide." },
+      { "q": "Where is Jason from in GTA 6?", "a": "Ambrosia, in Leonida. He joined the Army to escape the crooks he grew up around, then returned to the Keys to work for Brian Heder." },
+      { "q": "Can Jason cheat on Lucia in GTA 6?", "a": "No. IGN reports there are no other romance options for Jason or Lucia. See our guide on whether Jason and Lucia can cheat on each other." }
+    ],
+    "sources": [
+      { "name": "IGN: GTA 6 characters", "url": "https://www.ign.com/wikis/gta-6/GTA_6_Characters" },
+      { "name": "IGN: Can Jason and Lucia cheat on each other?", "url": "https://www.ign.com/wikis/gta-6/Can_Jason_and_Lucia_Cheat_on_Each_Other%3F" }
+    ]
   },
   {
     "slug": "lucia-caminos",
     "name": "Lucia Caminos",
     "role": "Protagonist",
     "icon": "star",
-    "description": "The second playable lead and the series' first female protagonist. She was recently released from Leonida Penitentiary and is now partnered with Jason.",
-    "bio": "Lucia is the first woman to headline a mainline Grand Theft Auto game, and Rockstar has built the reveal trailers around that fact deliberately — she isn't a sidekick who happens to be playable, she's positioned as co-lead from the very first frame she appears in. That alone makes her the most closely watched character in the game before a single mission has been played.\n\nShe comes into the story fresh out of Leonida Penitentiary, which tells you most of what you need to know about how the last few years went for her. Prison doesn't soften people like Lucia; it tends to make them faster, more decisive, and considerably less patient with anyone who wastes her time. Whatever put her away, she's not interested in repeating the mistake that got her caught — only in not getting caught again.\n\nHer partnership with Jason forms almost immediately, and the trailers frame it less as romance-first and more as two survivors recognizing the same look in each other. She reads as the sharper-tongued half of the two of them, quicker to call out a bad plan and quicker to improvise when the good plan falls apart anyway.\n\nOutside of Jason, Lucia is kept deliberately isolated in what's been shown so far — no obvious crew of her own, no old contacts surfacing yet. That's likely to change once the full story unfolds, but for now she reads as someone who's used to relying on herself first and anyone else second.",
-    "connections": ["jason-duval"]
+    "actor": "Manni L. Perez",
+    "debut": "Prologue (Chapter 1)",
+    "description": "Lucia Caminos is GTA 6's other playable lead, voiced by Manni L. Perez: raised in Liberty City, she opens the game in Hamlet Correctional Facility before teaming up with Jason.",
+    "bio": "Lucia's father taught her to fight from an early age. She grew up in Liberty City, moved to Leonida with her mother, and fighting for her family is what landed her in Hamlet Correctional Facility. The game's Prologue opens with her meeting a prison counselor about early release.\n\nOnce out, she is determined to only make smart moves, and teaming up with Jason looks like her way out.",
+    "connections": ["jason-duval", "andy"],
+    "faq": [
+      { "q": "Who voices Lucia in GTA 6?", "a": "Manni L. Perez plays Lucia Caminos, according to IGN's GTA 6 character guide." },
+      { "q": "Why was Lucia in prison in GTA 6?", "a": "IGN's bio says fighting for her family landed her in Hamlet Correctional Facility. The Prologue shows her discussing early release with a prison counselor." },
+      { "q": "Does Lucia cheat on Jason in GTA 6?", "a": "No. IGN reports neither protagonist can start a relationship with anyone else. See our guide on whether Jason and Lucia can cheat on each other." }
+    ],
+    "sources": [
+      { "name": "IGN: GTA 6 characters", "url": "https://www.ign.com/wikis/gta-6/GTA_6_Characters" },
+      { "name": "IGN: GTA 6 walkthrough", "url": "https://www.ign.com/wikis/gta-6/Walkthrough" }
+    ]
   },
   {
     "slug": "cal-hampton",
     "name": "Cal Hampton",
     "role": "Supporting",
     "icon": "signal",
-    "description": "An associate of Jason's based in Vice City, described as more cautious and homebound than the people around him.",
-    "bio": "Cal operates out of Vice City proper, and everything about how he's been described so far — cautious, homebound, more comfortable behind a phone than in the middle of a job — marks him as the planner in Jason's circle rather than the muscle. Every GTA crew needs someone who stays back and keeps things running while everyone else is out taking risks; Cal reads like that role.\n\nThat caution isn't framed as weakness. In a world built around impulsive people making increasingly bad decisions, someone who thinks twice before answering a call tends to last longer than the ones who don't. Cal's value to Jason is likely less about firepower and more about information — knowing who's asking questions, who's owed money, and who's about to become a problem.\n\nHis homebound streak also suggests a character who's carved out something resembling a normal life in Vice City, which makes him an odd fit for the chaos Jason and Lucia are about to bring into it. Whether that stability survives contact with the rest of the story is very much an open question.\n\nFor now, Cal exists mostly at the edges of what's been shown — a name attached to Jason's past rather than a face given much screen time yet. That will likely change as more of the story comes into focus.",
-    "connections": ["jason-duval"]
+    "actor": "Bobby Moynihan",
+    "description": "Cal Hampton is Jason's beer-loving, conspiracy-believing friend in GTA 6, voiced by Bobby Moynihan. He works with Jason at the Boatworks and Marina in the Keys.",
+    "bio": "Cal believes every conspiracy he hears and never turns down a beer. He is no fighter, so he tends to sit out Brian's more dangerous jobs, but he is a loyal friend to Jason and works alongside him at the Boatworks and Marina in the Keys. He is happy where he is, and spends a lot of his time on internet forums.",
+    "connections": ["jason-duval", "brian-heder", "donnie"],
+    "faq": [
+      { "q": "Who voices Cal in GTA 6?", "a": "Bobby Moynihan, known from Saturday Night Live, plays Cal Hampton, according to IGN's GTA 6 character guide." },
+      { "q": "Who is Bobby Moynihan in GTA 6?", "a": "He plays Cal Hampton, Jason's conspiracy-minded friend and co-worker in the Keys." }
+    ],
+    "sources": [
+      { "name": "IGN: GTA 6 characters", "url": "https://www.ign.com/wikis/gta-6/GTA_6_Characters" },
+      { "name": "GTABase: Donnie", "url": "https://gtabase.com/gta-6/characters/donnie" }
+    ]
   },
   {
-    "slug": "boobie-ike",
-    "name": "Boobie Ike",
+    "slug": "mandy",
+    "name": "Mandy",
     "role": "Supporting",
-    "icon": "briefcase",
-    "description": "A well-known Vice City businessman with interests spanning real estate, nightlife, and a record label he runs alongside Dre'Quan Priest.",
-    "bio": "Boobie Ike is Vice City money with Vice City taste — the kind of local figure whose name is on a building downtown and a VIP rope at three different clubs, and who never seems to be short of either. Real estate gives him the legitimate face; nightlife gives him the reach; and neither one fully explains where the rest of his income actually comes from, which is exactly how he seems to like it.\n\nHis record label, run in partnership with Dre'Quan Priest, is the piece of his empire that gets talked about the most, and for good reason — a music label doubles as both a cultural foothold in the city and a very convenient way to move money and people around without too many questions being asked. That's not a new idea in the GTA universe, but Boobie Ike wears it especially well.\n\nThe partnership with Dre'Quan appears to be a genuine one rather than just a business arrangement of convenience — two men who each bring something the other doesn't, one supplying the capital and connections, the other supplying the ear for talent and the studio time. Together they've built enough of a name that Real Dimez signing with them is treated as a meaningful moment rather than a footnote.\n\nEverything about Boobie Ike suggests a man who has spent years learning exactly how far Vice City will let him go before it pushes back — and who is fully expecting, at some point in this story, to find out.",
-    "connections": ["dre-quan-priest"]
+    "icon": "star",
+    "actor": "Lexie Shoaibi",
+    "debut": "Pipework (Chapter 1)",
+    "description": "Mandy is the GTA 6 tenant Jason visits to collect Brian's rent in the Pipework mission. She is played by Lexie Shoaibi, who did both her voice and motion capture.",
+    "bio": "Mandy is one of Brian Heder's tenants. Early in Chapter 1, in the Pipework mission, Brian sends Jason to her place to collect rent she owes. Insider Gaming calls her a relatively minor character, but a scene with her went viral and made her one of the most searched-for characters after launch. She also has an optional Chapter 1 mission, Mandy's Dark Secret.",
+    "connections": ["brian-heder", "jason-duval"],
+    "faq": [
+      { "q": "Who plays Mandy in GTA 6?", "a": "Lexie Shoaibi. Insider Gaming says she is named as Mandy in the official cast list, and SVG reports she confirmed on Instagram on November 19 that she did both the voice and motion capture." },
+      { "q": "What mission is Mandy in GTA 6?", "a": "Pipework, an early Chapter 1 mission where Jason collects Mandy's rent for Brian. There is also an optional mission, Mandy's Dark Secret." },
+      { "q": "Who is Mandy in GTA 6?", "a": "One of Brian Heder's tenants who owes him rent. She is a minor character who became popular after a scene went viral." }
+    ],
+    "sources": [
+      { "name": "Insider Gaming: Who plays Mandy in GTA 6?", "url": "https://insider-gaming.com/who-plays-mandy-in-gta-6/" },
+      { "name": "SVG: Who plays Mandy in GTA 6?", "url": "https://www.svg.com/2322399/mandy-gta-6-actress-lexie-shoaibi/" },
+      { "name": "IGN: GTA 6 walkthrough", "url": "https://www.ign.com/wikis/gta-6/Walkthrough" }
+    ]
   },
   {
-    "slug": "dre-quan-priest",
-    "name": "Dre'Quan Priest",
+    "slug": "donnie",
+    "name": "Donnie",
     "role": "Supporting",
-    "icon": "music",
-    "description": "A music producer connected to Boobie Ike's record label, Only Raw Records, who signed the duo Real Dimez.",
-    "bio": "Dre'Quan Priest is the ears behind Only Raw Records, the label he runs alongside Boobie Ike — the one listening to demos, sitting in on sessions, and deciding who's actually worth the studio time versus who just talks a good game. In a city as saturated with aspiring artists as Vice City is shown to be, that instinct is worth more than the marketing budget.\n\nSigning Real Dimez appears to be his highest-profile move so far, and the fact that it's treated as a notable event within the story suggests Only Raw Records has enough of a reputation that its choices actually move the needle for an up-and-coming act's career. That's not a small thing to build from nothing in a city this competitive.\n\nHis partnership with Boobie Ike gives him the kind of backing most producers spend a decade trying to find — money, connections, and a business partner who isn't just in it for a vanity credit. Whether that partnership is as clean as it looks from the outside is a different question entirely, and one the story will likely spend more time on than the music itself.\n\nAs written so far, Dre'Quan reads less like a background industry figure and more like someone whose label is a genuine piece of Vice City's cultural landscape — the kind of name a local artist name-drops because it actually means something.",
-    "connections": ["boobie-ike", "real-dimez"]
-  },
-  {
-    "slug": "real-dimez",
-    "name": "Real Dimez",
-    "role": "Supporting",
-    "icon": "mic",
-    "description": "A two-person music duo, Bae-Luxe and Roxy, signed to Only Raw Records after building a following through their own tracks and social media presence.",
-    "bio": "Real Dimez are Bae-Luxe and Roxy, a duo who built their name the way most breakout acts do now — releasing their own material, building an audience online one post at a time, and getting loud enough that a label eventually had to notice. By the time Only Raw Records came calling, they'd already done the hard part themselves.\n\nThat independent streak is worth paying attention to. Acts who build a following before signing tend to walk into a partnership with more leverage and a clearer sense of their own identity than acts who get discovered cold — which suggests Real Dimez may have more say in their own direction than a typical up-and-comer would.\n\nSigning with Dre'Quan Priest and Boobie Ike's label puts them squarely inside Vice City's music-and-money ecosystem, for better or worse. It's a step up in resources and visibility, but it also means their success is now tangled up with a label whose backers have interests well beyond the music itself.\n\nTheir rise is also framed alongside other local names coming up in the same scene, DWNPLY among them — less a solo ascent than one part of a wider Vice City music moment the story seems to be building out in the background.",
-    "connections": ["dre-quan-priest", "dwnply"]
-  },
-  {
-    "slug": "raul-bautista",
-    "name": "Raul Bautista",
-    "role": "Supporting",
-    "icon": "mask",
-    "description": "An experienced crew leader who plans and organizes heists, known for taking on increasingly risky scores.",
-    "bio": "Raul Bautista is the guy you call when the job is too big to pull off with a handgun and a getaway car. As a crew leader who specializes in planning and organizing heists, he represents the more methodical, blueprint-and-timing side of Leonida's criminal underworld — the opposite of the impulsive street-level chaos the series is also known for.\n\nWhat stands out about how he's been described is the trajectory: increasingly risky scores, not a single big one. That's a pattern more than a personality trait, and it usually means one of two things in a story like this — either he's chasing something specific that keeps raising the stakes, or he's simply good enough that the safer jobs stopped being worth his time.\n\nHeists have been a central pillar of Grand Theft Auto's more ambitious entries for years now, from elaborate casino jobs to multi-stage scores requiring a full crew with different specialties. Raul reads like the character built to anchor that side of GTA6's structure — the planner other characters, possibly including Jason and Lucia, end up working with or around.\n\nHis reputation for pushing scores further each time also plants an obvious question the story hasn't answered yet: what happens the first time one of those increasingly risky jobs doesn't go according to plan.",
-    "connections": []
+    "icon": "boat",
+    "debut": "Gone Fishing (Chapter 1)",
+    "description": "Donnie is the GTA 6 pilot who flies drug runs for Brian Heder, dropping packages from his sea plane for Jason and Cal. Jason rescues him in Gone Fishing.",
+    "bio": "Donnie flies for Brian Heder's smuggling operation in the Leonida Keys, dropping packages from his sea plane for Jason and Cal to collect at sea. He is introduced in Gone Fishing, when Jason has to rescue him from the Kingfishers, and later gives Jason work such as Clean Up After Donnie.",
+    "connections": ["brian-heder", "jason-duval", "cal-hampton"],
+    "faq": [
+      { "q": "Who is Donnie in GTA 6?", "a": "A pilot who flies drug runs for Brian Heder, according to GTABase. Jason rescues him from the Kingfishers in Gone Fishing." },
+      { "q": "Who voices Donnie in GTA 6?", "a": "We haven't found a confirmed credit from a major outlet yet." }
+    ],
+    "sources": [
+      { "name": "GTABase: Donnie", "url": "https://gtabase.com/gta-6/characters/donnie" },
+      { "name": "IGN: GTA 6 walkthrough", "url": "https://www.ign.com/wikis/gta-6/Walkthrough" }
+    ]
   },
   {
     "slug": "brian-heder",
     "name": "Brian Heder",
     "role": "Supporting",
     "icon": "boat",
-    "description": "A longtime smuggler operating out of the Keys, who lets Jason stay at one of his properties in exchange for help with local jobs.",
-    "bio": "Brian Heder has spent long enough running things through the Leonida Keys that he no longer thinks of it as smuggling so much as just business — boats going out light and coming back heavy, routes that avoid the wrong kind of attention, and a network built up over years of not getting caught. The Keys' maze of islands and open water make it exactly the kind of geography that a career like his depends on.\n\nHis arrangement with Jason is practical rather than sentimental: a place to stay in exchange for help with the jobs Brian needs done locally. It's the classic GTA housing situation — free rent always comes with strings attached — and it keeps Jason tied to the Keys even as the story presumably pulls him toward Vice City and Lucia.\n\nThe boat yard itself functions as both his cover and his actual operation, the kind of place that looks like routine maintenance and repair work to anyone glancing in from the road. It's also, notably, where his home life intersects with his business — his wife Lori is connected to the same operation, which suggests it's as much a family concern as a criminal one.\n\nBrian's role in the story is likely more supporting infrastructure than main plot — the guy who keeps the Keys chapter of Jason's life running in the background while the bigger story plays out elsewhere.",
-    "connections": ["jason-duval", "lori"]
+    "actor": "Stephen Root",
+    "description": "Brian Heder is the old-school Keys drug runner Jason works for in GTA 6, voiced by Stephen Root. He lets Jason live rent-free in return for shakedowns.",
+    "bio": "Brian has been smuggling through the Keys since before the cartels and the drug war changed the business. He still moves product through his boat yard with his third wife, Lori, and these days lets others do the dirty work. Jason lives rent-free in one of his properties as long as he helps with local shakedowns, which is how missions like Lab Fees and Pipework begin.",
+    "connections": ["jason-duval", "lori", "donnie", "mandy"],
+    "faq": [
+      { "q": "Who voices Brian in GTA 6?", "a": "Stephen Root plays Brian Heder, according to IGN's GTA 6 character guide." },
+      { "q": "What is the code to Brian's lockup in GTA 6?", "a": "7700, according to GTABase, PowerPyx and Beebom. See our GTA 6 safe and door codes guide." }
+    ],
+    "sources": [
+      { "name": "IGN: GTA 6 characters", "url": "https://www.ign.com/wikis/gta-6/GTA_6_Characters" },
+      { "name": "GTABase: Lab Fees", "url": "https://www.gtabase.com/gta-6/missions/lab-fees" }
+    ]
   },
   {
     "slug": "lori",
-    "name": "Lori",
-    "role": "Mentioned",
+    "name": "Lori Heder",
+    "role": "Supporting",
     "icon": "boat",
-    "description": "Brian Heder's wife, mentioned in connection with his boat yard operation in the Keys.",
-    "bio": "Lori hasn't been given much screen time so far, but her connection to Brian Heder's boat yard operation says something about the shape of his life in the Keys — this isn't framed as a lone-wolf smuggling setup, it's a family business, or close enough to one that the two are hard to separate.\n\nHow involved she actually is in the day-to-day running of things is still unclear. She could be entirely removed from that side of it, or she could be more hands-on than a first mention suggests — GTA's supporting cast has a long history of quiet, background characters turning out to matter more once the story gets moving.\n\nEither way, her presence adds a layer of domestic texture to Brian's corner of the world that the trailers haven't spent much time on elsewhere. The Keys chapter of the story reads less like a criminal outpost and more like a place people actually live, work, and are married in — which fits Leonida's overall approach of grounding its criminal world in ordinary-looking lives.",
-    "connections": ["brian-heder"]
+    "actor": "Orlagh Cassidy",
+    "description": "Lori Heder is Brian Heder's wife in GTA 6, voiced by Orlagh Cassidy: warm and motherly, and never far from the gun range or her custom carbine.",
+    "bio": "Lori is Brian's wife. She spends her days at the gun range and her nights with Brian in the cabana bars of the Keys. She is warm and maternal, the type to offer you a snack right after she finishes reloading her custom carbine, and she makes the sangria Brian expects Jason to stop by for.",
+    "connections": ["brian-heder", "jason-duval"],
+    "faq": [
+      { "q": "Who voices Lori in GTA 6?", "a": "Orlagh Cassidy plays Lori Heder, according to IGN's GTA 6 character guide." }
+    ],
+    "sources": [{ "name": "IGN: GTA 6 characters", "url": "https://www.ign.com/wikis/gta-6/GTA_6_Characters" }]
+  },
+  {
+    "slug": "andy",
+    "name": "Andy",
+    "role": "Supporting",
+    "icon": "star",
+    "actor": "Mallory Wu",
+    "description": "Andy is Lucia's ride-or-die best friend in GTA 6, voiced by Mallory Wu: a party girl and hustler ready to quit her waitressing job in the Keys for something bigger.",
+    "bio": "Andy is Lucia's best friend: a party girl and hustler who says yes to bad ideas before thinking them through. She is also smart and energetic, and she is turning away from her dead-end waitressing job in the Keys toward whatever opportunity comes next.",
+    "connections": ["lucia-caminos"],
+    "faq": [
+      { "q": "Who voices Andy in GTA 6?", "a": "Mallory Wu plays Andy, according to IGN's GTA 6 character guide." }
+    ],
+    "sources": [{ "name": "IGN: GTA 6 characters", "url": "https://www.ign.com/wikis/gta-6/GTA_6_Characters" }]
+  },
+  {
+    "slug": "vicki-wallis",
+    "name": "Vicki Wallis",
+    "role": "Supporting",
+    "icon": "music",
+    "actor": "Taryn Manning",
+    "description": "Vicki Wallis is a dancer and bartender at Delights Cabaret in Port Gellhorn in GTA 6, voiced by Taryn Manning, trying to build a better life for her kid, Jordy.",
+    "bio": "Vicki dances and tends bar at Delights Cabaret in Port Gellhorn. She is a good person stuck in a bad situation: she has beaten the worst of her habits and will do whatever it takes to get out of that life, for her son Jordy if not for herself.",
+    "connections": ["dunk", "moses-watkins"],
+    "faq": [
+      { "q": "Who voices Vicki in GTA 6?", "a": "Taryn Manning plays Vicki Wallis, according to IGN's GTA 6 character guide." },
+      { "q": "Where does Vicki work in GTA 6?", "a": "Delights Cabaret in Port Gellhorn, as a dancer and bartender." }
+    ],
+    "sources": [{ "name": "IGN: GTA 6 characters", "url": "https://www.ign.com/wikis/gta-6/GTA_6_Characters" }]
+  },
+  {
+    "slug": "moses-watkins",
+    "name": "Moses Watkins",
+    "role": "Supporting",
+    "icon": "briefcase",
+    "actor": "Aaron Morton",
+    "debut": "Moses (Chapter 2)",
+    "description": "Moses Watkins is the ex-con who runs a Port Gellhorn chop shop in GTA 6, voiced by Aaron Morton. You register your first car with him, which unlocks the Scooter Bros app.",
+    "bio": "Moses is an ex-con running a chop shop in Port Gellhorn, with no intention of going back to prison. He only deals with people he knows and trusts: intimidating, but honest and capable. Early in Chapter 2 you register your first vehicle with him, which also introduces the Scooter Bros app for retrieving and repairing your cars.",
+    "connections": ["vicki-wallis", "wyman"],
+    "faq": [
+      { "q": "Who voices Moses in GTA 6?", "a": "Aaron Morton plays Moses Watkins, according to IGN's GTA 6 character guide." },
+      { "q": "How do you register a car in GTA 6?", "a": "IGN says you register your first vehicle with Moses early in Chapter 2, which also unlocks the Scooter Bros app." }
+    ],
+    "sources": [
+      { "name": "IGN: GTA 6 characters", "url": "https://www.ign.com/wikis/gta-6/GTA_6_Characters" },
+      { "name": "IGN: How to get car from impound", "url": "https://www.ign.com/wikis/gta-6/How_to_Get_Car_From_Impound" }
+    ]
+  },
+  {
+    "slug": "wyman",
+    "name": "Wyman",
+    "role": "Supporting",
+    "icon": "signal",
+    "actor": "David Stishan",
+    "description": "Wyman is GTA 6's off-grid, anti-everything car obsessive, voiced by David Stishan, who knows almost everything there is to know about combustion engines.",
+    "bio": "Wyman lives off the grid and is against the government, corporations and nearly everything else, except cars. He knows just about everything there is to know about internal combustion engines. Other people call him a wackjob; he calls himself Wyman. IGN has a separate guide to Wyman's Cars, an Ultimate Edition extra.",
+    "connections": ["moses-watkins"],
+    "faq": [
+      { "q": "Who voices Wyman in GTA 6?", "a": "David Stishan plays Wyman, according to IGN's GTA 6 character guide." }
+    ],
+    "sources": [
+      { "name": "IGN: GTA 6 characters", "url": "https://www.ign.com/wikis/gta-6/GTA_6_Characters" },
+      { "name": "IGN: Wyman's Cars", "url": "https://www.ign.com/wikis/gta-6/Wyman%27s_Cars_(Ultimate_Edition_Exclusive)" }
+    ]
+  },
+  {
+    "slug": "dunk",
+    "name": "Dunk",
+    "role": "Supporting",
+    "icon": "mask",
+    "actor": "Brad Fleischer",
+    "description": "Dunk is one of Port Gellhorn's forgotten citizens in GTA 6, voiced by Brad Fleischer: a pill addict with a heart of gold who still has some fight left.",
+    "bio": "Dunk got hooked through Port Gellhorn's unregulated pain clinics, which police later shut down and street dealers replaced. He scrapes by at the bottom of society while managing a pill addiction, but he hasn't given up: a junkie with a heart of gold who still has some fight in him.",
+    "connections": ["vicki-wallis"],
+    "faq": [
+      { "q": "Who voices Dunk in GTA 6?", "a": "Brad Fleischer plays Dunk, according to IGN's GTA 6 character guide." }
+    ],
+    "sources": [{ "name": "IGN: GTA 6 characters", "url": "https://www.ign.com/wikis/gta-6/GTA_6_Characters" }]
+  },
+  {
+    "slug": "boobie-ike",
+    "name": "Boobie Ike",
+    "role": "Supporting",
+    "icon": "briefcase",
+    "description": "Boobie Ike is one of Vice City's big players in GTA 6: a businessman whose strip club and studio are linked to music mogul Dre'Quan Priest.",
+    "bio": "Boobie is one of Vice City's big players. PC Gamer notes his official bio hints that he started out as a petty criminal and may not have left that behind, summed up by his line that the club money pays for the studio and the drug money pays for it all. He is connected to Dre'Quan Priest, who books gigs at Boobie's strip club and gets investment from him.",
+    "connections": ["dre-quan-priest", "real-dimez"],
+    "faq": [
+      { "q": "Who is Boobie Ike in GTA 6?", "a": "A Vice City businessman with a strip club and a stake in Dre'Quan Priest's music label, according to PC Gamer's summary of his official bio." }
+    ],
+    "sources": [{ "name": "PC Gamer: GTA 6 characters", "url": "https://pcgamer.com/games/action/grand-theft-auto/gta6-characters" }]
+  },
+  {
+    "slug": "dre-quan-priest",
+    "name": "Dre'Quan Priest",
+    "role": "Supporting",
+    "icon": "music",
+    "description": "Dre'Quan Priest runs Only Raw Records in GTA 6: more hustler than gangster, he signed rap duo Real Dimez with investment from Boobie Ike.",
+    "bio": "Dre'Quan's official bio, as PC Gamer reports it, calls him more of a hustler than a gangster: he dealt drugs mostly to pay the bills while chasing a music career. He now runs his own label, Only Raw Records, has signed Real Dimez, and books gigs at Boobie Ike's strip club in return for Boobie's investment.",
+    "connections": ["boobie-ike", "real-dimez"],
+    "faq": [
+      { "q": "What label does Dre'Quan run in GTA 6?", "a": "Only Raw Records, which signed the rap duo Real Dimez (PC Gamer)." }
+    ],
+    "sources": [{ "name": "PC Gamer: GTA 6 characters", "url": "https://pcgamer.com/games/action/grand-theft-auto/gta6-characters" }]
+  },
+  {
+    "slug": "real-dimez",
+    "name": "Real Dimez",
+    "role": "Supporting",
+    "icon": "mic",
+    "description": "Real Dimez are GTA 6's rap duo, Roxy and Bae-Luxe: high-school friends signed to Dre'Quan Priest's Only Raw Records and chasing their next hit.",
+    "bio": "Roxy and Bae-Luxe have been friends since high school and make up the rap duo Real Dimez. They are now signed to Dre'Quan's Only Raw Records, hoping for another hit. Their official bio says they turn shaking down local dealers into cash through rap tracks and a relentless social media presence.",
+    "connections": ["dre-quan-priest", "boobie-ike", "dwnply"],
+    "faq": [
+      { "q": "Who are Real Dimez in GTA 6?", "a": "A rap duo made up of Roxy and Bae-Luxe, signed to Dre'Quan Priest's Only Raw Records (PC Gamer)." }
+    ],
+    "sources": [{ "name": "PC Gamer: GTA 6 characters", "url": "https://pcgamer.com/games/action/grand-theft-auto/gta6-characters" }]
+  },
+  {
+    "slug": "raul-bautista",
+    "name": "Raul Bautista",
+    "role": "Supporting",
+    "icon": "mask",
+    "description": "Raul Bautista is GTA 6's seasoned bank robber, always looking for new talent, though his experience doesn't make his heists any safer.",
+    "bio": "Raul's official bio describes him as a seasoned bank robber who is always on the hunt for talent. As PC Gamer points out, all that experience doesn't seem to make his scores any less dangerous.",
+    "connections": [],
+    "faq": [
+      { "q": "Who is Raul in GTA 6?", "a": "A veteran bank robber recruiting talent for increasingly risky heists, according to his official bio as reported by PC Gamer." }
+    ],
+    "sources": [{ "name": "PC Gamer: GTA 6 characters", "url": "https://pcgamer.com/games/action/grand-theft-auto/gta6-characters" }]
   },
   {
     "slug": "dwnply",
     "name": "DWNPLY",
     "role": "Mentioned",
     "icon": "music",
-    "description": "A local rapper referenced as part of Real Dimez's early rise in the Vice City music scene.",
-    "bio": "DWNPLY is one of the names tied to Real Dimez's early days coming up in Vice City, part of the same grassroots scene that eventually produced a duo big enough to catch Only Raw Records' attention. Exactly how direct that connection is — collaborator, peer, rival, or just someone who shared a stage early on — hasn't been spelled out yet.\n\nWhat the mention does confirm is that Rockstar is building out a music scene with actual depth to it rather than a single act existing in isolation. Vice City's in-game culture has always leaned heavily on music, and having named artists referencing each other's rise suggests the same layered approach extends into the story's supporting cast this time.\n\nFor now, DWNPLY functions more as scene-setting than a character in their own right — a thread that ties Real Dimez's backstory to a wider, more lived-in version of Vice City's music world. Whether that thread gets pulled on further once the game is out remains to be seen.",
-    "connections": ["real-dimez"]
+    "description": "DWNPLY is a local rapper referenced alongside Real Dimez's early rise in GTA 6's Vice City music scene.",
+    "bio": "DWNPLY is a rapper referenced in connection with Real Dimez's early rise in the Vice City music scene. We'll add more once major outlets cover the character's role in the released game.",
+    "connections": ["real-dimez"],
+    "noindex": true,
+    "faq": [],
+    "sources": []
   }
 ]

@@ -20,7 +20,7 @@
     "name": "Grassrivers",
     "kind": "Wetlands",
     "icon": "wetlands",
-    "description": "An inland wetlands region of swamps and waterways, sparsely populated outside of a few small towns.",
+    "description": "Grassrivers is the inland wetlands region of Leonida in GTA 6: swamps and waterways, sparsely populated outside a few small towns, away from the coast and Vice City.",
     "bio": "Grassrivers is Leonida's wetlands interior, a stretch of swamp and waterway that trades Vice City's density for something a lot quieter and considerably harder to navigate on foot. It's the kind of terrain that rewards knowing the back routes and punishes anyone who doesn't.\n\nOutside of a handful of small towns, the region is sparsely populated, and that emptiness is doing a lot of the atmospheric work — long stretches of reeds and slow water instead of skyline, the sense that help is a long way off if something goes wrong out here. It's a deliberate tonal break from the neon of Vice City.\n\nSparse population in a GTA map has historically meant one thing gameplay-wise: fewer witnesses, fewer cops, and more room for things to happen that wouldn't survive city streets. Grassrivers reads like the kind of place a smart character goes when they need to disappear for a while, or when a job requires more privacy than downtown can offer.\n\nIt also sets up a strong visual and emotional contrast with the rest of the map — after the saturation of Vice City, Grassrivers' muted greens and slow water function almost as a palette cleanser between the louder set pieces elsewhere in Leonida."
   },
   {
@@ -28,7 +28,7 @@
     "name": "Port Gellhorn",
     "kind": "Coastal Town",
     "icon": "motel",
-    "description": "A faded coastal town on Leonida's less prosperous shoreline, past its tourism prime.",
+    "description": "Port Gellhorn is a faded coastal town in Kelly County, Leonida. In GTA 6 it's home to Delights Cabaret, Moses Watkins' chop shop, Kingpin Bowling and Brooks Boatworks.",
     "bio": "Port Gellhorn sits on the part of Leonida's coastline that tourism forgot — a town that clearly had its moment decades ago and has been quietly fading ever since. Peeling motel signs, half-empty boardwalks, and the general sense of a place running on momentum rather than money define its look so far.\n\nThat faded quality gives it a different texture than either Vice City's glitz or the Keys' vacation-brochure appeal. Port Gellhorn reads as working-class Leonida, the kind of town that real people actually grew up in rather than the version built for postcards, and it's exactly the sort of setting GTA has always used to ground its more outlandish stories in something believable.\n\nA town like this typically exists in these games as connective tissue — a place characters pass through, hide out in, or do a small job in on the way to somewhere bigger — rather than a central hub. Expect it to carry more narrative and side-content weight than its size on the map would suggest.\n\nThere's also an obvious opportunity for exactly the kind of local color GTA has always excelled at: a town past its prime is a town full of people looking for one more score to turn things around, which tends to make for some of the most memorable side characters in any given entry."
   },
   {
@@ -36,7 +36,7 @@
     "name": "Ambrosia",
     "kind": "Farmland",
     "icon": "farmland",
-    "description": "An inland agricultural and industrial area built around large-scale farming operations.",
+    "description": "Ambrosia is an inland farming and industrial area of Leonida in GTA 6, built around large-scale agriculture. It's where Jason Duval grew up before joining the Army.",
     "bio": "Ambrosia is Leonida's agricultural backbone, a stretch of inland farmland built around the kind of large-scale operations that look more like industrial facilities than the family farms the name might suggest. Silos, processing plants, and long straight roads cutting through open fields define the region's look.\n\nThat industrial scale matters. Big agriculture in a GTA map has always doubled as fertile ground — pun very much intended — for corporate corruption, labor exploitation, and the kind of storylines that let the series poke at real-world issues through a satirical lens. Ambrosia looks built for exactly that kind of subplot.\n\nIt's also a sharp visual departure from everywhere else revealed so far: no coastline, no neon, no water — just flat open land and machinery. That makes it valuable purely as a change of pace, both visually and in terms of the kind of missions and vehicles it's likely to support, from crop dusters to heavy farm equipment repurposed for less agricultural uses.\n\nExpect Ambrosia to function as one of the map's quieter, more rural stretches — long drives, wide-open sightlines, and the sense that whatever trouble finds you out here, you're a long way from the nearest police response."
   },
   {
@@ -44,7 +44,7 @@
     "name": "Mount Kalaga",
     "kind": "Mountain Region",
     "icon": "mountain",
-    "description": "A rural, mountainous area near Leonida's northern border, known for backwoods terrain.",
+    "description": "Mount Kalaga is a rural, mountainous area near Leonida's northern border in GTA 6, known for its backwoods terrain and far from the coastal cities of Vice City and the Keys.",
     "bio": "Mount Kalaga anchors the northern edge of the map, a mountainous, heavily wooded region that's about as far from Vice City's skyline as Leonida gets, both geographically and in tone. It's rural in the specific way GTA likes to portray rural — backwoods terrain, isolated properties, and a landscape that suggests a very different way of life than anything happening on the coast.\n\nSeries history is a useful guide here. Mountainous, sparsely policed terrain has consistently been where GTA puts its more remote hideouts, its stranger side characters, and its highest-elevation vantage points for the map — the kind of place a story sends someone when they need to lie low, or when the plot needs a dramatic overlook shot.\n\nThe terrain itself is likely to shape how it plays as much as how it looks: winding elevation changes, dense tree cover, and roads that presumably thin out into dirt tracks the further from civilization you get. That's a meaningfully different driving and traversal experience than the flat grid of a city.\n\nBeing positioned at Leonida's northern border also gives Mount Kalaga a natural role as the edge of the map narratively as well as geographically — the place where the state's usual rules feel like they apply a little less, for characters and players alike."
   }
 ]
