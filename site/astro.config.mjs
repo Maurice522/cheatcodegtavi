@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
@@ -7,6 +7,14 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://cheatcodegtavi.com',
+
+  // Self-hosted at build time with metric-matched fallbacks: no render-blocking
+  // Google Fonts request and no layout shift when the web fonts swap in.
+  fonts: [
+    { provider: fontProviders.google(), name: 'Anton', cssVariable: '--font-anton', weights: [400], subsets: ['latin'], fallbacks: ['Archivo Black', 'sans-serif'] },
+    { provider: fontProviders.google(), name: 'Manrope', cssVariable: '--font-manrope', weights: [600, 700, 800], subsets: ['latin'], fallbacks: ['system-ui', 'sans-serif'] },
+    { provider: fontProviders.google(), name: 'Inter', cssVariable: '--font-inter', weights: [400, 500], subsets: ['latin'], fallbacks: ['system-ui', 'sans-serif'] },
+  ],
 
   integrations: [
     sitemap({

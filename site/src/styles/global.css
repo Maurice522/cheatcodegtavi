@@ -56,9 +56,9 @@
   --color-text-on-accent: var(--color-ink-950);
 
   /* ---- Fonts ---- */
-  --font-display: "Anton", "Archivo Black", sans-serif;
-  --font-heading: "Manrope", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, sans-serif;
+  --font-display: var(--font-anton);
+  --font-heading: var(--font-manrope);
+  --font-body: var(--font-inter);
 
   /* ---- Radius ---- */
   --radius-sm: 6px;
