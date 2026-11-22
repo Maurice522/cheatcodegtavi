@@ -9,20 +9,20 @@ const steps = [
 ];
 ---
 
-<section aria-labelledby="activate-heading" class="w-full max-w-3xl">
-  <h2 id="activate-heading" class="text-label mb-4 text-text-primary [text-shadow:0_1px_6px_rgb(0_0_0_/_0.9)]">How to activate cheats in GTA 6</h2>
-  <ol class="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+<section aria-labelledby="activate-heading" class="w-full max-w-5xl">
+  <h2 id="activate-heading" class="text-heading-md mb-5 text-2xl text-text-primary [text-shadow:0_2px_8px_rgb(0_0_0_/_0.9)] sm:text-3xl">How to activate cheats in GTA 6</h2>
+  <ol class="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-5">
     {
       steps.map((s) => (
-        <li class="shadow-glow-pink flex flex-col items-center gap-1.5 rounded-xl border border-border-default bg-bg-elevated/90 px-3 py-4 text-center">
-          <span class="text-display-md flex h-9 w-9 items-center justify-center rounded-full bg-accent-primary/15 text-lg text-accent-primary" aria-hidden="true">{s.n}</span>
-          <span class="text-body-sm font-semibold text-text-primary">{s.title}</span>
-          <span class="text-caption text-text-secondary">{s.text}</span>
+        <li class="shadow-glow-pink flex flex-col items-center gap-2 rounded-2xl border border-border-default bg-bg-elevated px-3 py-5 text-center sm:px-5 sm:py-6">
+          <span class="text-display-md flex h-12 w-12 items-center justify-center rounded-full bg-accent-primary/20 text-2xl text-accent-primary" aria-hidden="true">{s.n}</span>
+          <span class="text-heading-sm text-lg font-semibold text-text-primary sm:text-xl">{s.title}</span>
+          <span class="text-body-md text-base leading-snug text-text-primary/85">{s.text}</span>
         </li>
       ))
     }
   </ol>
-  <p class="text-caption mt-3 text-text-secondary [text-shadow:0_1px_6px_rgb(0_0_0_/_0.9)]">
-    Save first: a cheat turns off saving and trophies for that session. <a href="/cheats/gta-6/how-to-activate-cheats/" class="text-accent-secondary hover:underline">Full guide</a> · <a href="/cheats/gta-6/tracker/" class="text-accent-secondary hover:underline">Track your unlocks</a>
+  <p class="text-body-md mx-auto mt-5 w-fit max-w-full rounded-xl border border-border-default bg-bg-elevated px-5 py-3 text-base text-text-primary">
+    <strong>Save first:</strong> a cheat turns off saving and trophies for that session. <a href="/cheats/gta-6/how-to-activate-cheats/" class="font-semibold text-accent-secondary hover:underline">Full guide</a> · <a href="/cheats/gta-6/tracker/" class="font-semibold text-accent-secondary hover:underline">Track your unlocks</a>
   </p>
 </section>
