@@ -85,3 +85,31 @@ export function reportedBy(cheat: Gta6Cheat): string {
 }
 
 export const gta6CheatPath = (slug: string) => `/cheats/gta-6/${slug}/`;
+
+// What people type instead of the official cheat name ("gta 6 money cheat").
+// Used in titles, descriptions, the answer sentence and FAQ so each cheat page
+// matches those searches. Keyed by slug; unknown cheats just get none.
+const SEARCH_ALIASES: Record<string, string[]> = {
+  '250-000': ['money cheat', 'infinite money cheat'],
+  'raise-heat-level': ['wanted level cheat', 'heat level cheat'],
+  'max-ammo': ['ammo cheat', 'full ammo cheat'],
+  'unlimited-focus': ['infinite focus cheat'],
+  'mtl-pumper': ['MTL Pumper spawn cheat', 'vehicle spawn cheat'],
+  'dollhouse': ['screen filter cheat'],
+  'exploding-balls': ['explosive balls cheat'],
+};
+
+export function searchAliases(slug: string): string[] {
+  return SEARCH_ALIASES[slug] ?? [];
+}
+
+/** "Instantly gives you $250,000." — capitalised, exactly one trailing period. */
+export function effectSentence(effect: string | null | undefined): string {
+  const e = (effect ?? '').trim().replace(/\.+$/, '');
+  return e ? `${e.charAt(0).toUpperCase()}${e.slice(1)}.` : '';
+}
+
+/** Unlock requirement without a trailing period, for use mid-sentence. */
+export function unlockClause(unlock: string | null | undefined): string {
+  return (unlock ?? '').trim().replace(/\.+$/, '');
+}

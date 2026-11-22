@@ -11,7 +11,8 @@ const cheats = await getReportedGta6Cheats();
 const money = cheats.find((c) => c.slug === '250-000');
 const SITE = 'https://cheatcodegtavi.com';
 const url = `${SITE}/cheats/gta-6/how-to-activate-cheats/`;
-const updated = new Date().toISOString().slice(0, 10);
+// Bump by hand when the guide's facts change, not on every scheduled rebuild.
+const updated = '2026-11-22';
 
 const SOURCES = [
   { name: 'Eurogamer', url: 'https://www.eurogamer.net/all-gta-6-cheats' },
@@ -24,28 +25,28 @@ const answer =
   'To activate a cheat in GTA 6, first finish the main story and unlock that cheat by meeting its requirement. Then press Up on the D-pad to open your phone, hold L1 and R1 on PS5 (LB and RB on Xbox Series X|S), and enter the cheat\'s D-pad code. Using a cheat turns off saving and trophies or achievements for that session.';
 
 const steps = [
-  { name: 'Finish the main story', text: 'Cheats stay locked until you complete the campaign (91 story missions). After the ending, a new Cheats option appears at the end of the Progress menu.' },
+  { name: 'Finish the main story', text: 'Cheats stay locked until you complete the campaign, which Rock Paper Shotgun counts as 91 story missions. After the ending, Eurogamer reports a new Cheats option at the end of the Progress menu.' },
   { name: 'Unlock the cheat you want', text: 'Every cheat has its own unlock requirement, such as making $250,000 from fenced goods or winning shooting range medals. Meeting it reveals that cheat\'s button code in the Progress menu. Progress made before the ending counts.' },
   { name: 'Save your game', text: 'Using any cheat disables saving for the rest of that session, so save first.' },
   { name: 'Open your phone', text: 'Press Up on the D-pad to take out your phone.' },
-  { name: 'Hold the shoulder buttons', text: 'Hold L1 and R1 on PS5, or LB and RB on Xbox Series X|S.' },
+  { name: 'Hold the shoulder buttons', text: 'Hold L1 and R1 on PS5, or LB and RB on Xbox Series X|S (as reported by Radio Times).' },
   { name: 'Enter the D-pad code', text: `Press the cheat's D-pad sequence quickly, for example ${money?.ps5?.join(', ') ?? 'Up, Right, Down, Left, Up, Left, Down, Right'} for $250,000.` },
 ];
 
 const faq = [
   { q: 'How do you activate cheats in GTA 6?', a: answer },
   { q: 'How do I enter cheat codes in GTA 6 on PS5?', a: 'Press Up on the D-pad to open your phone, hold L1 and R1, then press the cheat\'s D-pad code. The cheat must already be unlocked, which needs the main story finished first.' },
-  { q: 'How do I enter cheats in GTA 6 on Xbox Series X|S?', a: 'The same way as on PS5, with LB and RB instead of L1 and R1: open your phone with Up on the D-pad, hold LB and RB, then enter the D-pad code. The codes are the same on both consoles because they only use the D-pad.' },
-  { q: 'Why are my GTA 6 cheats not working?', a: 'Usually one of four reasons: you haven\'t finished the main story yet, you haven\'t met that cheat\'s own unlock requirement, you aren\'t holding both shoulder buttons (L1 + R1 or LB + RB) while entering the code, or you entered the D-pad sequence too slowly or in the wrong order. GTA 5 codes also don\'t work in GTA 6.' },
+  { q: 'How do I enter cheats in GTA 6 on Xbox Series X|S?', a: 'The same way as on PS5, with LB and RB instead of L1 and R1: open your phone with Up on the D-pad, hold LB and RB, then enter the D-pad code (Radio Times). Rock Paper Shotgun reports the codes are the same on both consoles because they only use the D-pad.' },
+  { q: 'Why are my GTA 6 cheats not working?', a: 'Usually one of four reasons: you haven\'t finished the main story yet, you haven\'t met that cheat\'s own unlock requirement, you aren\'t holding both shoulder buttons (L1 + R1 or LB + RB) while entering the code, or you entered the D-pad sequence too slowly or in the wrong order. Rock Paper Shotgun also reports that GTA 5 codes don\'t work in GTA 6.' },
   { q: 'How do I unlock cheats in GTA 6?', a: 'Finish the main story to unlock cheats in general, then meet each cheat\'s requirement to unlock that specific cheat. Requirements include fencing $250,000 of goods, losing a 3-star wanted level 25 times, or completing 50 stunt jumps. Our unlock tracker lists them.' },
-  { q: 'Where is the cheats menu in GTA 6?', a: 'After you finish the main story, a Cheats option appears at the end of the Progress menu. It lists every cheat and what it does, and shows a cheat\'s button code once you\'ve unlocked it.' },
+  { q: 'Where is the cheats menu in GTA 6?', a: 'According to Eurogamer, after you finish the main story a Cheats option appears at the end of the Progress menu. It lists every cheat and what it does, and shows a cheat\'s button code once you\'ve unlocked it.' },
   { q: 'Can you use cheats in GTA 6 before finishing the story?', a: 'No. Unlike GTA 5, where cheats worked from the start, GTA 6 cheats only work after you complete the main story.' },
-  { q: 'Do cheats disable trophies or achievements in GTA 6?', a: 'Yes, but only for the current session. Using any cheat stops you earning trophies on PS5 or achievements on Xbox until you reload an earlier save.' },
+  { q: 'Do cheats disable trophies or achievements in GTA 6?', a: 'Yes, but only for the current session. Rock Paper Shotgun reports that using any cheat stops you earning trophies on PS5 or achievements on Xbox, and that reloading an earlier save enables them again.' },
   { q: 'Can you save after using cheats in GTA 6?', a: 'No. Using a cheat disables saving for that session, so anything you do afterwards, including missions and money, is lost when you reload. Save before you cheat.' },
-  { q: 'How do you turn off cheats in GTA 6?', a: 'Reload your last save. Cheats only last for the session you used them in, and reloading an earlier save also brings back saving and trophies or achievements.' },
-  { q: 'Is there a money cheat in GTA 6?', a: `Yes. The $250,000 cheat (${money?.ps5?.join(', ') ?? 'Up, Right, Down, Left, Up, Left, Down, Right'}) gives you $250,000 and can be repeated, but because cheats disable saving, you can't keep the money. It unlocks after you make $250,000 from fenced goods.` },
-  { q: 'Do GTA 5 cheat codes work in GTA 6?', a: 'No. GTA 6 has its own set of cheat codes, and they are entered on the phone while holding the shoulder buttons. GTA 5 button combos and 1-999 phone numbers don\'t do anything in GTA 6.' },
-  { q: 'Are there phone number cheats in GTA 6?', a: 'No. GTA 6 cheats are D-pad codes entered on the phone while holding the shoulder buttons. The 1-999 phone numbers are GTA 5 cheats.' },
+  { q: 'How do you turn off cheats in GTA 6?', a: 'Outlets haven\'t reported an off switch. Rock Paper Shotgun says cheats only affect your current session, and that afterwards you rewind to your last save, which also brings back trophies and achievements.' },
+  { q: 'Is there a money cheat in GTA 6?', a: `Yes. Rock Paper Shotgun reports that the $250,000 cheat (${money?.ps5?.join(', ') ?? 'Up, Right, Down, Left, Up, Left, Down, Right'}) gives you $250,000 and can be repeated, but because cheats disable saving, you can't keep the money. It unlocks after you make $250,000 from fenced goods.` },
+  { q: 'Do GTA 5 cheat codes work in GTA 6?', a: 'No, according to Rock Paper Shotgun: GTA 6 has its own set of cheat codes, and GTA 5 button combos won\'t do anything. GTA 6 codes are entered on the phone while holding the shoulder buttons.' },
+  { q: 'Are there phone number cheats in GTA 6?', a: 'None have been reported. Every GTA 6 cheat listed by outlets is a D-pad code entered on the phone while holding the shoulder buttons. The 1-999 phone numbers are GTA 5 cheats.' },
   { q: 'Do GTA 6 cheats work in GTA Online?', a: 'Outlets expect not. Cheat codes have never worked in GTA Online sessions, and we\'ll update this when Rockstar confirms how GTA 6\'s online mode handles them.' },
   { q: 'Are there GTA 6 cheats for PC or PS4?', a: 'Not yet. GTA 6 is only out on PS5 and Xbox Series X|S. There is no PC release date, and there is no PS4 or Xbox One version.' },
   { q: 'How many cheats are in GTA 6?', a: `About 61 cheats in five groups: Player, Combat, Spawn Vehicle, Environment and Screen Filters. ${cheats.length} are confirmed on this site by at least two major outlets.` },
@@ -97,14 +98,14 @@ const faq = [
         <li><strong class="text-text-primary">Cheat not unlocked.</strong> Each cheat needs its own requirement. Check the Cheats option in the Progress menu, or our <a href="/cheats/gta-6/tracker/" class="text-accent-secondary hover:underline">unlock tracker</a>.</li>
         <li><strong class="text-text-primary">Not holding both shoulder buttons.</strong> Keep L1 + R1 (LB + RB) held for the whole code, with the phone open.</li>
         <li><strong class="text-text-primary">Wrong or slow input.</strong> Enter the D-pad sequence quickly and in order.</li>
-        <li><strong class="text-text-primary">Using a GTA 5 code.</strong> GTA 5 button combos and phone numbers don't work in GTA 6.</li>
+        <li><strong class="text-text-primary">Using a GTA 5 code.</strong> GTA 6 has its own codes; Rock Paper Shotgun reports GTA 5 combos don't do anything.</li>
       </ul>
     </section>
 
     <section class="mt-12">
       <h2 class="text-heading-md text-text-primary">Cheats, saving and trophies</h2>
       <p class="text-body-md mt-4 text-text-secondary">
-        Using any cheat disables saving and stops you earning trophies (PS5) or achievements (Xbox) for the rest of that session. To turn cheats off, reload your last save: that also brings saving and trophies back. Money from the $250,000 cheat can't be kept for the same reason.
+        Using any cheat disables saving and stops you earning trophies (PS5) or achievements (Xbox) for the rest of that session. Rock Paper Shotgun reports the effect lasts only for that session, and reloading an earlier save brings trophies back. Money from the $250,000 cheat can't be kept for the same reason.
       </p>
     </section>
 

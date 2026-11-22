@@ -2,7 +2,7 @@
 import Layout from '../../../layouts/Layout.astro';
 import PageHero from '../../../components/PageHero.astro';
 import Gta6CheatCard from '../../../components/Gta6CheatCard.astro';
-import { getReportedGta6Cheats, gta6CheatPath, outletName, reportedBy, type Gta6Cheat } from '../../../lib/gta6-cheats';
+import { getReportedGta6Cheats, gta6CheatPath, outletName, reportedBy, searchAliases, effectSentence, unlockClause, type Gta6Cheat } from '../../../lib/gta6-cheats';
 import { allCheats } from '../../../lib/gta5-cheats';
 
 export async function getStaticPaths() {
@@ -13,20 +13,27 @@ export async function getStaticPaths() {
 const { cheat } = Astro.props as { cheat: Gta6Cheat };
 const gta5 = cheat.gta5Slug ? allCheats.find((c) => c.slug === cheat.gta5Slug) : undefined;
 const others = (await getReportedGta6Cheats()).filter((c) => c.slug !== cheat.slug).slice(0, 6);
-const input = [cheat.ps5?.length ? `PS5 input ${cheat.ps5.join(', ')}` : null, cheat.phone ? `phone ${cheat.phone}` : null]
-  .filter(Boolean)
-  .join(', ');
 const url = `https://cheatcodegtavi.com${gta6CheatPath(cheat.slug)}`;
 const by = reportedBy(cheat);
+const aliases = searchAliases(cheat.slug);
+const code = cheat.ps5?.join(', ') ?? 'not reported yet';
+const effect = effectSentence(cheat.effect);
+const unlock = unlockClause(cheat.unlock);
 const faq = [
   {
-    q: `What is the ${cheat.title} cheat in GTA 6 (GTA VI)?`,
-    a: `${cheat.effect ? `${cheat.effect} ` : ''}The code is ${input}. It was reported working in GTA 6 by ${by}.`,
+    q: `What is the ${cheat.title} cheat code in GTA 6 (GTA VI)?`,
+    a: `${effect ? `${effect} ` : ''}The code is ${code} on both PS5 and Xbox Series X|S. It was reported working in GTA 6 by ${by}.`,
   },
+  ...(aliases.length
+    ? [{
+        q: `What is the ${aliases[0]} in GTA 6?`,
+        a: `The GTA 6 ${aliases[0]} is the ${cheat.title} cheat: ${code}. ${effect}`.trim(),
+      }]
+    : []),
   {
     q: `How do I unlock the ${cheat.title} cheat in GTA 6?`,
     a: cheat.unlock
-      ? `Finish the main story first; cheats stay locked until then. The ${cheat.title} cheat then unlocks when you meet its requirement: ${cheat.unlock}.`
+      ? `Finish the main story first; cheats stay locked until then. The ${cheat.title} cheat then unlocks when you meet its requirement: ${unlock}.`
       : `Finish the main story first; cheats stay locked until then. The ${cheat.title} cheat's own unlock requirement hadn't been reported when we listed it.`,
   },
   {
@@ -41,8 +48,8 @@ const faq = [
 ---
 
 <Layout
-  title={`GTA 6 ${cheat.title} Cheat Code (GTA VI)`}
-  description={`GTA 6 ${cheat.title} cheat: ${input}. Reported working in GTA VI by ${by}.`}
+  title={`GTA 6 ${cheat.title} Cheat Code (PS5 & Xbox) | GTA VI`}
+  description={`GTA 6 ${cheat.title} cheat${aliases[0] ? ` (${aliases[0]})` : ''}: ${code} on PS5 and Xbox.${unlock ? ` Unlock: ${unlock}.` : ''} Reported by ${by}.`}
   ogType="article"
 >
   <PageHero eyebrow={`Reported by ${by}`} title={`GTA 6 ${cheat.title} Cheat`} subtitle={cheat.effect || 'Reported working in GTA 6.'} accent="gold" />
@@ -57,8 +64,9 @@ const faq = [
     </nav>
 
     <p class="text-body-lg mb-6 text-text-secondary" data-answer>
-      The GTA 6 {cheat.title} cheat code on PS5 is <strong class="text-text-primary">{cheat.ps5?.join(', ') ?? 'not reported yet'}</strong>. {cheat.effect ? `It ${cheat.effect.charAt(0).toLowerCase()}${cheat.effect.slice(1).replace(/.?$/, '.')} ` : ''}Finish the main story{cheat.unlock ? `, then unlock it (${cheat.unlock.replace(/.$/, '')})` : ''}, and enter it on the phone while holding L1 and R1. Reported by {by}.
+      The GTA 6 {cheat.title} cheat code is <strong class="text-text-primary">{code}</strong> on PS5 and Xbox Series X|S. {effect} To use it, finish the main story{unlock ? `, unlock it (${unlock})` : ''}, then open your phone with Up on the D-pad, hold L1 + R1 (LB + RB on Xbox) and enter the code. Code reported by {by}; Xbox buttons as reported by Radio Times.
     </p>
+    {aliases.length > 0 && <p class="text-body-sm -mt-3 mb-6 text-text-muted">Also searched as the GTA 6 {aliases.join(' or ')}.</p>}
 
     <Gta6CheatCard cheat={cheat} headingLevel="h2" link={false} />
 
@@ -67,8 +75,8 @@ const faq = [
     <section class="mt-10">
       <h2 class="text-heading-md text-text-primary">How to use the {cheat.title} cheat in GTA 6</h2>
       <ol class="text-body-md mt-4 flex list-decimal flex-col gap-2 pl-6 text-text-secondary">
-        <li>Finish the main story. Cheats stay locked until the credits roll, then a Cheats tab appears.</li>
-        <li>{cheat.unlock ? `Unlock this cheat: ${cheat.unlock}.` : "Meet this cheat's unlock requirement (not reported yet)."} Progress from before the ending counts.</li>
+        <li>Finish the main story. Cheats stay locked until the credits roll, then a Cheats option appears at the end of the Progress menu.</li>
+        <li>{unlock ? `Unlock this cheat: ${unlock}.` : "Meet this cheat's unlock requirement (not reported yet)."} Progress from before the ending counts.</li>
         <li>Save your game. Using a cheat disables saving and trophies for the rest of that session.</li>
         <li>Take out your phone (Up on the D-pad), hold L1 and R1 (LB and RB on Xbox), and enter {cheat.ps5?.length ? cheat.ps5.join(', ') : 'the code'}.</li>
       </ol>
@@ -132,7 +140,8 @@ const faq = [
         '@type': 'WebPage',
         '@id': url,
         url,
-        name: `GTA 6 ${cheat.title} Cheat Code`,
+        name: `GTA 6 ${cheat.title} Cheat Code (PS5 & Xbox)`,
+        alternateName: aliases.map((a) => `GTA 6 ${a}`),
         datePublished: cheat.verifiedAt,
         dateModified: cheat.verifiedAt,
         about: { '@type': 'VideoGame', name: 'Grand Theft Auto VI', alternateName: ['GTA 6', 'GTA VI'] },
