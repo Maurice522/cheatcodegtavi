@@ -28,6 +28,7 @@ jobs:
     timeout-minutes: 20
     outputs:
       published: ${{ steps.research.outputs.published }}
+      catalog_changed: ${{ steps.catalog.outputs.catalog_changed }}
     defaults:
       run:
         working-directory: automation
@@ -37,7 +38,7 @@ jobs:
         with:
           node-version: 22
       - run: npm install
-      - run: node --test src/cheats/verify.test.js
+      - run: node --test src/cheats/verify.test.js src/cheats/catalog.test.js
       - id: research
         if: ${{ !inputs.test_notify }}
         run: node src/cheats/research.js
@@ -47,10 +48,18 @@ jobs:
           # Repo variable. "true" publishes verified cheats automatically;
           # anything else only notifies.
           AUTO_PUBLISH: ${{ vars.AUTO_PUBLISH }}
+      # Full 61-cheat list (names, unlocks, every reported code with its
+      # outlets). Runs after research so newly confirmed cheats are marked.
+      - id: catalog
+        if: ${{ !inputs.test_notify }}
+        run: node src/cheats/catalog.js
+        continue-on-error: true
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
   deploy:
     needs: research
-    if: ${{ needs.research.outputs.published != '' && needs.research.outputs.published != '0' }}
+    if: ${{ (needs.research.outputs.published != '' && needs.research.outputs.published != '0') || needs.research.outputs.catalog_changed == '1' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     # Shared with the leaks pipeline so two deploys never race.
