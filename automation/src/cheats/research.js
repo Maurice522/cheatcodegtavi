@@ -107,10 +107,35 @@ async function collectLeads() {
       console.log(`Feed failed (${src}): ${err.message}`);
     }
   }
-  for (const url of SEED_GUIDES) {
+  for (const url of [...SEED_GUIDES, ...(await wikiCheatPages())]) {
     if (!leads.has(url)) leads.set(url, { url, title: url, publishedAt: new Date(EARLIEST_UNLOCK_MS).toISOString() });
   }
   return [...leads.values()];
+}
+
+// Guide wikis add pages over time. Each run, read the hub and pick up any page
+// whose name is about cheats (e.g. IGN's future "Cheats" page). Pages that only
+// mention "cheat" in another sense ("Can Jason and Lucia Cheat on Each Other")
+// are skipped.
+const WIKI_HUBS = ["https://www.ign.com/wikis/gta-6"];
+const WIKI_CHEAT_PAGE = /\/(all_)?cheats?(_codes?|_list|_and_|$)|\/cheat_codes|_cheats(_|$)/i;
+async function wikiCheatPages() {
+  const found = new Set();
+  for (const hub of WIKI_HUBS) {
+    try {
+      const res = await fetch(hub, { headers: { "user-agent": "Mozilla/5.0 (compatible; CheatWatcher/1.0)" }, signal: AbortSignal.timeout(20000) });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const html = await res.text();
+      const origin = new URL(hub).origin;
+      for (const [, path] of html.matchAll(/href="(\/wikis\/gta-6\/[^"#?]+)"/g)) {
+        if (WIKI_CHEAT_PAGE.test(path)) found.add(origin + path);
+      }
+    } catch (err) {
+      console.log(`Wiki hub failed (${hub}): ${err.message}`);
+    }
+  }
+  if (found.size) console.log(`Wiki cheat pages: ${[...found].join(", ")}`);
+  return [...found];
 }
 
 function baseSlug(name) {
