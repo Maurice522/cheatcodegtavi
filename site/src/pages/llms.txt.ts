@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getReportedGta6Cheats, gta6CheatPath, reportedBy } from '../lib/gta6-cheats';
+import { guides, guidePath } from '../data/guides';
 
 // A plain-text map of the site for AI assistants and answer engines
 // (llmstxt.org). Generated at build time so the confirmed cheat list is current.
@@ -22,6 +23,9 @@ export const GET: APIRoute = async () => {
       (c) =>
         `- [GTA 6 ${c.title} cheat](${SITE}${gta6CheatPath(c.slug)}): ${c.ps5?.join(', ') ?? 'code not reported'}${c.unlock ? `; unlock: ${c.unlock}` : ''} (reported by ${reportedBy(c)})`,
     ),
+    '',
+    '## GTA 6 guides',
+    ...guides.map((g) => `- [${g.title}](${SITE}${guidePath(g.slug)}): ${g.answer}`),
     '',
     '## GTA V cheats and comparison',
     `- [All cheat codes hub](${SITE}/cheats/): confirmed GTA 6 cheats plus all 35 GTA V cheats with PS5 inputs`,

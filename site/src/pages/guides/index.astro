@@ -1,0 +1,42 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import { guides, guidePath } from '../../data/guides';
+
+const SITE = 'https://cheatcodegtavi.com';
+---
+
+<Layout
+  title="GTA 6 Guides: Money, Safe Codes, Saving, Story Length & More"
+  description="Sourced GTA 6 guides answering what players search for most: making money, safe and door codes, how long GTA 6 is, saving, first person mode and more."
+>
+  <PageHero eyebrow="GTA 6 · GTA VI" title="GTA 6 Guides" subtitle="Short, sourced answers to the questions players are searching for right now." accent="gold" />
+
+  <div class="mx-auto max-w-4xl px-5 py-12 sm:px-8 sm:py-16">
+    <ul class="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <li>
+        <a href="/cheats/gta-6/how-to-activate-cheats/" class="press block h-full rounded-xl border border-accent-primary/40 bg-bg-surface p-5 hover:border-accent-primary">
+          <span class="text-heading-sm text-text-primary">How to activate cheats in GTA 6</span>
+          <span class="text-body-sm mt-2 block text-text-secondary">PS5 and Xbox steps, unlocking, trophies, saving and fixes.</span>
+        </a>
+      </li>
+      {
+        guides.map((g) => (
+          <li>
+            <a href={guidePath(g.slug)} class="press block h-full rounded-xl border border-border-default bg-bg-surface p-5 hover:border-accent-secondary/60">
+              <span class="text-heading-sm text-text-primary">{g.title}</span>
+              <span class="text-body-sm mt-2 block text-text-secondary">{g.description}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'GTA 6 guides',
+    itemListElement: guides.map((g, i) => ({ '@type': 'ListItem', position: i + 1, name: g.title, url: `${SITE}${guidePath(g.slug)}` })),
+  })} />
+</Layout>

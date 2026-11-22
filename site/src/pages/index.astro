@@ -11,6 +11,7 @@ import { allCheats, cheatGroups, getFeatured, groupPath } from '../lib/gta5-chea
 import { hasLaunched } from '../lib/launch';
 import Gta6CheatCard from '../components/Gta6CheatCard.astro';
 import { getReportedGta6Cheats, reportedBy } from '../lib/gta6-cheats';
+import { guides, guidePath } from '../data/guides';
 
 const launched = hasLaunched();
 
@@ -96,6 +97,18 @@ const latestLeaks = Array.isArray(latestLeaksResult) ? latestLeaksResult : [];
       </section>
     )
   }
+
+  <section class="mx-auto max-w-6xl px-5 pt-16 sm:px-8">
+    <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+      <h2 class="text-heading-lg text-text-primary">Trending GTA 6 Guides</h2>
+      <a href="/guides/" class="text-label text-accent-secondary hover:text-accent-secondary/80">All guides</a>
+    </div>
+    <ul class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {guides.map((g) => (
+        <li><a href={guidePath(g.slug)} class="press block h-full rounded-xl border border-border-default bg-bg-surface p-4 text-body-md font-semibold text-text-primary hover:border-accent-secondary/60">{g.short}</a></li>
+      ))}
+    </ul>
+  </section>
 
   <section class="mx-auto max-w-6xl px-5 py-16 sm:px-8" data-reveal-group>
     <div class="mb-3 flex flex-wrap items-end justify-between gap-3" data-reveal>
