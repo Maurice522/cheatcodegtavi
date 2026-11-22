@@ -16,6 +16,8 @@ interface Entry {
 const pages: Entry[] = [
   { t: 'GTA 6 cheat codes (PS5)', d: 'Confirmed GTA 6 cheats plus all 35 GTA V cheats with PS5 inputs.', u: '/cheats/', k: 'Page' },
   { t: 'Confirmed GTA 6 cheats', d: 'GTA 6 cheat codes reported by Rockstar or two major outlets, with unlock conditions.', u: '/cheats/gta-6/', k: 'Page' },
+  { t: 'How to activate cheats in GTA 6', d: 'Enter GTA 6 cheats on PS5 (L1 + R1) and Xbox (LB + RB), unlock them, and fix cheats that don't work.', u: '/cheats/gta-6/how-to-activate-cheats/', k: 'Page' },
+  { t: 'GTA 6 cheat unlock tracker', d: 'Checklist of confirmed GTA 6 cheats and their unlock requirements.', u: '/cheats/gta-6/tracker/', k: 'Page' },
   { t: 'GTA 5 vs GTA 6 cheat codes', d: 'Every GTA V cheat and its GTA 6 status, plus how cheat input changed across games.', u: '/cheats/gta5-vs-gta6/', k: 'Page' },
   { t: 'Printable PS5 cheat sheet', d: 'All 35 PS5 cheat inputs on one printable page.', u: '/cheats/cheat-sheet/', k: 'Page' },
   { t: 'GTA 6 release time', d: 'What is known about the GTA 6 unlock time on November 19, 2026, and what it means in your time zone.', u: '/gta-6-release-time/', k: 'Page' },

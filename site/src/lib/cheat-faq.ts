@@ -16,19 +16,19 @@ export const generalCheatFaq = [
   },
   {
     q: 'How do I unlock cheats in GTA 6?',
-    a: "According to Polygon and Eurogamer, cheats stay locked until you finish the main story. After that a Cheats tab appears, and each cheat unlocks when you meet its own requirement, such as finding a vehicle or winning shooting range medals. Progress made before the ending counts.",
+    a: "According to Polygon and Eurogamer, cheats stay locked until you finish the main story. After that a Cheats option appears at the end of the Progress menu, and each cheat unlocks when you meet its own requirement, such as finding a vehicle or winning shooting range medals. Progress made before the ending counts.",
   },
   {
-    q: 'How do I enter cheat codes in GTA 6 on PS5?',
-    a: 'Polygon reports that you take out your phone (Up on the D-pad), hold L1 and R1 on the home screen, then enter the D-pad code. This is different from GTA V, where you entered a button sequence during gameplay or dialed a phone number.',
+    q: 'How do I activate cheats in GTA 6 on PS5 and Xbox?',
+    a: 'Press Up on the D-pad to open your phone, hold L1 and R1 on PS5 (LB and RB on Xbox Series X|S), then enter the D-pad code, as reported by Polygon, Eurogamer and Radio Times. The cheat must be unlocked first. This is different from GTA V, where you entered a button sequence during gameplay or dialed a phone number.',
   },
   {
     q: 'Do GTA 6 cheats disable trophies and saving?',
-    a: 'Yes, according to Polygon and Eurogamer: using a cheat disables saving for that play session and stops you earning trophies or achievements. Save before you use one.',
+    a: 'Yes, according to Polygon, Eurogamer and Rock Paper Shotgun: using a cheat disables saving and stops you earning trophies or achievements for that session. Reloading an earlier save turns cheats off and brings saving and trophies back. Save before you use one.',
   },
   {
     q: 'Do GTA 5 cheat codes work in GTA 6?',
-    a: "GTA 6 has its own cheat list with different codes and a different way of entering them, so GTA V codes are not GTA 6 codes. We haven't tested whether any GTA V code carries over.",
+    a: "No. Rock Paper Shotgun reports that GTA 6 has its own set of cheat codes and GTA 5 button combos don't do anything in it. GTA 6 codes are entered on the phone while holding the shoulder buttons.",
   },
   {
     q: 'Can I use cheat codes in GTA 6 Online?',
@@ -36,6 +36,6 @@ export const generalCheatFaq = [
   },
   {
     q: 'Are GTA 6 cheat codes for Xbox and PC listed?',
-    a: "We list PS5 inputs. GTA 6's cheats use the D-pad, which is the same on Xbox, but we only publish what major outlets have reported, and there is no PC version yet.",
+    a: "The codes are the same on PS5 and Xbox Series X|S because they only use the D-pad; on Xbox you hold LB and RB instead of L1 and R1 (Radio Times, Rock Paper Shotgun). There is no PC version of GTA 6 yet.",
   },
 ];

@@ -1,0 +1,188 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import { getReportedGta6Cheats, gta6CheatPath } from '../../../lib/gta6-cheats';
+
+// One page that answers every "how do I activate / enter / unlock / use GTA 6
+// cheats" query, written answer-first so search engines and AI assistants can
+// quote it. Every fact is as reported by the linked outlets; we haven't tested
+// them on our own console yet.
+const cheats = await getReportedGta6Cheats();
+const money = cheats.find((c) => c.slug === '250-000');
+const SITE = 'https://cheatcodegtavi.com';
+const url = `${SITE}/cheats/gta-6/how-to-activate-cheats/`;
+const updated = new Date().toISOString().slice(0, 10);
+
+const SOURCES = [
+  { name: 'Eurogamer', url: 'https://www.eurogamer.net/all-gta-6-cheats' },
+  { name: 'Polygon', url: 'https://www.polygon.com/gta-6-cheat-codes-list-unlock/' },
+  { name: 'Radio Times', url: 'https://www.radiotimes.com/technology/gaming/gta-6-cheats-cheat-codes/' },
+  { name: 'Rock Paper Shotgun', url: 'https://www.rockpapershotgun.com/gta-6-cheats-list' },
+];
+
+const answer =
+  'To activate a cheat in GTA 6, first finish the main story and unlock that cheat by meeting its requirement. Then press Up on the D-pad to open your phone, hold L1 and R1 on PS5 (LB and RB on Xbox Series X|S), and enter the cheat\'s D-pad code. Using a cheat turns off saving and trophies or achievements for that session.';
+
+const steps = [
+  { name: 'Finish the main story', text: 'Cheats stay locked until you complete the campaign (91 story missions). After the ending, a new Cheats option appears at the end of the Progress menu.' },
+  { name: 'Unlock the cheat you want', text: 'Every cheat has its own unlock requirement, such as making $250,000 from fenced goods or winning shooting range medals. Meeting it reveals that cheat\'s button code in the Progress menu. Progress made before the ending counts.' },
+  { name: 'Save your game', text: 'Using any cheat disables saving for the rest of that session, so save first.' },
+  { name: 'Open your phone', text: 'Press Up on the D-pad to take out your phone.' },
+  { name: 'Hold the shoulder buttons', text: 'Hold L1 and R1 on PS5, or LB and RB on Xbox Series X|S.' },
+  { name: 'Enter the D-pad code', text: `Press the cheat's D-pad sequence quickly, for example ${money?.ps5?.join(', ') ?? 'Up, Right, Down, Left, Up, Left, Down, Right'} for $250,000.` },
+];
+
+const faq = [
+  { q: 'How do you activate cheats in GTA 6?', a: answer },
+  { q: 'How do I enter cheat codes in GTA 6 on PS5?', a: 'Press Up on the D-pad to open your phone, hold L1 and R1, then press the cheat\'s D-pad code. The cheat must already be unlocked, which needs the main story finished first.' },
+  { q: 'How do I enter cheats in GTA 6 on Xbox Series X|S?', a: 'The same way as on PS5, with LB and RB instead of L1 and R1: open your phone with Up on the D-pad, hold LB and RB, then enter the D-pad code. The codes are the same on both consoles because they only use the D-pad.' },
+  { q: 'Why are my GTA 6 cheats not working?', a: 'Usually one of four reasons: you haven\'t finished the main story yet, you haven\'t met that cheat\'s own unlock requirement, you aren\'t holding both shoulder buttons (L1 + R1 or LB + RB) while entering the code, or you entered the D-pad sequence too slowly or in the wrong order. GTA 5 codes also don\'t work in GTA 6.' },
+  { q: 'How do I unlock cheats in GTA 6?', a: 'Finish the main story to unlock cheats in general, then meet each cheat\'s requirement to unlock that specific cheat. Requirements include fencing $250,000 of goods, losing a 3-star wanted level 25 times, or completing 50 stunt jumps. Our unlock tracker lists them.' },
+  { q: 'Where is the cheats menu in GTA 6?', a: 'After you finish the main story, a Cheats option appears at the end of the Progress menu. It lists every cheat and what it does, and shows a cheat\'s button code once you\'ve unlocked it.' },
+  { q: 'Can you use cheats in GTA 6 before finishing the story?', a: 'No. Unlike GTA 5, where cheats worked from the start, GTA 6 cheats only work after you complete the main story.' },
+  { q: 'Do cheats disable trophies or achievements in GTA 6?', a: 'Yes, but only for the current session. Using any cheat stops you earning trophies on PS5 or achievements on Xbox until you reload an earlier save.' },
+  { q: 'Can you save after using cheats in GTA 6?', a: 'No. Using a cheat disables saving for that session, so anything you do afterwards, including missions and money, is lost when you reload. Save before you cheat.' },
+  { q: 'How do you turn off cheats in GTA 6?', a: 'Reload your last save. Cheats only last for the session you used them in, and reloading an earlier save also brings back saving and trophies or achievements.' },
+  { q: 'Is there a money cheat in GTA 6?', a: `Yes. The $250,000 cheat (${money?.ps5?.join(', ') ?? 'Up, Right, Down, Left, Up, Left, Down, Right'}) gives you $250,000 and can be repeated, but because cheats disable saving, you can't keep the money. It unlocks after you make $250,000 from fenced goods.` },
+  { q: 'Do GTA 5 cheat codes work in GTA 6?', a: 'No. GTA 6 has its own set of cheat codes, and they are entered on the phone while holding the shoulder buttons. GTA 5 button combos and 1-999 phone numbers don\'t do anything in GTA 6.' },
+  { q: 'Are there phone number cheats in GTA 6?', a: 'No. GTA 6 cheats are D-pad codes entered on the phone while holding the shoulder buttons. The 1-999 phone numbers are GTA 5 cheats.' },
+  { q: 'Do GTA 6 cheats work in GTA Online?', a: 'Outlets expect not. Cheat codes have never worked in GTA Online sessions, and we\'ll update this when Rockstar confirms how GTA 6\'s online mode handles them.' },
+  { q: 'Are there GTA 6 cheats for PC or PS4?', a: 'Not yet. GTA 6 is only out on PS5 and Xbox Series X|S. There is no PC release date, and there is no PS4 or Xbox One version.' },
+  { q: 'How many cheats are in GTA 6?', a: `About 61 cheats in five groups: Player, Combat, Spawn Vehicle, Environment and Screen Filters. ${cheats.length} are confirmed on this site by at least two major outlets.` },
+];
+---
+
+<Layout
+  title="How to Activate Cheats in GTA 6 (PS5 & Xbox) | GTA VI"
+  description="How to activate, enter and unlock cheats in GTA 6 on PS5 and Xbox: finish the story, unlock the cheat, open your phone, hold L1 + R1 (LB + RB) and enter the code. Plus trophies, saving and why cheats don't work."
+  ogType="article"
+>
+  <PageHero eyebrow="PS5 · Xbox Series X|S" title="How to Activate Cheats in GTA 6" subtitle="Unlock, enter and turn off GTA VI cheat codes, step by step." accent="gold" />
+
+  <div class="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
+    <nav aria-label="Breadcrumb" class="text-caption mb-6 text-text-muted">
+      <a href="/" class="hover:text-text-primary">Home</a>
+      <span class="mx-2">/</span>
+      <a href="/cheats/gta-6/" class="hover:text-text-primary">Confirmed GTA 6 Cheats</a>
+      <span class="mx-2">/</span>
+      <span class="text-text-secondary">How to activate</span>
+    </nav>
+
+    <p class="text-body-lg text-text-secondary" data-answer>
+      <strong class="text-text-primary">Short answer:</strong> {answer}
+    </p>
+
+    <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div class="rounded-xl border border-border-default bg-bg-surface p-4">
+        <p class="text-label text-accent-secondary">PS5</p>
+        <p class="text-body-md mt-1 text-text-primary">Phone (D-pad Up) → hold <strong>L1 + R1</strong> → D-pad code</p>
+      </div>
+      <div class="rounded-xl border border-border-default bg-bg-surface p-4">
+        <p class="text-label text-accent-secondary">Xbox Series X|S</p>
+        <p class="text-body-md mt-1 text-text-primary">Phone (D-pad Up) → hold <strong>LB + RB</strong> → D-pad code</p>
+      </div>
+    </div>
+
+    <section class="mt-12">
+      <h2 class="text-heading-md text-text-primary">How to activate a cheat in GTA 6, step by step</h2>
+      <ol class="text-body-md mt-4 flex list-decimal flex-col gap-3 pl-6 text-text-secondary">
+        {steps.map((s, i) => <li id={`step-${i + 1}`}><strong class="text-text-primary">{s.name}.</strong> {s.text}</li>)}
+      </ol>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="text-heading-md text-text-primary">Why your GTA 6 cheat isn't working</h2>
+      <ul class="text-body-md mt-4 flex list-disc flex-col gap-2 pl-6 text-text-secondary">
+        <li><strong class="text-text-primary">Story not finished.</strong> No cheat works until the campaign is complete.</li>
+        <li><strong class="text-text-primary">Cheat not unlocked.</strong> Each cheat needs its own requirement. Check the Cheats option in the Progress menu, or our <a href="/cheats/gta-6/tracker/" class="text-accent-secondary hover:underline">unlock tracker</a>.</li>
+        <li><strong class="text-text-primary">Not holding both shoulder buttons.</strong> Keep L1 + R1 (LB + RB) held for the whole code, with the phone open.</li>
+        <li><strong class="text-text-primary">Wrong or slow input.</strong> Enter the D-pad sequence quickly and in order.</li>
+        <li><strong class="text-text-primary">Using a GTA 5 code.</strong> GTA 5 button combos and phone numbers don't work in GTA 6.</li>
+      </ul>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="text-heading-md text-text-primary">Cheats, saving and trophies</h2>
+      <p class="text-body-md mt-4 text-text-secondary">
+        Using any cheat disables saving and stops you earning trophies (PS5) or achievements (Xbox) for the rest of that session. To turn cheats off, reload your last save: that also brings saving and trophies back. Money from the $250,000 cheat can't be kept for the same reason.
+      </p>
+    </section>
+
+    {
+      cheats.length > 0 && (
+        <section class="mt-12">
+          <h2 class="text-heading-md text-text-primary">Confirmed GTA 6 cheat codes</h2>
+          <ul class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {cheats.map((c) => (
+              <li>
+                <a href={gta6CheatPath(c.slug)} class="press block rounded-xl border border-border-default bg-bg-surface p-4 hover:border-accent-secondary/60">
+                  <span class="text-body-md font-semibold text-text-primary">{c.title}</span>
+                  <span class="text-caption mt-1 block text-text-secondary">{c.ps5?.join(', ') ?? 'Code not reported yet'}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p class="text-body-sm mt-4"><a href="/cheats/gta-6/" class="text-accent-secondary hover:underline">See every confirmed code with its unlock requirement</a></p>
+        </section>
+      )
+    }
+
+    <section class="mt-12">
+      <h2 class="text-heading-md text-text-primary">GTA 6 cheats: common questions</h2>
+      <div class="mt-4 flex flex-col gap-3">
+        {
+          faq.map((item) => (
+            <details class="rounded-xl border border-border-default bg-bg-surface p-5" open>
+              <summary class="text-heading-sm cursor-pointer list-none text-text-primary marker:content-none">{item.q}</summary>
+              <p class="text-body-md mt-3 text-text-secondary">{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="text-heading-md text-text-primary">Sources</h2>
+      <p class="text-body-sm mt-3 text-text-secondary">
+        As reported by {SOURCES.map((s, i) => <>{i > 0 && (i === SOURCES.length - 1 ? ' and ' : ', ')}<a href={s.url} rel="nofollow noopener" target="_blank" class="text-accent-secondary hover:underline">{s.name}</a></>)}. We haven't tested these steps on our own console yet. Last updated {updated}.
+      </p>
+    </section>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'HowTo',
+        '@id': `${url}#howto`,
+        name: 'How to activate cheats in GTA 6',
+        description: answer,
+        totalTime: 'PT1M',
+        supply: [{ '@type': 'HowToSupply', name: 'GTA 6 on PS5 or Xbox Series X|S, with the main story completed' }],
+        step: steps.map((s, i) => ({ '@type': 'HowToStep', position: i + 1, name: s.name, text: s.text, url: `${url}#step-${i + 1}` })),
+      },
+      {
+        '@type': 'Article',
+        '@id': `${url}#article`,
+        headline: 'How to Activate Cheats in GTA 6 (PS5 & Xbox)',
+        url,
+        dateModified: updated,
+        about: { '@type': 'VideoGame', name: 'Grand Theft Auto VI', alternateName: ['GTA 6', 'GTA VI'], gamePlatform: ['PlayStation 5', 'Xbox Series X|S'] },
+        publisher: { '@type': 'Organization', name: 'CheatCodeGTAVI.com', url: SITE },
+        citation: SOURCES.map((s) => s.url),
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 2, name: 'Confirmed GTA 6 Cheats', item: `${SITE}/cheats/gta-6/` },
+          { '@type': 'ListItem', position: 3, name: 'How to activate cheats', item: url },
+        ],
+      },
+    ],
+  })} />
+</Layout>
