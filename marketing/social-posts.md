@@ -12,7 +12,7 @@ Cheats only unlock after the story, and each one has its own requirement, so I m
 - Save first, because a cheat turns off saving and trophies for the session
 - $250,000: Up, Right, Down, Left, Up, Left, Down, Right (unlock: make $250,000 from fenced goods)
 
-Full list with sources (only codes that two major outlets agree on): https://cheatcodegtavi.com/cheats/gta-6/tracker/
+All 61 cheats with unlocks (codes marked Confirmed once two major outlets agree): https://cheatcodegtavi.com/cheats/gta-6/tracker/
 
 ## X / Threads
 

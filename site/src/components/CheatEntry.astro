@@ -116,6 +116,7 @@ const dot = { unconfirmed: 'bg-rumored', works: 'bg-verified', broken: 'bg-error
         if (navigator.share) {
           try {
             await navigator.share({ title, url });
+            (window as any).cctrack?.('share', { method: 'native', content_type: 'cheat', item_id: this.dataset.url });
             return;
           } catch {
             // dismissed the share sheet, or sharing failed: fall back to copying
@@ -123,6 +124,7 @@ const dot = { unconfirmed: 'bg-rumored', works: 'bg-verified', broken: 'bg-error
         }
         try {
           await navigator.clipboard.writeText(url);
+          (window as any).cctrack?.('share', { method: 'copy_link', content_type: 'cheat', item_id: this.dataset.url });
           label.textContent = 'Link copied';
         } catch {
           label.textContent = 'Copy failed';

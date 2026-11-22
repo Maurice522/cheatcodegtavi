@@ -29,12 +29,12 @@ test("parseLines reads Radio Times style lists, including split lines", () => {
 });
 
 test("mergeCatalog counts outlets per code and sets status", () => {
-  const A = ["Down", "Up", "Left", "Right"], B = ["Up", "Up", "Down", "Down"];
+  const A = ["Down", "Up", "Left", "Right"], B = ["Up", "Up", "Down", "Down"], C = ["Left", "Up", "Left", "Up"], D = ["Right", "Down", "Right", "Down"], E = ["Up", "Left", "Down", "Right"];
   const row = (name, ps5) => ({ name, category: "Player", effect: "", unlock: "", ps5 });
   const merged = mergeCatalog(
     [
-      { outlet: "polygon.com", url: "p", rows: [row("Agreed", A), row("Single", A), row("Split", A), row("None", null), row("Live", B)] },
-      { outlet: "eurogamer.net", url: "e", rows: [row("agreed", A), row("Split", B), row("Live", B)] },
+      { outlet: "polygon.com", url: "p", rows: [row("Agreed", A), row("Single", C), row("Split", D), row("None", null), row("Live", B)] },
+      { outlet: "eurogamer.net", url: "e", rows: [row("agreed", A), row("Split", E), row("Live", B)] },
     ],
     new Map([["ps5:Up-Up-Down-Down", { slug: "live", name: "Live" }]]),
   );
@@ -42,4 +42,21 @@ test("mergeCatalog counts outlets per code and sets status", () => {
   assert.deepEqual(s, { agreed: "two-outlets", single: "one-outlet", split: "conflict", none: "no-code", live: "confirmed" });
   assert.equal(merged.find((e) => e.key === "live").confirmedSlug, "live");
   assert.equal(nameKey("$250,000"), "250000");
+});
+
+test("mergeCatalog distrusts codes reused across cheat names", () => {
+  const MAX = ["Down", "Up", "Right", "Down"], REL = ["Up", "Down", "Up", "Down"], INF = ["Left", "Left", "Right", "Right"];
+  const row = (name, ps5) => ({ name, category: "Combat", effect: "", unlock: "", ps5 });
+  const merged = mergeCatalog([
+    { outlet: "polygon.com", url: "p", rows: [row("Max Ammo", MAX), row("No Reload", REL)] },
+    { outlet: "rockpapershotgun.com", url: "r", rows: [row("Max Ammo", MAX), row("Infinite Ammo", INF), row("No Reload", REL)] },
+    // Radio Times-style errors: same code twice on one page, and Max Ammo's code under Infinite Ammo.
+    { outlet: "radiotimes.com", url: "t", rows: [row("Max Ammo", REL), row("No Reload", REL), row("Infinite Ammo", MAX)] },
+  ]);
+  const by = Object.fromEntries(merged.map((e) => [e.key, e]));
+  assert.deepEqual(by.maxammo.codes.map((c) => c.outlets), [["polygon.com", "rockpapershotgun.com"]]);
+  assert.equal(by.maxammo.status, "two-outlets");
+  assert.deepEqual(by.noreload.codes.map((c) => c.outlets), [["polygon.com", "rockpapershotgun.com"]]);
+  assert.equal(by.infiniteammo.status, "conflict");
+  assert.deepEqual(by.infiniteammo.codes.map((c) => c.outlets), [["rockpapershotgun.com"]]);
 });

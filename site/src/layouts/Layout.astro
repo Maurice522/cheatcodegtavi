@@ -40,7 +40,23 @@ const ogImageURL = new URL(ogImage, Astro.site);
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-SBMBK35DZW');
+      // Content groups let GA4 compare sections (Reports > Engagement > Pages, group by Content group).
+      (function () {
+        var p = location.pathname, s = p.split('/')[1] || 'home';
+        var group = p.indexOf('/cheats/gta-6/') === 0 ? 'gta6-cheats' : p.indexOf('/cheats/code/') === 0 ? 'gta5-cheats' : s;
+        gtag('config', 'G-SBMBK35DZW', { content_group: group });
+      })();
+      // window.cctrack(name, params): custom GA4 events. Never throws, never sends personal data.
+      window.cctrack = function (name, params) {
+        try { gtag('event', name, Object.assign({ page_path: location.pathname }, params || {})); } catch (e) {}
+      };
+      // Which cheat codes people copy by hand (selecting text on a cheat page).
+      document.addEventListener('copy', function () {
+        try {
+          var t = String(window.getSelection() || '').trim();
+          if (t) window.cctrack('copy_text', { text_length: t.length, looks_like_code: /^(up|down|left|right|[0-9-]{7,})/i.test(t) });
+        } catch (e) {}
+      });
     </script>
 
     <!-- Google AdSense -->

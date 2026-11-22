@@ -65,6 +65,7 @@ const { class: className = '' } = Astro.props;
           });
 
           if (res.ok) {
+            (window as any).cctrack?.('sign_up', { method: 'email_alerts' });
             try {
               localStorage.setItem(STORAGE_KEY, email);
             } catch {

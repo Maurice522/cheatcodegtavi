@@ -13,7 +13,7 @@ export const GET: APIRoute = async () => {
   const lines = [
     '# CheatCodeGTAVI.com',
     '',
-    '> GTA 6 (GTA VI) cheat codes for PS5, checked hourly. A GTA 6 code is listed only when its exact input appears on an official Rockstar page or in articles from at least two independent major outlets published after the November 19, 2026 launch. Every source is linked. Codes are labeled "reported" until tested by us. GTA V codes are listed separately and labeled as GTA V.',
+    '> GTA 6 (GTA VI) cheat codes for PS5, checked hourly. A GTA 6 code is marked Confirmed only when its exact input appears on an official Rockstar page or in articles from at least two independent major outlets published after the November 19, 2026 launch. Every source is linked. Codes are labeled "reported" until tested by us. GTA V codes are listed separately and labeled as GTA V.',
     '',
     'Key facts (as reported by Polygon and Eurogamer): GTA 6 has about 61 cheats in five groups (Player, Combat, Spawn Vehicle, Environment, Screen Filters). Cheats unlock only after the main story is finished, and each has its own unlock requirement. To activate one, take out the phone (D-pad Up), hold L1 and R1 on PS5 or LB and RB on Xbox Series X|S, then press the D-pad code; codes are the same on both consoles. After the story, a Cheats option appears at the end of the Progress menu. Using a cheat disables saving and trophies/achievements for that session; reloading an earlier save turns cheats off. GTA 5 codes do not work in GTA 6. There are no GTA 6 phone-number cheats; 1-999 numbers are GTA V codes.',
     '',

@@ -16,4 +16,7 @@ import Layout from '../layouts/Layout.astro';
       Back to Safety
     </a>
   </div>
+  <script is:inline>
+    window.cctrack && window.cctrack('page_not_found', { missing_path: location.pathname, referrer_host: document.referrer ? new URL(document.referrer).host : '(direct)' });
+  </script>
 </Layout>

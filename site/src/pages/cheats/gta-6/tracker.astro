@@ -7,14 +7,15 @@ import { getCheatCatalog, byCategory, outletList, STATUS_LABEL } from '../../../
 
 // Unlock checklist: every GTA 6 cheat (from the hourly catalog) with its unlock
 // requirement and a tick box. Ticks are saved in this browser only
-// (localStorage). Confirmed cheats keep their page slug as the tick id, so
-// ticks saved before the full list existed still apply.
+// (localStorage), keyed by the cheat's name key ("maxammo"), which doesn't
+// change when a cheat gets confirmed. Older ticks used page slugs
+// ("max-ammo"); they're migrated on load by stripping non-alphanumerics.
 const confirmed = await getReportedGta6Cheats();
 const catalog = await getCheatCatalog();
 // Fall back to the confirmed list if the catalog can't load.
 const rows = catalog.length
-  ? catalog.map((c) => ({ id: c.confirmedSlug ?? c.key, name: c.name, category: c.category, unlock: c.unlock, code: c.codes[0] ?? null, status: c.status, slug: c.confirmedSlug ?? null }))
-  : confirmed.map((c) => ({ id: c.slug, name: c.title, category: 'Confirmed', unlock: c.unlock ?? '', code: c.ps5 ? { ps5: c.ps5, outlets: [] as string[], key: c.key } : null, status: 'confirmed' as const, slug: c.slug }));
+  ? catalog.map((c) => ({ id: c.key, name: c.name, category: c.category, unlock: c.unlock, code: c.codes[0] ?? null, status: c.status, slug: c.confirmedSlug ?? null }))
+  : confirmed.map((c) => ({ id: c.slug.replace(/[^a-z0-9]+/g, ''), name: c.title, category: 'Confirmed', unlock: c.unlock ?? '', code: c.ps5 ? { ps5: c.ps5, outlets: [] as string[], key: c.key } : null, status: 'confirmed' as const, slug: c.slug }));
 const count = rows.length;
 const groups = catalog.length ? byCategory(catalog).map((g) => ({ category: g.category, rows: rows.filter((r) => r.category === g.category) })) : [{ category: 'Confirmed', rows }];
 const faq = [
@@ -140,7 +141,8 @@ const faq = [
       connectedCallback() {
         const read = (): Set<string> => {
           try {
-            return new Set(JSON.parse(localStorage.getItem(KEY) ?? '[]'));
+            const ids = (JSON.parse(localStorage.getItem(KEY) ?? '[]') as string[]).map((id) => String(id).toLowerCase().replace(/[^a-z0-9]+/g, ''));
+            return new Set(ids);
           } catch {
             return new Set();
           }
@@ -182,6 +184,7 @@ const faq = [
             else done.delete(box.dataset.check!);
             write(done);
             render();
+            (window as any).cctrack?.('tracker_toggle', { cheat: box.dataset.check, checked: box.checked, unlocked_total: done.size });
           });
         }
         hideBtn?.addEventListener('click', () => {
@@ -195,8 +198,11 @@ const faq = [
           done = new Set();
           write(done);
           render();
+          (window as any).cctrack?.('tracker_reset', {});
         });
         render();
+        // Returning users with saved progress: a direct retention signal.
+        if (done.size) (window as any).cctrack?.('tracker_return', { unlocked_total: done.size });
       }
     }
     customElements.define('cheat-tracker', CheatTracker);

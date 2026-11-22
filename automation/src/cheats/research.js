@@ -29,6 +29,7 @@ import {
   extractRegex,
   extractTableRows,
   extractListLines,
+  dropAmbiguous,
   TABLE_EVIDENCE_GAP,
   evidenceOk,
   isOfficial,
@@ -173,7 +174,7 @@ async function fetchPage(url) {
 
 const REFETCH_AFTER_MS = 6 * 60 * 60 * 1000;
 // Bump when extraction changes, so pages already seen are read again.
-const EXTRACTOR_VERSION = 3;
+const EXTRACTOR_VERSION = 4;
 const hashOf = (t) => createHash("sha256").update(t).digest("hex");
 
 const PROMPT = `You read a web article and list cheat codes it states for GTA 6 (Grand Theft Auto VI).
@@ -300,6 +301,10 @@ async function main() {
         console.log(`Gemini unavailable for ${lead.url} (${err.message.split(String.fromCharCode(10))[0]}); using rule-based extraction.`);
         proposed = extractRegex(text);
       }
+
+      const before = proposed.length;
+      proposed = dropAmbiguous(proposed);
+      if (proposed.length < before) console.log(`Dropped ${before - proposed.length} row(s) from ${outletOf(lead.url)}: same code listed under different cheat names.`);
 
       if (pageDisclaims(text)) {
         console.log(`Skipped ${lead.url}: the page says its codes are unconfirmed or untested.`);

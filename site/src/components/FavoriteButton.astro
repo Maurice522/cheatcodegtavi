@@ -60,6 +60,7 @@ const { slug, title, category, url = '', class: className = '' } = Astro.props;
         e.preventDefault();
         e.stopPropagation();
         toggleFavorite({ slug, title, category, url });
+        (window as any).cctrack?.('favorite_toggle', { cheat: slug, now_favorite: isFavorited(slug) });
         sync();
       });
 

@@ -259,7 +259,8 @@ const cellText = (html) => htmlToText(html).replace(/\s+/g, " ").trim();
 const BUTTON_WORD = /^(up|down|left|right|triangle|circle|square|cross|x|l1|l2|r1|r2)$/i;
 
 function asButtons(cell) {
-  const parts = cell.split(/[\s,>\-–]+/).filter(Boolean);
+  // Also reads Rock Paper Shotgun's "[ps5: Up + Right + Down]" notation.
+  const parts = cell.replace(/\[?\s*ps5\s*:/gi, " ").split(/[\s,>+\-–\[\]]+/).filter(Boolean);
   if (parts.length < 4 || !parts.every((p) => BUTTON_WORD.test(p))) return null;
   return normalizeButtons(parts);
 }
@@ -318,4 +319,21 @@ export function extractListLines(text) {
     out.push({ name: m[1].trim().slice(0, 80), effect: "", unlock: (m[3] ?? "").trim().slice(0, 200), ps5, phone: "", evidence, fromTable: true });
   }
   return out;
+}
+
+// A page that gives the same code to two different cheats has a copy/paste
+// error somewhere (seen on a big guide at launch), so none of those rows can
+// be trusted. Drop every proposal whose code appears under 2+ cheat names.
+export function dropAmbiguous(proposed) {
+  const names = new Map();
+  for (const p of proposed) {
+    const key = codeKey({ phone: normalizePhone(p.phone), ps5: p.ps5?.length ? normalizeButtons(p.ps5) : null });
+    if (!key) continue;
+    if (!names.has(key)) names.set(key, new Set());
+    names.get(key).add(String(p.name ?? "").toLowerCase().replace(/[^a-z0-9]+/g, ""));
+  }
+  return proposed.filter((p) => {
+    const key = codeKey({ phone: normalizePhone(p.phone), ps5: p.ps5?.length ? normalizeButtons(p.ps5) : null });
+    return !key || (names.get(key)?.size ?? 0) < 2;
+  });
 }

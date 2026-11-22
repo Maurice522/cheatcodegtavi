@@ -113,7 +113,15 @@ export function parseLines(text) {
 export function mergeCatalog(perSource, confirmed = new Map()) {
   const byName = new Map();
   let order = 0;
-  for (const { outlet, url, rows } of perSource) {
+  for (const { outlet, url, rows: raw } of perSource) {
+    // An outlet that lists one code under two cheat names made a copy/paste
+    // error, so neither of its codes for those cheats can be trusted.
+    const namesByCode = new Map();
+    for (const r of raw) if (r.ps5) {
+      const ck = codeKey({ ps5: r.ps5 });
+      namesByCode.set(ck, (namesByCode.get(ck) ?? new Set()).add(nameKey(r.name)));
+    }
+    const rows = raw.map((r) => (r.ps5 && namesByCode.get(codeKey({ ps5: r.ps5 })).size > 1 ? { ...r, ps5: null, ambiguous: true } : r));
     for (const r of rows) {
       let k = nameKey(r.name);
       if (!k) continue;
@@ -137,6 +145,21 @@ export function mergeCatalog(perSource, confirmed = new Map()) {
       }
     }
   }
+  // Across outlets, a code belongs to the cheat most outlets give it to; drop
+  // it from any other cheat (e.g. one outlet listing Max Ammo's code under
+  // Infinite Ammo). A tie keeps it nowhere.
+  const owners = new Map();
+  for (const e of byName.values()) for (const c of e.codes) (owners.get(c.key) ?? owners.set(c.key, []).get(c.key)).push({ e, n: c.outlets.length });
+  for (const [ck, list] of owners) {
+    if (list.length < 2) continue;
+    const max = Math.max(...list.map((x) => x.n));
+    const winners = list.filter((x) => x.n === max);
+    for (const { e } of list) {
+      if (winners.length === 1 && winners[0].e === e) continue;
+      e.codes = e.codes.filter((c) => c.key !== ck);
+      e.disputed = true;
+    }
+  }
   for (const e of byName.values()) {
     // Display the spelling most outlets use; ties keep the first source's.
     e.name = Object.entries(e.names).sort((a, b) => b[1] - a[1])[0][0];
@@ -147,9 +170,10 @@ export function mergeCatalog(perSource, confirmed = new Map()) {
       e.status = "confirmed";
       e.confirmedSlug = confirmed.get(hit.key).slug;
       e.codes = [hit, ...e.codes.filter((c) => c !== hit)];
-    } else if (!e.codes.length) e.status = "no-code";
+    } else if (!e.codes.length) e.status = e.disputed ? "conflict" : "no-code";
     else if (e.codes.length > 1) e.status = "conflict";
-    else e.status = e.codes[0].outlets.length >= 2 ? "two-outlets" : "one-outlet";
+    else e.status = e.disputed ? "conflict" : e.codes[0].outlets.length >= 2 ? "two-outlets" : "one-outlet";
+    delete e.disputed;
   }
   return [...byName.values()].sort((a, b) => CATEGORIES.indexOf(a.category) - CATEGORIES.indexOf(b.category) || a.order - b.order);
 }

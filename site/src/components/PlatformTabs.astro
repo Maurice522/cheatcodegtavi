@@ -192,6 +192,7 @@ const defaultPlatform = cheat.platforms.ps5 ? 'ps5' : cheat.platforms.xbox ? 'xb
             const { up, down } = await res.json();
             setVoteCounts(widget, up, down);
             localStorage.setItem(votedKey(slug, platform), direction);
+            (window as any).cctrack?.('cheat_vote', { cheat: slug, platform, direction });
           }
         } catch {
           // Vote didn't record server-side, but the UI already locked — acceptable
@@ -297,6 +298,7 @@ const defaultPlatform = cheat.platforms.ps5 ? 'ps5' : cheat.platforms.xbox ? 'xb
           const code = btn.dataset.copyCode ?? '';
           try {
             await navigator.clipboard.writeText(code);
+            (window as any).cctrack?.('copy_code', { method: 'button' });
           } catch {
             return;
           }

@@ -78,6 +78,8 @@ import Layout from '../layouts/Layout.astro';
       if (query) url.searchParams.set('q', query);
       else url.searchParams.delete('q');
       history.replaceState(null, '', url);
+      clearTimeout((window as any).__searchTrack);
+      if (query.length >= 2) (window as any).__searchTrack = setTimeout(() => (window as any).cctrack?.('search', { search_term: query.slice(0, 60) }), 1500);
 
       if (!query) {
         status.textContent = '';

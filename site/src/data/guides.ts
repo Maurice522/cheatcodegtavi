@@ -349,7 +349,7 @@ export const guides: Guide[] = [
           `Update GTA 6: Game Library, highlight the game, press Options and choose Check for Update.`,
           `Delete and reinstall the game from the Game Library (your saves are stored separately, but back them up to the cloud first if you can).`,
           `If the game is on extended storage, move it to the console's internal SSD.`,
-          `Rebuild the database: hold the power button to turn the PS5 off, then hold it again until the second beep to start Safe Mode, and choose Clear Cache and Rebuild Database.`,
+          `Rebuild the console database from Safe Mode; 2K Support's article walks through the button steps.`,
           `Still crashing in the same spot? It's likely a game bug; check for a new patch or contact PlayStation Support.`,
         ],
       },
@@ -391,7 +391,6 @@ export const guides: Guide[] = [
     ],
     sources: [
       { name: 'SlashGear: Xbox auto-upload bans', url: 'https://www.slashgear.com/1511121/xbox-auto-upload-feature-how-turn-off-avoid-banned' },
-      { name: 'VGC: Xbox confirms Baldur’s Gate 3 clip bans', url: 'https://www.videogameschronicle.com/news/xbox-confirms-its-banning-baldurs-gate-3-players-who-auto-upload-sex-clips/' },
       IGN('Can_Jason_and_Lucia_Cheat_on_Each_Other%3F', 'IGN: Can Jason and Lucia cheat on each other?'),
     ],
     related: ['/guides/can-jason-and-lucia-cheat-on-each-other/', '/guides/first-person-mode/'],
@@ -460,6 +459,70 @@ export const guides: Guide[] = [
     ],
     sources: [IGN('GTA_6_100_Percent_Guide', 'IGN: GTA 6 100% guide'), { name: 'Rock Paper Shotgun: GTA 6 cheats', url: 'https://www.rockpapershotgun.com/gta-6-cheats-list' }],
     related: ['/guides/collectible-cards/', '/guides/how-long-is-gta-6/', '/cheats/gta-6/how-to-activate-cheats/'],
+    updated: '2026-11-22',
+  },
+  {
+    slug: 'how-to-fix-the-railing',
+    title: 'How to Fix the Railing in GTA 6 (Jason’s House, Chapter 1)',
+    short: 'Fix the railing',
+    description: `How to fix the railing in GTA 6: go down the back porch stairs at Jason's house to the gym, find the broken rail by the silver ladder, hold Triangle/Y, then press R2/RT.`,
+    answer: `At Jason's house, go out the back door, down the porch stairs to the gym area, and find the broken railing next to the silver ladder. Approach it from the gym side, hold Triangle (PS5) or Y (Xbox) to start, then press R2/RT to nail the rails, according to IGN. It's an optional Chapter 1 task that boosts Jason and Lucia's relationship.`,
+    sections: [
+      {
+        heading: `Step by step`,
+        bullets: [
+          `Go out onto the back porch of Jason's house and down the stairs to the gym setup.`,
+          `Find the broken section of railing next to the silver ladder.`,
+          `Stand on the gym side: IGN says it won't work from the upper deck by the back door.`,
+          `Hold Triangle/Y to start the repair, then press R2/RT to nail the remaining rails.`,
+        ],
+      },
+      {
+        heading: `Do you have to fix it before Lucia arrives?`,
+        paragraphs: [`No. IGN notes the house repairs don't have to be finished before you pick up Lucia; you can do them after she moves in. It's part of the optional Feng Shui tasks.`],
+      },
+    ],
+    faq: [
+      { q: `Where is the railing in GTA 6?`, a: `Behind Jason's house: down the back porch stairs at the gym setup, next to the silver ladder (IGN).` },
+      { q: `Why can't I fix the railing in GTA 6?`, a: `Approach it from the gym side. IGN says it doesn't work from the upper deck near the back door.` },
+      { q: `What does fixing the railing do in GTA 6?`, a: `It gives Jason and Lucia's relationship a boost.` },
+    ],
+    sources: [IGN('How_to_Fix_the_Railing', 'IGN: How to fix the railing'), IGN('Feng_Shui_Walkthrough', 'IGN: Feng Shui walkthrough')],
+    related: ['/guides/chapter-1-missions/', '/guides/can-jason-and-lucia-cheat-on-each-other/', '/characters/jason-duval/'],
+    updated: '2026-11-22',
+  },
+  {
+    slug: 'chapter-1-missions',
+    title: 'GTA 6 Chapter 1 Missions: All 23 in Order (Just Like Paradise)',
+    short: 'Chapter 1 missions',
+    description: `Every GTA 6 Chapter 1 (Just Like Paradise) story mission in order, from the Prologue and Gone Fishing to Discharge Time: 23 missions, plus the optional ones.`,
+    answer: `GTA 6's first chapter, Just Like Paradise, has 23 story missions, according to IGN: it starts with the Prologue and Gone Fishing and ends with Discharge Time. Mission names only below, no story spoilers.`,
+    sections: [
+      {
+        heading: `All 23 Chapter 1 missions in order`,
+        bullets: [
+          `1. Prologue`, `2. Gone Fishing`, `3. Gear Up`, `4. Just a Scratch`, `5. Lab Fees`, `6. Pipework`, `7. Unwanted Attention`, `8. Hey Arnold!`,
+          `9. Island Dreams`, `10. Feng Shui`, `11. Coming Home`, `12. Clean Up After Donnie`, `13. Buck Me`, `14. Down to Earth`, `15. Clear Skies`,
+          `16. Building a Life`, `17. Day Release`, `18. Swamped`, `19. Don Gone`, `20. Recalibration`, `21. Tourist Trap`, `22. Home Sweet Home`, `23. Discharge Time`,
+        ],
+      },
+      {
+        heading: `Chapter 1 optional missions`,
+        paragraphs: [`IGN lists Get Shirley's Rum, Skunk Apeology 101, Mandy's Dark Secret, Find the Lost Drugs and Ring the Bell! as Chapter 1 optional missions.`],
+      },
+      {
+        heading: `Useful codes in Chapter 1`,
+        paragraphs: [`Lab Fees needs two door codes: 0420 for the Moonstone Boutique back room and 7700 for Brian's Lockup (GTABase, PowerPyx, Beebom). See our safe and door codes guide.`],
+      },
+    ],
+    faq: [
+      { q: `How many missions are in GTA 6 Chapter 1?`, a: `23 story missions, according to IGN.` },
+      { q: `What is the first mission in GTA 6?`, a: `The Prologue, followed by Gone Fishing.` },
+      { q: `What is Chapter 1 of GTA 6 called?`, a: `Just Like Paradise.` },
+      { q: `What is the last mission of Chapter 1 in GTA 6?`, a: `Discharge Time, according to IGN's walkthrough.` },
+    ],
+    sources: [IGN('Walkthrough', 'IGN: GTA 6 walkthrough'), IGN('Chapter_1_Guide_and_Tips', 'IGN: Chapter 1 guide and tips'), IGN('Chapter_1_Optional_Missions', 'IGN: Chapter 1 optional missions')],
+    related: ['/guides/how-long-is-gta-6/', '/guides/safe-codes/', '/guides/how-to-fix-the-railing/'],
     updated: '2026-11-22',
   },
 ];
