@@ -302,6 +302,166 @@ export const guides: Guide[] = [
     related: ['/guides/how-to-make-money-fast/', '/cheats/gta-6/mtl-pumper/'],
     updated: '2026-11-22',
   },
+  {
+    slug: 'how-to-get-rhino-tank',
+    title: 'How to Get a Rhino Tank in GTA 6 (Steal One or Use the Cheat)',
+    short: 'Get a Rhino tank',
+    description: `How to get the Rhino tank in GTA 6: steal a Hauner Rhino Tank from the Mile Zero Air Station as early as Chapter 1, or unlock the Rhino Tank spawn cheat after the story.`,
+    answer: `IGN says you can steal a Hauner Rhino Tank as early as Chapter 1 by breaking into the Mile Zero Air Station with a stunt jump, though expect a wanted level you probably can't lose. After the story there is also a Rhino Tank spawn cheat, which unlocks when you complete all survival challenges; its code hasn't been reported yet.`,
+    sections: [
+      {
+        heading: `Steal a Rhino tank from Mile Zero Air Station`,
+        bullets: [
+          `Prepare first: Adrenaline boosts all your stats, and Body Armor from Ammu-Nation plus Zombix from a corner store help you survive.`,
+          `Use a stunt jump to get into the Mile Zero Air Station, then take the tank.`,
+          `IGN warns you'll likely be Wasted or end up with a wanted level you can't shake, so treat it as a rampage, not a car to keep.`,
+        ],
+      },
+      {
+        heading: `The Rhino Tank spawn cheat`,
+        paragraphs: [
+          `GTA 6's Spawn Vehicle cheats include a Rhino Tank. Polygon, Eurogamer and Rock Paper Shotgun list its unlock as completing all survival challenges. No outlet has reported its D-pad code yet; our full cheat list updates every hour when one does.`,
+        ],
+      },
+    ],
+    faq: [
+      { q: `How do you get a tank in GTA 6?`, a: `Steal a Hauner Rhino Tank from the Mile Zero Air Station by getting in with a stunt jump (IGN), or unlock the Rhino Tank spawn cheat after the story.` },
+      { q: `Is there a Rhino tank cheat in GTA 6?`, a: `Yes. It unlocks after you finish the story and complete all survival challenges. The code hasn't been reported yet.` },
+      { q: `Where can you find a Rhino tank in GTA 6?`, a: `At the Mile Zero Air Station, according to IGN's guide.` },
+    ],
+    sources: [
+      IGN('How_to_Get_a_Rhino_Tank', 'IGN: How to get a Rhino tank'),
+      { name: 'Polygon: GTA 6 cheat codes', url: 'https://www.polygon.com/gta-6-cheat-codes-list-unlock/' },
+    ],
+    related: ['/cheats/gta-6/', '/cheats/gta-6/how-to-activate-cheats/', '/guides/how-to-get-car-from-impound/'],
+    updated: '2026-11-22',
+  },
+  {
+    slug: 'ps5-crash-error-ce-108255-1',
+    title: 'GTA 6 Crashing on PS5? How to Fix Error CE-108255-1',
+    short: 'Fix PS5 crash CE-108255-1',
+    description: `GTA 6 crashing on PS5 with error CE-108255-1? It's PlayStation's general crash code. The official fixes: update the game, reinstall, move it to the SSD, rebuild the database.`,
+    answer: `CE-108255-1 is PlayStation's general "an error occurred with the game" code, not a GTA 6-specific one. Sony's first fix is to update the game. If it keeps crashing, 2K Support (Take-Two's support site) also suggests reinstalling the game, moving it to the console's SSD, and rebuilding the PS5 database in Safe Mode. If none of that helps, wait for a Rockstar patch or contact PlayStation Support.`,
+    sections: [
+      {
+        heading: `How to fix GTA 6 error CE-108255-1`,
+        bullets: [
+          `Update GTA 6: Game Library, highlight the game, press Options and choose Check for Update.`,
+          `Delete and reinstall the game from the Game Library (your saves are stored separately, but back them up to the cloud first if you can).`,
+          `If the game is on extended storage, move it to the console's internal SSD.`,
+          `Rebuild the database: hold the power button to turn the PS5 off, then hold it again until the second beep to start Safe Mode, and choose Clear Cache and Rebuild Database.`,
+          `Still crashing in the same spot? It's likely a game bug; check for a new patch or contact PlayStation Support.`,
+        ],
+      },
+    ],
+    faq: [
+      { q: `What does CE-108255-1 mean on PS5?`, a: `PlayStation describes it as an error with the game or application; it's the general crash code many PS5 games show.` },
+      { q: `How do I stop GTA 6 crashing on PS5?`, a: `Update the game first. Then try reinstalling, moving it to the internal SSD, and rebuilding the database in Safe Mode, as 2K Support recommends.` },
+      { q: `Will reinstalling GTA 6 delete my save?`, a: `Saves are stored separately from the game install, but upload them to cloud storage first to be safe.` },
+    ],
+    sources: [
+      { name: 'PlayStation Support: CE-108255-1', url: 'https://www.playstation.com/en-us/support/error-codes/ps5/ce-108255-1/' },
+      { name: '2K Support: PlayStation error CE-108255-1', url: 'https://support.2k.com/hc/en-us/articles/46180986449427-PlayStation-Error-Code-CE-108255-1' },
+    ],
+    related: ['/guides/how-to-save/', '/cheats/gta-6/'],
+    updated: '2026-11-22',
+  },
+  {
+    slug: 'xbox-auto-upload-bans',
+    title: 'Can You Get Banned on Xbox for GTA 6 Clips? Turn Off Auto-Upload',
+    short: 'Xbox auto-upload bans',
+    description: `Xbox can suspend accounts for uploaded clips with nudity, and Series X|S uploads captures automatically. How to turn off auto-upload before recording GTA 6's strip clubs.`,
+    answer: `Possibly. Xbox Series X|S uploads your captures to the cloud automatically by default, and Xbox has suspended players for uploaded clips with nudity before, most notably Baldur's Gate 3 in 2024. GTA 6 has strip clubs and lap dances, so turn off auto-upload: Settings, Preferences, Captures & Shares, then switch off Automatically upload. We haven't seen confirmed GTA 6 ban reports from major outlets.`,
+    sections: [
+      {
+        heading: `How to turn off auto-upload on Xbox`,
+        bullets: [`Open Settings.`, `Go to Preferences, then Captures & Shares.`, `Turn off Automatically upload.`, `Upload the clips you want to share manually after checking them.`],
+      },
+      {
+        heading: `Why this matters for GTA 6`,
+        paragraphs: [
+          `SlashGear reports that during the Baldur's Gate 3 case, Xbox Support said moderators review each flagged clip and reversed accidental bans case by case, but any game with nudity can trigger one. GTA 6 lets Jason and Lucia visit strip clubs and buy lap dances, so recording those scenes with auto-upload on is the risk.`,
+        ],
+      },
+    ],
+    faq: [
+      { q: `Can you get banned on Xbox for recording GTA 6?`, a: `Uploaded clips with nudity can break Xbox's rules, and auto-upload is on by default. Turn it off to be safe. We haven't seen confirmed GTA 6 cases from major outlets.` },
+      { q: `How do I turn off auto-upload on Xbox Series X?`, a: `Settings, Preferences, Captures & Shares, then turn off Automatically upload.` },
+      { q: `Can an Xbox suspension be reversed?`, a: `In the Baldur's Gate 3 case, Xbox reviewed accidental uploads case by case and reversed some suspensions; you can appeal through Xbox Enforcement.` },
+    ],
+    sources: [
+      { name: 'SlashGear: Xbox auto-upload bans', url: 'https://www.slashgear.com/1511121/xbox-auto-upload-feature-how-turn-off-avoid-banned' },
+      { name: 'VGC: Xbox confirms Baldur’s Gate 3 clip bans', url: 'https://www.videogameschronicle.com/news/xbox-confirms-its-banning-baldurs-gate-3-players-who-auto-upload-sex-clips/' },
+      IGN('Can_Jason_and_Lucia_Cheat_on_Each_Other%3F', 'IGN: Can Jason and Lucia cheat on each other?'),
+    ],
+    related: ['/guides/can-jason-and-lucia-cheat-on-each-other/', '/guides/first-person-mode/'],
+    updated: '2026-11-22',
+  },
+  {
+    slug: 'collectible-cards',
+    title: 'GTA 6 Collectible Cards: All 18 Sets and 481 Cards',
+    short: 'Collectible cards',
+    description: `GTA 6 has 18 collectible card sets with 481 cards: baseball, basketball, football, soccer, comic, novelty and dancer cards. Every set and how many cards are in each.`,
+    answer: `GTA 6 has 18 collectible card sets totaling 481 cards, according to IGN. They span baseball, basketball, football and soccer teams, comic series, novelty sets and dancer cards. The biggest sets (Jack of Hearts, Nine1Nine and the three comic sets) have 36 cards each.`,
+    sections: [
+      {
+        heading: `All GTA 6 card sets`,
+        bullets: [
+          `Baseball: Los Santos Corkers (25), Vice City Flamingos (24), Liberty Swingers (24).`,
+          `Basketball: Los Santos Panic (24), Liberty City Penetrators (24), Vice City Narcos (24).`,
+          `Football: Vice City Manatees (24), Los Santos Pounders (24), Liberty City Wrath (24).`,
+          `Soccer: Vice City Club de Futbol (30).`,
+          `Comics: Right Wing: America's Hero (36), Ed Universe (36), Legends of Ratface (36).`,
+          `Novelty: B.A.M. Backyard Wrestling (12), America's Next Top Hooker (24).`,
+          `Dancers: Jack of Hearts (36), Delights (18), Nine1Nine (36).`,
+        ],
+      },
+      {
+        heading: `Do cards count toward 100%?`,
+        paragraphs: [`IGN says 100% completion doesn't require every collectible set; it's weighted toward the story and missions. See our 100% completion guide.`],
+      },
+    ],
+    faq: [
+      { q: `How many collectible cards are in GTA 6?`, a: `481 cards across 18 sets, according to IGN.` },
+      { q: `What card sets are in GTA 6?`, a: `Sports teams (baseball, basketball, football, soccer), three comic series, two novelty sets and three dancer sets.` },
+      { q: `Do you need all cards for 100% in GTA 6?`, a: `No. IGN says 100% doesn't require completing every collectible set.` },
+    ],
+    sources: [IGN('Collectible_Cards', 'IGN: Collectible cards'), IGN('GTA_6_100_Percent_Guide', 'IGN: 100% guide')],
+    related: ['/guides/100-percent-completion/', '/guides/how-to-make-money-fast/'],
+    updated: '2026-11-22',
+  },
+  {
+    slug: '100-percent-completion',
+    title: 'GTA 6 100% Completion and Platinum Trophy: What Counts',
+    short: '100% & Platinum',
+    description: `What counts toward 100% in GTA 6: the story is 50%, optional missions 6%, plus Illegal Operations, robberies and more. The Platinum needs The Long Road trophy (100%).`,
+    answer: `In GTA 6 the main story is worth 50% of your completion and optional missions 6%; the rest comes from Exploration, Activities and Discoveries targets, according to IGN. You don't need every collectible: all 100 basketball hoops add just 1%. The Platinum trophy requires The Long Road, which is 100% completion, and you can check progress in the Stats menu after the story.`,
+    sections: [
+      {
+        heading: `What counts toward 100% (IGN)`,
+        bullets: [
+          `Story completion: 50%.`,
+          `Optional missions: 6%.`,
+          `Illegal Operations (39): 3%.`,
+          `Bank robberies (22), Payday Loan jobs (7), Smash 'n' Grabs (34), Stick Ups (100) and $100,000 of narcotics fenced: 2% each.`,
+          `Basketball hoops (100): 1%.`,
+        ],
+      },
+      {
+        heading: `Do cheats affect 100% or trophies?`,
+        paragraphs: [`Using a cheat disables trophies and saving for that session, so don't cheat during a completion run. Reloading an earlier save restores them, according to Rock Paper Shotgun.`],
+      },
+    ],
+    faq: [
+      { q: `What counts toward 100% in GTA 6?`, a: `The story (50%), optional missions (6%), and targets across Exploration, Activities and Discoveries, such as Illegal Operations and robberies (IGN).` },
+      { q: `How do you get the Platinum trophy in GTA 6?`, a: `Unlock The Long Road trophy by reaching 100% completion, according to IGN.` },
+      { q: `Do cheats stop you getting trophies in GTA 6?`, a: `Yes, for that session. Reload an earlier save to earn trophies again.` },
+      { q: `Where can I see my completion percentage in GTA 6?`, a: `In the Stats menu, once you've finished the story (IGN).` },
+    ],
+    sources: [IGN('GTA_6_100_Percent_Guide', 'IGN: GTA 6 100% guide'), { name: 'Rock Paper Shotgun: GTA 6 cheats', url: 'https://www.rockpapershotgun.com/gta-6-cheats-list' }],
+    related: ['/guides/collectible-cards/', '/guides/how-long-is-gta-6/', '/cheats/gta-6/how-to-activate-cheats/'],
+    updated: '2026-11-22',
+  },
 ];
 
 export const guidePath = (slug: string) => `/guides/${slug}/`;
