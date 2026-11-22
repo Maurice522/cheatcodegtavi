@@ -1,0 +1,64 @@
+---
+import ButtonSequence from './ButtonSequence.astro';
+import { byCategory, outletList, STATUS_LABEL, type CatalogCheat } from '../lib/cheat-catalog';
+import { gta6CheatPath } from '../lib/gta6-cheats';
+
+// Every GTA 6 cheat with its unlock requirement and each reported code shown
+// with the outlets that reported it. Only "confirmed" codes passed our checks.
+interface Props {
+  cheats: CatalogCheat[];
+}
+const { cheats } = Astro.props;
+const groups = byCategory(cheats);
+
+const badge: Record<string, string> = {
+  confirmed: 'border-verified/50 text-verified',
+  'two-outlets': 'border-accent-secondary/50 text-accent-secondary',
+  'one-outlet': 'border-rumored/50 text-rumored',
+  conflict: 'border-rumored/50 text-rumored',
+  'no-code': 'border-border-default text-text-muted',
+};
+const anchor = (category: string) => category.toLowerCase().replace(/\s+/g, '-');
+---
+
+<nav aria-label="Cheat categories" class="flex flex-wrap gap-2">
+  {groups.map((g) => (
+    <a href={`#${anchor(g.category)}`} class="press text-caption rounded-full border border-border-default bg-bg-surface px-3 py-1.5 text-text-secondary hover:border-accent-secondary/60 hover:text-text-primary">
+      {g.category} ({g.cheats.length})
+    </a>
+  ))}
+</nav>
+
+{
+  groups.map((g) => (
+    <section id={anchor(g.category)} class="mt-10 scroll-mt-28">
+      <h3 class="text-heading-md text-text-primary">GTA 6 {g.category} cheats ({g.cheats.length})</h3>
+      <ul class="mt-4 flex flex-col gap-3">
+        {g.cheats.map((c) => (
+          <li class="rounded-xl border border-border-default bg-bg-surface p-4">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <h4 class="text-heading-sm text-text-primary">
+                {c.confirmedSlug ? <a href={gta6CheatPath(c.confirmedSlug)} class="hover:text-accent-secondary hover:underline">{c.name}</a> : c.name}
+              </h4>
+              <span class={`text-caption rounded-full border px-2.5 py-0.5 ${badge[c.status]}`}>{STATUS_LABEL[c.status]}</span>
+            </div>
+            {c.effect && <p class="text-body-sm mt-1 text-text-secondary">{c.effect}.</p>}
+            <p class="text-body-sm mt-2 text-text-secondary"><strong class="text-text-primary">Unlock:</strong> {c.unlock ? `${c.unlock}.` : 'Not reported yet.'}</p>
+            {c.codes.length > 0 ? (
+              <div class="mt-3 flex flex-col gap-3">
+                {c.codes.map((code) => (
+                  <div>
+                    <ButtonSequence buttons={code.ps5} size="sm" />
+                    <p class="text-caption mt-1 text-text-muted">Reported by {outletList(code.outlets)}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p class="text-caption mt-2 text-text-muted">No outlet has reported this code yet. We add it as soon as one does.</p>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))
+}

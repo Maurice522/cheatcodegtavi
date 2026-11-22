@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getReportedGta6Cheats, gta6CheatPath, reportedBy } from '../lib/gta6-cheats';
 import { guides, guidePath } from '../data/guides';
+import { getCheatCatalog, STATUS_LABEL, outletList } from '../lib/cheat-catalog';
 
 // A plain-text map of the site for AI assistants and answer engines
 // (llmstxt.org). Generated at build time so the confirmed cheat list is current.
@@ -8,6 +9,7 @@ const SITE = 'https://cheatcodegtavi.com';
 
 export const GET: APIRoute = async () => {
   const cheats = await getReportedGta6Cheats();
+  const catalog = await getCheatCatalog();
   const lines = [
     '# CheatCodeGTAVI.com',
     '',
@@ -23,6 +25,10 @@ export const GET: APIRoute = async () => {
       (c) =>
         `- [GTA 6 ${c.title} cheat](${SITE}${gta6CheatPath(c.slug)}): ${c.ps5?.join(', ') ?? 'code not reported'}${c.unlock ? `; unlock: ${c.unlock}` : ''} (reported by ${reportedBy(c)})`,
     ),
+    '',
+    `## All ${catalog.length} GTA 6 cheats (full list, ${SITE}/cheats/gta-6/#all-cheats)`,
+    'Status: "Confirmed" passed our two-outlet check; other codes show the outlets that reported them and may change.',
+    ...catalog.map((c) => `- ${c.category}: ${c.name}${c.effect ? ` (${c.effect})` : ''}; unlock: ${c.unlock || 'not reported'}; code: ${c.codes.length ? c.codes.map((k) => `${k.ps5.join(', ')} [${outletList(k.outlets)}]`).join(' / ') : 'none reported yet'}; status: ${STATUS_LABEL[c.status]}`),
     '',
     '## GTA 6 guides',
     ...guides.map((g) => `- [${g.title}](${SITE}${guidePath(g.slug)}): ${g.answer}`),

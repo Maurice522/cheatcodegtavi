@@ -4,21 +4,26 @@ import PageHero from '../../../components/PageHero.astro';
 import Gta6CheatCard from '../../../components/Gta6CheatCard.astro';
 import NotifySignup from '../../../components/NotifySignup.astro';
 import { getReportedGta6Cheats, gta6CheatPath } from '../../../lib/gta6-cheats';
+import CheatCatalog from '../../../components/CheatCatalog.astro';
+import { getCheatCatalog } from '../../../lib/cheat-catalog';
 
 const cheats = await getReportedGta6Cheats();
 const count = cheats.length;
+const catalog = await getCheatCatalog();
+const total = catalog.length || 61;
+const withCode = catalog.filter((c) => c.codes.length).length;
 ---
 
 <Layout
-  title={count ? `${count} Confirmed GTA 6 Cheat Code${count === 1 ? '' : 's'} (GTA VI)` : 'Confirmed GTA 6 Cheat Codes (GTA VI)'}
+  title={`GTA 6 Cheats: All ${total} Cheat Codes, Unlocks & ${count} Confirmed (GTA VI)`}
   description={count
-    ? `${count} GTA 6 / GTA VI cheat code${count === 1 ? '' : 's'} reported working by Rockstar or at least two major outlets, with D-pad codes for PS5 and Xbox, unlock requirements and how to activate them.`
+    ? `All ${total} GTA 6 cheats with unlock requirements, every code reported so far and who reported it, plus ${count} codes confirmed by two major outlets. PS5 and Xbox.`
     : 'No GTA 6 / GTA VI cheat codes are confirmed yet. We check official and major gaming sources every hour and list codes here as soon as they are reported.'}
 >
   <PageHero
     eyebrow={count ? `${count} reported · Checked hourly` : 'Checked hourly'}
-    title="Confirmed GTA 6 Cheat Codes"
-    subtitle="Cheats reported working in the released game by Rockstar or by at least two major gaming outlets."
+    title="GTA 6 Cheat Codes"
+    subtitle={`All ${total} GTA 6 cheats with their unlock requirements, and the ${count} codes confirmed by major outlets.`}
     accent="gold"
   />
 
@@ -65,6 +70,18 @@ const count = cheats.length;
           <p class="text-body-lg text-text-secondary">No GTA 6 cheat codes are confirmed yet.</p>
           <p class="text-body-sm text-text-muted">Until then, see the <a href="/cheats/" class="text-accent-secondary hover:underline">35 GTA V cheats</a>.</p>
         </div>
+      )
+    }
+
+    {
+      catalog.length > 0 && (
+        <section id="all-cheats" class="mt-14 scroll-mt-24">
+          <h2 class="text-heading-lg text-text-primary">All {total} GTA 6 cheats and how to unlock them</h2>
+          <p class="text-body-md mt-3 text-text-secondary">
+            Every GTA 6 cheat, grouped the way the game lists them, with its unlock requirement. {withCode} have a code reported by at least one outlet so far. Each code shows who reported it: only <strong class="text-verified">Confirmed</strong> codes have passed our checks (two major outlets, exact code, after launch). Others may still change, so use them with care. Updated automatically every hour.
+          </p>
+          <div class="mt-6"><CheatCatalog cheats={catalog} /></div>
+        </section>
       )
     }
 

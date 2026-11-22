@@ -3,11 +3,20 @@ import Layout from '../../../layouts/Layout.astro';
 import PageHero from '../../../components/PageHero.astro';
 import ButtonSequence from '../../../components/ButtonSequence.astro';
 import { getReportedGta6Cheats, gta6CheatPath, reportedBy } from '../../../lib/gta6-cheats';
+import { getCheatCatalog, byCategory, outletList, STATUS_LABEL } from '../../../lib/cheat-catalog';
 
-// Unlock checklist: every confirmed GTA 6 cheat with its unlock requirement and
-// a tick box. Ticks are saved in this browser only (localStorage).
-const cheats = await getReportedGta6Cheats();
-const count = cheats.length;
+// Unlock checklist: every GTA 6 cheat (from the hourly catalog) with its unlock
+// requirement and a tick box. Ticks are saved in this browser only
+// (localStorage). Confirmed cheats keep their page slug as the tick id, so
+// ticks saved before the full list existed still apply.
+const confirmed = await getReportedGta6Cheats();
+const catalog = await getCheatCatalog();
+// Fall back to the confirmed list if the catalog can't load.
+const rows = catalog.length
+  ? catalog.map((c) => ({ id: c.confirmedSlug ?? c.key, name: c.name, category: c.category, unlock: c.unlock, code: c.codes[0] ?? null, status: c.status, slug: c.confirmedSlug ?? null }))
+  : confirmed.map((c) => ({ id: c.slug, name: c.title, category: 'Confirmed', unlock: c.unlock ?? '', code: c.ps5 ? { ps5: c.ps5, outlets: [] as string[], key: c.key } : null, status: 'confirmed' as const, slug: c.slug }));
+const count = rows.length;
+const groups = catalog.length ? byCategory(catalog).map((g) => ({ category: g.category, rows: rows.filter((r) => r.category === g.category) })) : [{ category: 'Confirmed', rows }];
 const faq = [
   {
     q: 'How do I unlock cheats in GTA 6?',
@@ -22,12 +31,12 @@ const faq = [
 
 <Layout
   title="GTA 6 Cheat Unlock Tracker (Checklist)"
-  description={`Track which GTA 6 / GTA VI cheats you've unlocked: a checklist of ${count || 'every'} confirmed cheat${count === 1 ? '' : 's'} with D-pad codes and unlock requirements, saved in your browser.`}
+  description={`Track which GTA 6 / GTA VI cheats you've unlocked: a checklist of all ${count} cheats with every unlock requirement and the codes reported so far, saved in your browser.`}
 >
   <PageHero
     eyebrow="Checklist · Saved in your browser"
     title="GTA 6 Cheat Unlock Tracker"
-    subtitle="Tick off each GTA 6 cheat as you unlock it. Requirements and codes for every confirmed cheat, in one list."
+    subtitle={`Tick off all ${count} GTA 6 cheats as you unlock them. Every requirement and reported code, in one list.`}
     accent="gold"
   />
 
@@ -41,7 +50,7 @@ const faq = [
     </nav>
 
     <p class="text-body-md text-text-secondary">
-      GTA 6 cheats only unlock after you finish the main story, and each one has its own requirement. This tracker lists the {count} cheats confirmed so far (GTA 6 has about 61); more are added automatically as major outlets confirm their codes.
+      GTA 6 cheats only unlock after you finish the main story, and each one has its own requirement. This tracker lists all {count} cheats. Codes marked Confirmed have passed our checks; the rest show who reported them, and new codes are added automatically every hour.
     </p>
 
     <cheat-tracker class="mt-8 block">
@@ -58,27 +67,33 @@ const faq = [
         </div>
       </div>
 
-      <ul class="mt-4 flex flex-col gap-3">
-        {
-          cheats.map((cheat) => (
-            <li data-row={cheat.slug} class="rounded-xl border border-border-default bg-bg-surface p-4 transition-opacity duration-150 data-[done=true]:opacity-60">
-              <label class="flex cursor-pointer items-start gap-3">
-                <input type="checkbox" data-check={cheat.slug} class="mt-1 h-5 w-5 shrink-0 accent-[var(--color-verified,#22c55e)]" />
-                <span class="flex min-w-0 flex-1 flex-col gap-2">
-                  <span class="text-heading-sm text-text-primary">{cheat.title}</span>
-                  <span class="text-body-sm text-text-secondary">
-                    <strong class="text-text-primary">Unlock:</strong> {cheat.unlock || 'Requirement not reported yet'}
-                  </span>
-                  {cheat.ps5?.length ? <ButtonSequence buttons={cheat.ps5} size="sm" /> : null}
-                </span>
-              </label>
-              <p class="text-caption mt-2 pl-8 text-text-muted">
-                Reported by {reportedBy(cheat)} · <a href={gta6CheatPath(cheat.slug)} class="text-accent-secondary hover:underline">Details</a>
-              </p>
-            </li>
-          ))
-        }
-      </ul>
+      {
+        groups.map((g) => (
+          <section class="mt-6">
+            <h2 class="text-heading-sm text-text-primary">{g.category} ({g.rows.length})</h2>
+            <ul class="mt-3 flex flex-col gap-3">
+              {g.rows.map((r) => (
+                <li data-row={r.id} class="rounded-xl border border-border-default bg-bg-surface p-4 transition-opacity duration-150 data-[done=true]:opacity-60">
+                  <label class="flex cursor-pointer items-start gap-3">
+                    <input type="checkbox" data-check={r.id} class="mt-1 h-5 w-5 shrink-0 accent-[var(--color-verified,#22c55e)]" />
+                    <span class="flex min-w-0 flex-1 flex-col gap-2">
+                      <span class="text-heading-sm text-text-primary">{r.name}</span>
+                      <span class="text-body-sm text-text-secondary">
+                        <strong class="text-text-primary">Unlock:</strong> {r.unlock || 'Requirement not reported yet'}
+                      </span>
+                      {r.code ? <ButtonSequence buttons={r.code.ps5} size="sm" /> : <span class="text-caption text-text-muted">No code reported yet</span>}
+                    </span>
+                  </label>
+                  <p class="text-caption mt-2 pl-8 text-text-muted">
+                    {STATUS_LABEL[r.status]}{r.code && r.code.outlets.length ? ` · ${outletList(r.code.outlets)}` : ''}
+                    {r.slug && <> · <a href={gta6CheatPath(r.slug)} class="text-accent-secondary hover:underline">Details</a></>}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
     </cheat-tracker>
 
     <section class="mt-12">
