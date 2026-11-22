@@ -3,29 +3,30 @@ import Layout from '../../layouts/Layout.astro';
 import LocationIcon from '../../components/LocationIcon.astro';
 import LocationBanner from '../../components/LocationBanner.astro';
 import locations from '../../data/locations.json';
+import characters from '../../data/characters.json';
+
+type Loc = (typeof locations)[number] & { heroImage?: string };
 
 export function getStaticPaths() {
   return locations.map((loc) => ({ params: { slug: loc.slug } }));
 }
 
 const { slug } = Astro.params;
-const location = locations.find((loc) => loc.slug === slug)!;
+const location = locations.find((loc) => loc.slug === slug)! as Loc;
 const others = locations.filter((loc) => loc.slug !== slug);
+const people = (location.characters ?? []).map((s) => characters.find((c) => c.slug === s)).filter((c): c is NonNullable<typeof c> => Boolean(c));
+const SITE = 'https://cheatcodegtavi.com';
+const url = `${SITE}/locations/${location.slug}/`;
+const UPDATED = '2026-11-22';
+const title = `${location.name} in GTA 6: What's There, Map Region & Characters`;
 ---
 
-<Layout title={`${location.name} (GTA 6 Location)`} description={location.description}>
-  <script type="application/ld+json" set:html={JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://cheatcodegtavi.com/' },
-      { '@type': 'ListItem', position: 2, name: 'GTA 6 Map & Locations', item: 'https://cheatcodegtavi.com/locations/' },
-      { '@type': 'ListItem', position: 3, name: location.name, item: `https://cheatcodegtavi.com/locations/${location.slug}/` },
-    ],
-  })} />
+<Layout title={title} description={location.description} ogType="article">
   <div class="mx-auto max-w-3xl px-5 py-12 sm:px-8 sm:py-16">
-    <nav class="text-caption mb-6 text-text-muted">
-      <a href="/locations/" class="hover:text-text-primary">Locations</a>
+    <nav aria-label="Breadcrumb" class="text-caption mb-6 text-text-muted">
+      <a href="/" class="hover:text-text-primary">Home</a>
+      <span class="mx-2">/</span>
+      <a href="/locations/" class="hover:text-text-primary">GTA 6 Map & Locations</a>
       <span class="mx-2">/</span>
       <span class="text-text-secondary">{location.name}</span>
     </nav>
@@ -37,17 +38,74 @@ const others = locations.filter((loc) => loc.slug !== slug);
         <LocationIcon icon={location.icon} class="h-10 w-10 text-accent-secondary" />
       </div>
       <div>
-        <span class="text-label text-accent-secondary">{location.kind}</span>
+        <span class="text-label text-accent-secondary">{location.kind} · Leonida</span>
         <h1 class="text-display-md text-3xl text-text-primary sm:text-5xl">{location.name}</h1>
       </div>
     </div>
 
-    <p class="text-body-lg mt-8 max-w-2xl whitespace-pre-line text-text-secondary">
-      {location.bio ?? location.description}
-    </p>
+    <p class="text-body-lg mt-8 text-text-secondary" data-answer>{location.description}</p>
+    {location.tagline && <p class="text-body-md mt-4 border-l-2 border-accent-primary pl-4 italic text-text-secondary">"{location.tagline}" <span class="not-italic text-text-muted">(Rockstar Games)</span></p>}
+
+    <section class="mt-10">
+      <h2 class="text-heading-md text-text-primary">About {location.name}</h2>
+      <p class="text-body-md mt-3 whitespace-pre-line text-text-secondary">{location.bio}</p>
+    </section>
+
+    {
+      location.places?.length > 0 && (
+        <section class="mt-10">
+          <h2 class="text-heading-md text-text-primary">What's in {location.name}</h2>
+          <ul class="mt-4 flex flex-col gap-2">
+            {location.places.map((p) => (
+              <li class="rounded-xl border border-border-default bg-bg-surface p-4">
+                <span class="text-heading-sm text-text-primary">{p.name}</span>
+                <span class="text-body-sm mt-1 block text-text-secondary">{p.note} <span class="text-text-muted">({p.source})</span></span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      people.length > 0 && (
+        <section class="mt-10">
+          <h2 class="text-heading-sm mb-4 text-text-primary">Characters in {location.name}</h2>
+          <div class="flex flex-wrap gap-3">
+            {people.map((c) => (
+              <a href={`/characters/${c.slug}/`} class="press text-body-sm rounded-full border border-border-default bg-bg-surface px-4 py-2 text-text-secondary hover:border-accent-secondary/50 hover:text-text-primary">{c.name}</a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      location.faq?.length > 0 && (
+        <section class="mt-10">
+          <h2 class="text-heading-md text-text-primary">Questions</h2>
+          <div class="mt-4 flex flex-col gap-3">
+            {location.faq.map((item) => (
+              <details class="rounded-xl border border-border-default bg-bg-surface p-5" open>
+                <summary class="text-heading-sm cursor-pointer list-none text-text-primary marker:content-none">{item.q}</summary>
+                <p class="text-body-md mt-3 text-text-secondary">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="mt-10">
+      <h2 class="text-heading-sm text-text-primary">Sources</h2>
+      <ul class="text-body-sm mt-3 flex flex-col gap-2 text-text-secondary">
+        {location.sources.map((s) => <li><a href={s.url} rel="nofollow noopener" target="_blank" class="text-accent-secondary hover:underline">{s.name}</a></li>)}
+      </ul>
+      <p class="text-caption mt-3 text-text-muted">Written in our own words from the sources above; quoted taglines are Rockstar's. Last updated {UPDATED}.</p>
+    </section>
 
     <div class="mt-12">
-      <h2 class="text-heading-sm mb-4 text-text-primary">Other Regions</h2>
+      <h2 class="text-heading-sm mb-4 text-text-primary">Other regions of Leonida</h2>
       <div class="flex flex-wrap gap-3">
         {others.map((loc) => (
           <a
@@ -61,8 +119,37 @@ const others = locations.filter((loc) => loc.slug !== slug);
       </div>
     </div>
 
-    <a href="/locations/" class="text-label mt-12 inline-block text-accent-secondary hover:text-accent-secondary/80">
-      &larr; Back to Locations
-    </a>
+    <p class="text-body-sm mt-10 text-text-secondary">
+      Exploring with cheats? See <a href="/cheats/gta-6/#all-cheats" class="text-accent-secondary hover:underline">all 61 GTA 6 cheats</a>, including vehicle spawns.
+    </p>
   </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Article',
+        '@id': `${url}#article`,
+        headline: title,
+        description: location.description,
+        url,
+        dateModified: UPDATED,
+        about: [
+          { '@type': 'Place', name: `${location.name} (GTA 6)`, containedInPlace: { '@type': 'Place', name: 'Leonida' } },
+          { '@type': 'VideoGame', name: 'Grand Theft Auto VI', alternateName: ['GTA 6', 'GTA VI'] },
+        ],
+        publisher: { '@type': 'Organization', name: 'CheatCodeGTAVI.com', url: SITE },
+        citation: location.sources.map((s) => s.url),
+      },
+      ...(location.faq?.length ? [{ '@type': 'FAQPage', mainEntity: location.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }] : []),
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+          { '@type': 'ListItem', position: 2, name: 'GTA 6 Map & Locations', item: `${SITE}/locations/` },
+          { '@type': 'ListItem', position: 3, name: location.name, item: url },
+        ],
+      },
+    ],
+  })} />
 </Layout>
