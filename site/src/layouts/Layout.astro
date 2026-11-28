@@ -23,7 +23,10 @@ const {
   ogType = 'website',
 } = Astro.props;
 
-const pageTitle = `${title} · CheatCodeGTAVI.com`;
+// Google truncates title links around 60 characters, so only add the brand
+// when it still fits; long titles are already descriptive on their own.
+const BRAND = ' · CheatCodeGTAVI.com';
+const pageTitle = title.length + BRAND.length <= 62 ? `${title}${BRAND}` : title;
 // Search engines cut descriptions off around 160 characters, so end on a whole word instead.
 const metaDescription =
   description.length <= 160 ? description : `${description.slice(0, 157).replace(/\s+\S*$/, '')}...`;
